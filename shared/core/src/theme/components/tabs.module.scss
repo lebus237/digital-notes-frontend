@@ -1,0 +1,13 @@
+.tab {
+  font-weight: 500;
+  color: light-dark(#6c757d, var(--mantine-color-dark-2));
+
+  &[data-active] {
+    color: var(--mantine-color-orange-5);
+    border-color: var(--mantine-color-orange-5);
+  }
+
+  &:hover {
+    color: light-dark(#343a40, var(--mantine-color-dark-0));
+  }
+}

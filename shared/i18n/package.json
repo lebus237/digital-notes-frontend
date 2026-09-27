@@ -1,0 +1,22 @@
+{
+  "name": "@digitalnotes/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.tsx"
+  },
+  "scripts": {
+    "lint:ts": "tsc",
+    "translate:fill-missing": "node ./scripts/deepl/translateMissingKeys.js",
+    "translate:check-consistency": "node ./scripts/checkTranslationConsistency.js"
+  },
+  "dependencies": {
+    "@tolgee/core": "^6.2.7",
+    "@tolgee/react": "^6.2.7"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  }
+}

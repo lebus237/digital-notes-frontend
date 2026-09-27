@@ -1,0 +1,21 @@
+.input {
+  font-size: var(--mantine-font-size-sm);
+  color: light-dark(#343a40, var(--mantine-color-dark-0));
+
+  &::placeholder {
+    font-size: var(--mantine-font-size-sm);
+  }
+
+  &:focus {
+    border-color: var(--mantine-color-orange-5);
+    background-color: light-dark(#ffffff, var(--mantine-color-dark-5));
+  }
+}
+
+.option {
+  color: light-dark(#343a40, var(--mantine-color-dark-0));
+
+  &[data-hovered] {
+    background-color: light-dark(rgba(255, 140, 26, 0.05), rgba(255, 140, 26, 0.1));
+  }
+}

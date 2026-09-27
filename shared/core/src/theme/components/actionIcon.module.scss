@@ -1,0 +1,13 @@
+.root {
+  &[data-variant='light']:hover {
+    background-color: light-dark(rgba(255, 140, 26, 0.1), rgba(255, 140, 26, 0.15));
+  }
+
+  &[data-variant='subtle'] {
+    color: light-dark(#6c757d, var(--mantine-color-dark-1));
+
+    &:hover {
+      background-color: light-dark(#f8f9fa, var(--mantine-color-dark-5));
+    }
+  }
+}

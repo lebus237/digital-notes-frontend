@@ -1,0 +1,19 @@
+{
+  "name": "@digitalnotes/admin",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "dependencies": {
+    "@digitalnotes/core": "workspace:*",
+    "@digitalnotes/i18n": "workspace:*"
+  }
+}

@@ -1,0 +1,13 @@
+.form {
+  padding: 1.25rem;
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-md);
+}
+
+@media (max-width: 40rem) {
+  .form input,
+  .form textarea {
+    font-size: 1rem;
+  }
+}

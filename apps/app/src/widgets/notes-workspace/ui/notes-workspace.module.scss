@@ -1,0 +1,9 @@
+.workspace {
+  display: grid;
+  gap: 2.5rem;
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: var(--mantine-font-size-lg);
+  }
+}

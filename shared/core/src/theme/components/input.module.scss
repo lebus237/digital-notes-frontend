@@ -1,0 +1,7 @@
+.input {
+  font-size: var(--mantine-font-size-sm);
+
+  &::placeholder {
+    font-size: var(--mantine-font-size-sm);
+  }
+}

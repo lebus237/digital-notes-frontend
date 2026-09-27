@@ -1,0 +1,15 @@
+.input {
+  font-size: var(--mantine-font-size-sm);
+  padding-block: 2px;
+
+  &:focus {
+    border-color: var(--mantine-primary-color-2);
+    background-color: light-dark(#ffffff, var(--mantine-color-dark-5));
+  }
+
+  &::placeholder {
+    font-size: var(--mantine-font-size-sm);
+    font-weight: 200;
+    font-style: italic;
+  }
+}

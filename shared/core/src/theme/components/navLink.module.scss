@@ -1,0 +1,17 @@
+.root {
+  color: light-dark(#adb5bd, var(--mantine-color-dark-2));
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: light-dark(#ffffff, var(--mantine-color-dark-0));
+  }
+
+  &[data-active] {
+    background-color: var(--mantine-color-orange-5);
+    color: #ffffff;
+
+    &:hover {
+      background-color: var(--mantine-color-orange-6);
+    }
+  }
+}

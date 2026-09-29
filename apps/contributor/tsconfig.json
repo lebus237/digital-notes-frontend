@@ -13,7 +13,11 @@
     "target": "ES2024",
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-    "paths": { "@/*": ["./src/*"] },
+    "paths": {
+      "@/*": ["./src/*"],
+      "@digitalnotes/core": ["../../shared/core/*"],
+      "@digitalnotes/i18n": ["../../shared/i18n/*"]
+    },
     "noEmit": true
   }
 }

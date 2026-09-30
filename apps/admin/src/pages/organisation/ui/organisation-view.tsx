@@ -1,18 +1,21 @@
 import { Alert, Button, Group, Modal, Tabs } from '@mantine/core'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
-import { organisationApi, type Department, type Faculty, type Level, type Semester, type University } from '@/entities/organisation'
-import { DepartmentForm, FacultyForm, LevelForm, SemesterForm, UniversityForm } from '@/features/manage-organisation'
+import { type Department, type Faculty, type Level, type Semester, type University } from '@/entities/organisation'
 import { CollectionManager, type CollectionColumn } from '@/widgets/collection'
 import { PageContainer } from '@/widgets/page-container'
-import { queryKeys } from '@/shared/api/query-client'
+import { queryClient, queryKeys } from '@/shared/api/query-client'
+import { UniversityForm } from './forms/university-form'
+import { FacultyForm } from './forms/faculty-form'
+import { DepartmentForm } from './forms/department-form'
+import { LevelForm } from './forms/level-form'
+import { SemesterForm } from './forms/semester-form'
 
 const breadcrumbs = [{ label: 'Home', to: '/' as const }, { label: 'Organisation' }]
 
 type ModalKind = 'university' | 'faculty' | 'department' | 'level' | 'semester' | null
 
 export function OrganisationView() {
-  const queryClient = useQueryClient()
   const [tab, setTab] = useState('universities')
   const [search, setSearch] = useState('')
   const [modal, setModal] = useState<ModalKind>(null)

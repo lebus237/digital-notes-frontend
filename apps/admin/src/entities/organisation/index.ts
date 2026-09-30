@@ -1,4 +1,4 @@
-export type { Department, Faculty, Level, ListQuery, Semester, University } from './model/types'
+export type { Department, Faculty, Level, ListQuery, Semester, University } from './model/models'
 export {
   departmentSchema,
   facultySchema,
@@ -11,4 +11,3 @@ export {
   type SemesterValues,
   type UniversityValues,
 } from './model/schemas'
-export { organisationApi } from './model/api'

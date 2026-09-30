@@ -1,3 +1,2 @@
-export type { Course, CourseFilters } from './model/types'
+export type { Course, CourseFilters } from './model/models'
 export { courseSchema, updateCourseSchema, type CourseValues, type UpdateCourseValues } from './model/schemas'
-export { courseApi } from './model/api'

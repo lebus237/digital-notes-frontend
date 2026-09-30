@@ -2,8 +2,8 @@ import type { ComponentType, ReactNode } from 'react'
 import { useFieldContext } from './context'
 
 export interface FieldValueProps {
-   value?: string
-   onChange?: (value: string) => void
+   value?: any
+   onChange?: (value: any) => void
    onBlur?: () => void
    error?: ReactNode
 }
@@ -25,13 +25,13 @@ function firstErrorMessage(errors: Array<unknown>): string | undefined {
 export function withFieldContext<TProps extends FieldValueProps>(Component: ComponentType<TProps>) {
    return function BoundField(props: TProps & WithFormFieldProps) {
       const { error: explicitError, ...componentProps } = props
-      const field = useFieldContext<string>()
+      const field = useFieldContext<any>()
       const message = firstErrorMessage(field.state.meta.errors ?? [])
       return (
          <Component
             {...(componentProps as TProps)}
             value={field.state.value ?? ''}
-            onChange={(value: string) => field.handleChange(value)}
+            onChange={(value: any) => field.handleChange(value)}
             onBlur={() => field.handleBlur()}
             error={explicitError ?? (!field.state.meta.isValid ? message : undefined)}
          />

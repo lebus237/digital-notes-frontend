@@ -1,0 +1,43 @@
+.section {
+  display: grid;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.search {
+  width: min(100%, 16rem);
+}
+
+.filter {
+  width: min(100%, 12rem);
+}
+
+.summary {
+  margin: 0;
+  color: light-dark(#6b7280, #9ca3af);
+  font-size: 0.875rem;
+}
+
+.tableWrap {
+  border-top: 1px solid light-dark(#e5e7eb, #1f2937);
+}
+
+.empty {
+  padding: 2rem 1.25rem;
+  color: light-dark(#6b7280, #9ca3af);
+  text-align: center;
+}

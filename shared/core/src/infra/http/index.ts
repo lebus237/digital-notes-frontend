@@ -1,4 +1,5 @@
 export { default as axios } from './axios-client'
+export * from './api-client'
 export { callAction, callActionWithId } from './helpers/action-helpers'
 export * from './helpers/api-keys-helper'
 export * from './helpers/session-helper'

@@ -1,6 +1,8 @@
 import { useFormContext } from './context'
 import type { EmailProps } from './inputs/email'
+import type { NumberInputProps } from './inputs/number-input'
 import type { PasswordProps } from './inputs/password'
+import type { SelectInputProps } from './inputs/select'
 import type { TextAreaProps } from './inputs/text-area'
 import type { TextInputProps } from './inputs/text-input'
 
@@ -26,4 +28,14 @@ export function Password(props: PasswordProps & FormFieldProps) {
 export function TextArea(props: TextAreaProps & FormFieldProps) {
    const form = useFormContext()
    return <form.AppField name={props.name}>{(field: any) => <field.TextArea {...props} />}</form.AppField>
+}
+
+export function Select(props: SelectInputProps & FormFieldProps) {
+   const form = useFormContext()
+   return <form.AppField name={props.name}>{(field: any) => <field.Select {...props} />}</form.AppField>
+}
+
+export function NumberInput(props: NumberInputProps & FormFieldProps) {
+   const form = useFormContext()
+   return <form.AppField name={props.name}>{(field: any) => <field.NumberInput {...props} />}</form.AppField>
 }

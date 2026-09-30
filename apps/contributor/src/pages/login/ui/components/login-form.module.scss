@@ -1,3 +1,11 @@
-.form {
-  width: 100%;
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 80%;
+  margin-inline: auto;
+}
+
+.submit {
+  height: 3rem;
 }

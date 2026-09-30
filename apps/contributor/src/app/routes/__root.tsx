@@ -1,7 +1,8 @@
 import '@mantine/core/styles.css'
-import { MantineProvider } from '@mantine/core'
+import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
+import { theme } from '@/app/theme'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -17,7 +18,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <MantineProvider>
+      <MantineProvider theme={theme} defaultColorScheme="auto">
         <Outlet />
       </MantineProvider>
     </RootDocument>
@@ -26,8 +27,9 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <ColorSchemeScript defaultColorScheme="auto" />
         <HeadContent />
       </head>
       <body>

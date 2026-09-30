@@ -1,25 +1,24 @@
-import { Container, Text, Title } from '@mantine/core'
 import { useNavigate } from '@tanstack/react-router'
-import styles from './login-view.module.scss'
+import { ThemeSwitcher } from '@/features/switch-theme'
 import { LoginForm } from './components/LoginForm'
+import styles from './login-view.module.scss'
 
 export default function LoginView() {
   const navigate = useNavigate()
 
   return (
     <main className={styles.page}>
-      <Container size="xs">
-        <header className={styles.header}>
-          <Text c="dimmed" size="sm">DIGITALNOTES · CONTRIBUTOR</Text>
-          <Title order={1}>Sign in</Title>
-          <Text c="dimmed">Sign in with your contributor account to continue.</Text>
-        </header>
+      <div className={styles.theme}>
+        <ThemeSwitcher />
+      </div>
+      <div className={styles.card}>
+        <h1 className={styles.title}>Sign in</h1>
         <LoginForm
           onSuccess={() => {
             void navigate({ to: '/' })
           }}
         />
-      </Container>
+      </div>
     </main>
   )
 }

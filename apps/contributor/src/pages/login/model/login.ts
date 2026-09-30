@@ -51,6 +51,11 @@ function persistSession(data: LoginResponse) {
     localStorage.setItem('app-token', data.accessToken)
     if (data.refreshToken) localStorage.setItem('app-refresh-token', data.refreshToken)
     localStorage.setItem('app-context', JSON.stringify(data.context ?? {}))
+    localStorage.setItem('app-user', JSON.stringify({
+      fullName: data.user?.fullName,
+      email: data.user?.email,
+      phoneNumber: data.user?.phoneNumber,
+    }))
   } catch {
     return
   }

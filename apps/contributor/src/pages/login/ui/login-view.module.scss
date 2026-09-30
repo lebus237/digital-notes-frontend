@@ -1,15 +1,31 @@
 .page {
-  min-height: 100vh;
-  padding-block: 3rem 5rem;
+  position: relative;
+  display: grid;
+  min-height: 100dvh;
+  padding: 1.5rem;
+  background: light-dark(#ffffff, #030712);
+  place-items: center;
 }
 
-.header {
+.theme {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.card {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
+  justify-content: center;
+  gap: 3rem;
+  width: min(100%, 32rem);
+  min-height: 66dvh;
+}
 
-  h1 {
-    margin-top: 0.5rem;
-  }
+.title {
+  margin: 0;
+  color: light-dark(#374151, #f3f4f6);
+  font-size: 1.875rem;
+  font-weight: 700;
+  text-align: center;
 }

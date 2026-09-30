@@ -1,0 +1,37 @@
+.title {
+  font-weight: 600;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.statusDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.draft {
+  color: var(--mantine-color-gray-7);
+}
+
+.pendingReview {
+  color: var(--mantine-color-orange-8);
+}
+
+.published {
+  color: var(--mantine-color-green-8);
+}
+
+.rejected {
+  color: var(--mantine-color-red-8);
+}
+
+.archived {
+  color: var(--mantine-color-blue-8);
+}

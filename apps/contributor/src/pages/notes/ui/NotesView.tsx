@@ -11,7 +11,7 @@ import {
   type NoteStatus,
 } from '@/entities/note'
 import { CreateNoteForm } from '@/features/create-note'
-import { CollectionManager, type CollectionColumn } from '@/widgets/collection'
+import { CollectionManager, type TableColumn } from '@digitalnotes/core'
 import { PageContainer } from '@/widgets/page-container'
 import styles from './notes-view.module.scss'
 
@@ -23,21 +23,21 @@ const statusClass: Record<NoteStatus, string> = {
   ARCHIVED: styles.archived,
 }
 
-const columns: Array<CollectionColumn<Note>> = [
+const columns: TableColumn[] = [
   {
-    key: 'title',
+    accessor: 'title',
     title: 'Note',
-    render: (note) => <span className={styles.title}>{note.title}</span>,
+    render: (note: Note) => <span className={styles.title}>{note.title}</span>,
   },
   {
-    key: 'type',
+    accessor: 'type',
     title: 'Type',
-    render: (note) => noteTypeLabels[note.noteType],
+    render: (note: Note) => noteTypeLabels[note.noteType],
   },
   {
-    key: 'status',
+    accessor: 'status',
     title: 'Status',
-    render: (note) => (
+    render: (note: Note) => (
       <span className={`${styles.status} ${statusClass[note.status]}`}>
         <span className={styles.statusDot} aria-hidden="true" />
         {noteStatusLabels[note.status]}
@@ -45,9 +45,9 @@ const columns: Array<CollectionColumn<Note>> = [
     ),
   },
   {
-    key: 'updated',
+    accessor: 'updated',
     title: 'Updated',
-    render: (note) => new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(note.updatedAt)),
+    render: (note: Note) => new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(note.updatedAt)),
   },
 ]
 
@@ -78,15 +78,9 @@ export function NotesView() {
   )
 
   const visibleNotes = useMemo(() => {
-    const query = search.trim().toLowerCase()
-    return notes.filter((note) => {
-      const matchesQuery = query === ''
-        || note.title.toLowerCase().includes(query)
-        || note.description.toLowerCase().includes(query)
-      const matchesStatus = status === 'ALL' || note.status === status
-      return matchesQuery && matchesStatus
-    })
-  }, [notes, search, status])
+    if (status === 'ALL') return notes
+    return notes.filter((note) => note.status === status)
+  }, [notes, status])
 
   return (
     <PageContainer
@@ -115,9 +109,7 @@ export function NotesView() {
         columns={columns}
         search={search}
         onSearchChange={setSearch}
-        searchPlaceholder="Search notes"
-        summary={`${visibleNotes.length} ${visibleNotes.length === 1 ? 'note' : 'notes'}`}
-        emptyLabel="No notes match this view."
+        limit={10}
         filter={(
           <Select
             aria-label="Filter status"

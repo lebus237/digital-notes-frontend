@@ -1,1 +1,1 @@
-export { CollectionManager, type CollectionColumn } from './ui/collection-manager'
+export { CollectionManager, type CollectionColumn } from '@digitalnotes/core'

@@ -51,11 +51,11 @@ export const callAction = <T>(
                return res.data
             } else if (!getIsOk(res)) {
                return null
-            }
+           }
 
             return res.data
          })
-         .catch(({ response }: any) => {
+        .catch(({ response }: any) => {
             if (response?.status >= 500) {
                throw response
             }

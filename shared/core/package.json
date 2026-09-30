@@ -18,7 +18,9 @@
   },
   "peerDependencies": {
     "@mantine/core": "^9.6.3",
+    "@tabler/icons-react": "*",
     "@tanstack/react-form": "^1.33.5",
+    "@tanstack/react-query": "*",
     "mantine-datatable": "^9.4.0",
     "react": "*",
     "react-dom": "*",

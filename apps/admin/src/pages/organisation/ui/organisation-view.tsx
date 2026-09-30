@@ -1,8 +1,15 @@
 import { Alert, Button, Group, Modal, Tabs } from '@mantine/core'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
-import { type Department, type Faculty, type Level, type Semester, type University } from '@/entities/organisation'
-import { CollectionManager, type CollectionColumn } from '@/widgets/collection'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { unwrapCollection } from '@digitalnotes/core'
+import {
+  listDepartments,
+  listFaculties,
+  listLevels,
+  listSemesters,
+  listUniversities,
+} from '@/shared/api/endpoints'
+import { CollectionTable, type TableColumn } from '@digitalnotes/core'
 import { PageContainer } from '@/widgets/page-container'
 import { queryClient, queryKeys } from '@/shared/api/query-client'
 import { UniversityForm } from './forms/university-form'
@@ -17,53 +24,45 @@ type ModalKind = 'university' | 'faculty' | 'department' | 'level' | 'semester' 
 
 export function OrganisationView() {
   const [tab, setTab] = useState('universities')
-  const [search, setSearch] = useState('')
   const [modal, setModal] = useState<ModalKind>(null)
-
-  const universitiesQuery = useQuery({ queryKey: queryKeys.universities(search), queryFn: () => organisationApi.universities({ search }) })
-  const facultiesQuery = useQuery({ queryKey: queryKeys.faculties(undefined, search), queryFn: () => organisationApi.faculties({ search }) })
-  const departmentsQuery = useQuery({ queryKey: queryKeys.departments(undefined, search), queryFn: () => organisationApi.departments({ search }) })
-  const levelsQuery = useQuery({ queryKey: queryKeys.levels(undefined, search), queryFn: () => organisationApi.levels({ search }) })
-  const semestersQuery = useQuery({ queryKey: queryKeys.semesters(search), queryFn: () => organisationApi.semesters({ search }) })
-
-  const universities = useMemo(() => universitiesQuery.data ?? [], [universitiesQuery.data])
-  const faculties = useMemo(() => facultiesQuery.data ?? [], [facultiesQuery.data])
-  const departments = useMemo(() => departmentsQuery.data ?? [], [departmentsQuery.data])
-  const levels = useMemo(() => levelsQuery.data ?? [], [levelsQuery.data])
-  const semesters = useMemo(() => semestersQuery.data ?? [], [semestersQuery.data])
 
   function handleCreated() {
     setModal(null)
     void queryClient.invalidateQueries({ queryKey: ['admin'] })
   }
 
-  const universityOptions = universities.map((item) => ({ value: item.id, label: item.name }))
-  const facultyOptions = faculties.map((item) => ({ value: item.id, label: item.name }))
-  const departmentOptions = departments.map((item) => ({ value: item.id, label: item.name }))
 
-  const universityColumns: Array<CollectionColumn<University>> = [
-    { key: 'name', title: 'Name', render: (row) => row.name },
-    { key: 'slug', title: 'Slug', render: (row) => row.slug },
+  const universityColumns: TableColumn[] = [
+    { accessor: 'name', title: 'Name', render: (row: any) => row.name },
+    { accessor: 'slug', title: 'Slug', render: (row: any) => row.slug ?? row.name },
   ]
-  const facultyColumns: Array<CollectionColumn<Faculty>> = [
-    { key: 'name', title: 'Name', render: (row) => row.name },
-    { key: 'slug', title: 'Slug', render: (row) => row.slug },
-    { key: 'universityId', title: 'University', render: (row) => universities.find((item) => item.id === row.universityId)?.name ?? row.universityId },
+  const facultyColumns: TableColumn[] = [
+    { accessor: 'name', title: 'Name', render: (row: any) => row.name },
+    { accessor: 'slug', title: 'Slug', render: (row: any) => row.slug ?? row.name },
+    {
+      accessor: 'universityId',
+      title: 'University',
+    },
   ]
-  const departmentColumns: Array<CollectionColumn<Department>> = [
-    { key: 'name', title: 'Name', render: (row) => row.name },
-    { key: 'slug', title: 'Slug', render: (row) => row.slug },
-    { key: 'facultyId', title: 'Faculty', render: (row) => faculties.find((item) => item.id === row.facultyId)?.name ?? row.facultyId },
+  const departmentColumns: TableColumn[] = [
+    { accessor: 'name', title: 'Name', render: (row: any) => row.name },
+    { accessor: 'slug', title: 'Slug', render: (row: any) => row.slug ?? row.name },
+    {
+      accessor: 'facultyId',
+      title: 'Faculty',
+    },
   ]
-  const levelColumns: Array<CollectionColumn<Level>> = [
-    { key: 'name', title: 'Name', render: (row) => row.name },
-    { key: 'departmentId', title: 'Department', render: (row) => departments.find((item) => item.id === row.departmentId)?.name ?? row.departmentId },
+  const levelColumns: TableColumn[] = [
+    { accessor: 'name', title: 'Name', render: (row: any) => row.name },
+    {
+      accessor: 'departmentId',
+      title: 'Department',
+    },
   ]
-  const semesterColumns: Array<CollectionColumn<Semester>> = [
-    { key: 'name', title: 'Name', render: (row) => row.name },
+  const semesterColumns: TableColumn[] = [
+    { accessor: 'name', title: 'Name', render: (row: any) => row.name },
   ]
 
-  const failed = universitiesQuery.isError || facultiesQuery.isError || departmentsQuery.isError || levelsQuery.isError || semestersQuery.isError
 
   return (
     <PageContainer
@@ -78,37 +77,61 @@ export function OrganisationView() {
         </Group>
       )}
     >
-      {failed && <Alert color="yellow">Backend is unreachable — showing empty lists. Check API_URL and admin session.</Alert>}
       <Tabs value={tab} onChange={(value) => setTab(value ?? 'universities')}>
         <Tabs.List>
-          <Tabs.Tab value="universities">Universities ({universities.length})</Tabs.Tab>
-          <Tabs.Tab value="faculties">Faculties ({faculties.length})</Tabs.Tab>
-          <Tabs.Tab value="departments">Departments ({departments.length})</Tabs.Tab>
-          <Tabs.Tab value="levels">Levels ({levels.length})</Tabs.Tab>
-          <Tabs.Tab value="semesters">Semesters ({semesters.length})</Tabs.Tab>
+          <Tabs.Tab value="universities">Universities</Tabs.Tab>
+          <Tabs.Tab value="faculties">Faculties</Tabs.Tab>
+          <Tabs.Tab value="departments">Departments</Tabs.Tab>
+          <Tabs.Tab value="levels">Levels</Tabs.Tab>
+          <Tabs.Tab value="semesters">Semesters</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="universities" pt="md">
-          <CollectionManager rows={universities} columns={universityColumns} search={search} onSearchChange={setSearch} searchPlaceholder="Search organisation" summary={`${universities.length} universities`} emptyLabel="No universities yet." />
+          <CollectionTable
+            columns={universityColumns}
+            fetchApi={listUniversities}
+            cacheKey="admin-universities"
+            limit={20}
+          />
         </Tabs.Panel>
         <Tabs.Panel value="faculties" pt="md">
-          <CollectionManager rows={faculties} columns={facultyColumns} search={search} onSearchChange={setSearch} searchPlaceholder="Search organisation" summary={`${faculties.length} faculties`} emptyLabel="No faculties yet." />
+          <CollectionTable
+            columns={facultyColumns}
+            fetchApi={listFaculties}
+            cacheKey="admin-faculties"
+            limit={20}
+          />
         </Tabs.Panel>
         <Tabs.Panel value="departments" pt="md">
-          <CollectionManager rows={departments} columns={departmentColumns} search={search} onSearchChange={setSearch} searchPlaceholder="Search organisation" summary={`${departments.length} departments`} emptyLabel="No departments yet." />
+          <CollectionTable
+            columns={departmentColumns}
+            fetchApi={listDepartments}
+            cacheKey="admin-departments"
+            limit={20}
+          />
         </Tabs.Panel>
         <Tabs.Panel value="levels" pt="md">
-          <CollectionManager rows={levels} columns={levelColumns} search={search} onSearchChange={setSearch} searchPlaceholder="Search organisation" summary={`${levels.length} levels`} emptyLabel="No levels yet." />
+          <CollectionTable
+            columns={levelColumns}
+            fetchApi={listLevels}
+            cacheKey="admin-levels"
+            limit={20}
+          />
         </Tabs.Panel>
         <Tabs.Panel value="semesters" pt="md">
-          <CollectionManager rows={semesters} columns={semesterColumns} search={search} onSearchChange={setSearch} searchPlaceholder="Search organisation" summary={`${semesters.length} semesters`} emptyLabel="No semesters yet." />
+          <CollectionTable
+            columns={semesterColumns}
+            fetchApi={listSemesters}
+            cacheKey="admin-semesters"
+            limit={20}
+          />
         </Tabs.Panel>
       </Tabs>
 
       <Modal opened={modal !== null} onClose={() => setModal(null)} title="Create record" centered>
         {modal === 'university' && <UniversityForm onSuccess={handleCreated} />}
-        {modal === 'faculty' && <FacultyForm universities={universityOptions} onSuccess={handleCreated} />}
-        {modal === 'department' && <DepartmentForm faculties={facultyOptions} onSuccess={handleCreated} />}
-        {modal === 'level' && <LevelForm departments={departmentOptions} onSuccess={handleCreated} />}
+        {modal === 'faculty' && <FacultyForm  onSuccess={handleCreated} />}
+        {modal === 'department' && <DepartmentForm  onSuccess={handleCreated} />}
+        {modal === 'level' && <LevelForm  onSuccess={handleCreated} />}
         {modal === 'semester' && <SemesterForm onSuccess={handleCreated} />}
       </Modal>
     </PageContainer>

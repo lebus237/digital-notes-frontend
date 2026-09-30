@@ -2,7 +2,8 @@ import { Alert, Button, Stack } from '@mantine/core'
 import { formOptions } from '@tanstack/react-form'
 import { useState } from 'react'
 import { FormField, FormWrapper, getServerMessage } from '@digitalnotes/core'
-import { courseApi, courseSchema, type CourseValues } from '@/entities/course'
+import { courseSchema, type CourseValues } from '@/entities/course'
+import { createCourse } from '@/shared/api/endpoints/courses'
 
 type Option = { value: string; label: string }
 
@@ -34,7 +35,15 @@ export function CourseForm({ departments, levels, semesters, onSuccess }: Readon
     setError('')
     setPending(true)
     try {
-      await courseApi.create(value)
+      const result = (await createCourse(value)) as unknown
+      if (
+        result !== null &&
+        typeof result === 'object' &&
+        'status' in result &&
+        (result as { status?: string }).status === 'error'
+      ) {
+        throw new Error((result as { error?: { message?: string } }).error?.message ?? 'Could not create course.')
+      }
       onSuccess?.()
     } catch (submitError) {
       setError(getServerMessage(submitError, 'Could not create course.'))

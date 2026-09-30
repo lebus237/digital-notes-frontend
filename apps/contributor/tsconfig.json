@@ -16,7 +16,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@digitalnotes/core": ["../../shared/core/*"],
-      "@digitalnotes/i18n": ["../../shared/i18n/*"]
+      "@digitalnotes/i18n": ["../../shared/i18n/*"],
+      "#/*": ["../../shared/core/src/*"]
     },
     "noEmit": true
   }

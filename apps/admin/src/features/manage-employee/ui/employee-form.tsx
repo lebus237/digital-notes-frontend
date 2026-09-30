@@ -2,7 +2,8 @@ import { Alert, Button, Stack } from '@mantine/core'
 import { formOptions } from '@tanstack/react-form'
 import { useState } from 'react'
 import { FormField, FormWrapper, getServerMessage } from '@digitalnotes/core'
-import { employeeApi, employeeSchema, type EmployeeValues } from '@/entities/employee'
+import { employeeSchema, type EmployeeValues } from '@/entities/employee'
+import { createEmployee } from '@/shared/api/endpoints/employees'
 
 type Option = { value: string; label: string }
 
@@ -25,7 +26,15 @@ export function EmployeeForm({ universities, roles, onSuccess }: Readonly<{ univ
     setError('')
     setPending(true)
     try {
-      await employeeApi.create(value)
+      const result = (await createEmployee(value)) as unknown
+      if (
+        result !== null &&
+        typeof result === 'object' &&
+        'status' in result &&
+        (result as { status?: string }).status === 'error'
+      ) {
+        throw new Error((result as { error?: { message?: string } }).error?.message ?? 'Could not create employee.')
+      }
       onSuccess?.()
     } catch (submitError) {
       setError(getServerMessage(submitError, 'Could not create employee.'))

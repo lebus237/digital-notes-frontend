@@ -1,5 +1,2 @@
-export type CollectionResponseType<T> = {
-   data: T[]
-   meta: Record<string, any>
-   analytics?: any
-}
+export * from './collection'
+export type { CollectionResponseType as LegacyCollectionResponseType } from './collection'

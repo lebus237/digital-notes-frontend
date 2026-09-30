@@ -125,44 +125,6 @@ function AppShellFrame({ children }: Readonly<{ children: ReactNode }>) {
         </div>
         <div className={styles.rule} />
         <nav className={styles.nav} aria-label="Primary">
-          {showReviewGroup && (
-            <div>
-              <button
-                type="button"
-                className={styles.groupButton}
-                aria-expanded={reviewOpen}
-                onClick={() => setReviewOpen((open) => !open)}
-              >
-                <span className={styles.groupLabel}>
-                  <IconClipboardCheck size={18} aria-hidden="true" />
-                  Review
-                </span>
-                <IconChevronDown
-                  size={18}
-                  className={`${styles.chevron} ${reviewOpen ? '' : styles.chevronClosed}`}
-                  aria-hidden="true"
-                />
-              </button>
-              {reviewOpen && (
-                <ul className={styles.subMenu}>
-                  {visibleLinks.map((link) => {
-                    const active = pathname === link.to
-                    return (
-                      <li key={link.to}>
-                        <Link
-                          to={link.to}
-                          className={`${styles.subLink} ${active ? styles.subLinkActive : ''}`}
-                          aria-current={active ? 'page' : undefined}
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
-            </div>
-          )}
           {showCatalogueGroup && (
             <div>
               <button

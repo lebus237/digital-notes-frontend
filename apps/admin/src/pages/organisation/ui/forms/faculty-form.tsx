@@ -12,7 +12,7 @@ const facultyOpts = formOptions({
   validators: { onSubmit: facultySchema },
 })
 
-export function FacultyForm({ universities, onSuccess }: Readonly<{ universities: Option[]; onSuccess?: () => void }>) {
+export function FacultyForm({ onSuccess }: Readonly<{onSuccess?: () => void }>) {
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
 
@@ -43,7 +43,7 @@ export function FacultyForm({ universities, onSuccess }: Readonly<{ universities
     <FormWrapper formOptions={facultyOpts} onSubmit={handleSubmit}>
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
-        <FormField.Select name="universityId" label="University" placeholder="Select university" data={universities} withAsterisk />
+        {/*<FormField.Select name="universityId" label="University" placeholder="Select university" data={universities} withAsterisk />*/}
         <FormField.TextInput name="name" label="Faculty name" placeholder="e.g. Faculty of Science" withAsterisk />
         <FormField.TextInput name="slug" label="Slug" placeholder="e.g. faculty-of-science" withAsterisk />
         <Button type="submit" loading={pending}>Create faculty</Button>

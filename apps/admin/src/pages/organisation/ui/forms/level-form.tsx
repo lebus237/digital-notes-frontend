@@ -12,7 +12,7 @@ const levelOpts = formOptions({
   validators: { onSubmit: levelSchema },
 })
 
-export function LevelForm({ departments, onSuccess }: Readonly<{ departments: Option[]; onSuccess?: () => void }>) {
+export function LevelForm({ onSuccess }: Readonly<{ onSuccess?: () => void }>) {
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
 
@@ -43,7 +43,7 @@ export function LevelForm({ departments, onSuccess }: Readonly<{ departments: Op
     <FormWrapper formOptions={levelOpts} onSubmit={handleSubmit}>
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
-        <FormField.Select name="departmentId" label="Department" placeholder="Select department" data={departments} withAsterisk />
+        {/*<FormField.Select name="departmentId" label="Department" placeholder="Select department" data={departments} withAsterisk />*/}
         <FormField.TextInput name="name" label="Level name" placeholder="e.g. 100 Level" withAsterisk />
         <Button type="submit" loading={pending}>Create level</Button>
       </Stack>

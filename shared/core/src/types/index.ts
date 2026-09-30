@@ -1,5 +1,6 @@
 import type { EnumValues } from './utils/enums'
 export * from './DocumentFile'
+export * from './collection'
 
 export type ModuleKey = string
 

@@ -1,10 +1,11 @@
 import { Alert, Button, Modal, Select } from '@mantine/core'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
-import { courseApi, type Course } from '@/entities/course'
-import { organisationApi } from '@/entities/organisation'
+import { useState } from 'react'
+import { unwrapCollection } from '@digitalnotes/core'
+import { archiveCourse, listCourses } from '@/shared/api/endpoints/courses'
+import { listDepartments, listLevels, listSemesters } from '@/shared/api/endpoints/organisation'
 import { CourseForm } from '@/features/manage-course'
-import { CollectionManager, type CollectionColumn } from '@/widgets/collection'
+import { CollectionTable, type TableColumn } from '@digitalnotes/core'
 import { PageContainer } from '@/widgets/page-container'
 import { queryKeys } from '@/shared/api/query-client'
 
@@ -12,45 +13,47 @@ const breadcrumbs = [{ label: 'Home', to: '/' as const }, { label: 'Courses' }]
 
 export function CoursesView() {
   const queryClient = useQueryClient()
-  const [search, setSearch] = useState('')
   const [departmentId, setDepartmentId] = useState<string | null>(null)
   const [createOpen, setCreateOpen] = useState(false)
   const [feedback, setFeedback] = useState('')
 
-  const filters = useMemo(
-    () => ({ search, departmentId: departmentId ?? undefined }),
-    [search, departmentId],
-  )
-  const coursesQuery = useQuery({ queryKey: queryKeys.courses(filters), queryFn: () => courseApi.list(filters) })
-  const departmentsQuery = useQuery({ queryKey: queryKeys.departments(undefined, ''), queryFn: () => organisationApi.departments({}) })
-  const levelsQuery = useQuery({ queryKey: queryKeys.levels(undefined, ''), queryFn: () => organisationApi.levels({}) })
-  const semestersQuery = useQuery({ queryKey: queryKeys.semesters(''), queryFn: () => organisationApi.semesters({}) })
+  const departmentsQuery = useQuery({
+    queryKey: queryKeys.departments(undefined, ''),
+    queryFn: async () => unwrapCollection<{ id: string; name: string }>(await listDepartments({})),
+  })
+  const levelsQuery = useQuery({
+    queryKey: queryKeys.levels(undefined, ''),
+    queryFn: async () => unwrapCollection<{ id: string; name: string }>(await listLevels({})),
+  })
+  const semestersQuery = useQuery({
+    queryKey: queryKeys.semesters(''),
+    queryFn: async () => unwrapCollection<{ id: string; name: string }>(await listSemesters({})),
+  })
 
-  const courses = coursesQuery.data ?? []
   const departments = departmentsQuery.data ?? []
 
   const archiveMutation = useMutation({
-    mutationFn: (id: string) => courseApi.archive(id),
-    onSuccess: (_data, id) => {
+    mutationFn: (id: string) => archiveCourse(id, {}),
+    onSuccess: () => {
       setFeedback('Course archived.')
       void queryClient.invalidateQueries({ queryKey: ['admin', 'courses'] })
     },
     onError: (error) => setFeedback(error instanceof Error ? error.message : 'Could not archive course.'),
   })
 
-  const columns: Array<CollectionColumn<Course>> = [
-    { key: 'code', title: 'Code', render: (row) => row.code },
-    { key: 'name', title: 'Name', render: (row) => row.name },
+  const columns: TableColumn[] = [
+    { accessor: 'code', title: 'Code', render: (row: any) => row.code },
+    { accessor: 'name', title: 'Name', render: (row: any) => row.name },
     {
-      key: 'departmentId',
+      accessor: 'departmentId',
       title: 'Department',
-      render: (row) => departments.find((item) => item.id === row.departmentId)?.name ?? row.departmentId,
+      render: (row: any) => departments.find((item) => item.id === row.departmentId)?.name ?? row.departmentName ?? row.departmentId,
     },
     {
-      key: 'actions',
+      accessor: 'actions',
       title: 'Actions',
-      align: 'right',
-      render: (row) => (
+      textAlign: 'right',
+      render: (row: any) => (
         <Button type="button" variant="subtle" color="red" size="xs" loading={archiveMutation.isPending} onClick={() => archiveMutation.mutate(row.id)}>
           Archive
         </Button>
@@ -65,28 +68,24 @@ export function CoursesView() {
         <Button size="xs" onClick={() => setCreateOpen(true)}>New course</Button>
       )}
     >
-      {coursesQuery.isError && <Alert color="yellow">Could not reach the courses API. Check admin session.</Alert>}
       {feedback && <Alert color="blue">{feedback}</Alert>}
-      <CollectionManager
-        rows={courses}
+      <CollectionTable
         columns={columns}
-        search={search}
-        onSearchChange={setSearch}
-        searchPlaceholder="Search courses"
-        summary={`${courses.length} courses`}
-        emptyLabel="No courses match this view."
-        filter={(
-          <Select
-            aria-label="Filter department"
-            placeholder="All departments"
-            clearable
-            data={departments.map((item) => ({ value: item.id, label: item.name }))}
-            value={departmentId}
-            onChange={setDepartmentId}
-            w={200}
-          />
-        )}
-      />
+        fetchApi={listCourses}
+        cacheKey="admin-courses"
+        customQuery={departmentId ? { departmentId } : undefined}
+        limit={20}
+      >
+        <Select
+          aria-label="Filter department"
+          placeholder="All departments"
+          clearable
+          data={departments.map((item) => ({ value: item.id, label: item.name }))}
+          value={departmentId}
+          onChange={setDepartmentId}
+          w={200}
+        />
+      </CollectionTable>
       <Modal opened={createOpen} onClose={() => setCreateOpen(false)} title="Create course" centered size="lg">
         <CourseForm
           departments={(departmentsQuery.data ?? []).map((item) => ({ value: item.id, label: item.name }))}

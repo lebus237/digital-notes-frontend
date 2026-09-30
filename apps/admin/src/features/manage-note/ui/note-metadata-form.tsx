@@ -2,7 +2,8 @@ import { Alert, Button, Stack } from '@mantine/core'
 import { formOptions } from '@tanstack/react-form'
 import { useState } from 'react'
 import { FormField, FormWrapper, getServerMessage } from '@digitalnotes/core'
-import { noteApi, noteMetadataSchema, type NoteMetadataValues } from '@/entities/note'
+import { noteMetadataSchema, type NoteMetadataValues } from '@/entities/note'
+import { updateNoteMetadata } from '@/shared/api/endpoints/notes'
 
 const metadataOpts = formOptions({
   defaultValues: { title: '', description: '', price: 0 } satisfies NoteMetadataValues,
@@ -22,7 +23,19 @@ export function NoteMetadataForm({ noteId, initial, onSuccess }: Readonly<{ note
     setError('')
     setPending(true)
     try {
-      await noteApi.updateMetadata(noteId, value)
+      const result = (await updateNoteMetadata(noteId, {
+        title: value.title,
+        description: value.description === '' ? null : (value.description ?? null),
+        price: value.price,
+      })) as unknown
+      if (
+        result !== null &&
+        typeof result === 'object' &&
+        'status' in result &&
+        (result as { status?: string }).status === 'error'
+      ) {
+        throw new Error((result as { error?: { message?: string } }).error?.message ?? 'Could not update note.')
+      }
       onSuccess?.()
     } catch (submitError) {
       setError(getServerMessage(submitError, 'Could not update note.'))

@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 
 export type ShellCrumb = {
   label: string
-  to?: '/' | '/submit'
+  to?: string
 }
 
 type ShellContextValue = {

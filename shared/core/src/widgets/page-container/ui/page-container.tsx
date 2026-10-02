@@ -1,6 +1,6 @@
 import { IconX } from '@tabler/icons-react'
 import { useEffect, type ReactNode } from 'react'
-import { useShell, type ShellCrumb } from '@/widgets/app-shell'
+import { useShell, type ShellCrumb } from '../../app-shell/model/shell-context'
 import styles from './page-container.module.scss'
 
 type PagePanel = {

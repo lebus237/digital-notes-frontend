@@ -153,6 +153,9 @@ importers:
       '@tanstack/react-query':
         specifier: '*'
         version: 5.104.0(react@19.3.0)
+      '@tanstack/react-router':
+        specifier: '*'
+        version: 1.170.40(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       lodash-es:
         specifier: ^4.18.1
         version: 4.18.1

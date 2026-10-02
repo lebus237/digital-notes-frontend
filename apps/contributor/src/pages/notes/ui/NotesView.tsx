@@ -11,8 +11,7 @@ import {
   type NoteStatus,
 } from '@/entities/note'
 import { CreateNoteForm } from '@/features/create-note'
-import { CollectionManager, type TableColumn } from '@digitalnotes/core'
-import { PageContainer } from '@/widgets/page-container'
+import { CollectionManager, PageContainer, type TableColumn } from '@digitalnotes/core'
 import styles from './notes-view.module.scss'
 
 const statusClass: Record<NoteStatus, string> = {

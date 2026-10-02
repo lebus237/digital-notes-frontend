@@ -121,6 +121,15 @@
   overflow: auto;
 }
 
+.topLevel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .groupButton {
   display: flex;
   align-items: center;
@@ -181,6 +190,8 @@
 .subLink {
   position: relative;
   display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.375rem 0.75rem 0.375rem 2.25rem;
   border-radius: 0.375rem;
   color: light-dark(#374151, #9ca3af);
@@ -195,6 +206,10 @@
     outline: 2px solid #2563eb;
     outline-offset: 2px;
   }
+}
+
+.standaloneLink {
+  padding-left: 0.75rem;
 }
 
 .subLinkActive {
@@ -213,6 +228,10 @@
     background: #3b82f6;
     transform: translateY(-50%);
   }
+}
+
+.standaloneLink.subLinkActive::before {
+  left: 0.5rem;
 }
 
 .footer {

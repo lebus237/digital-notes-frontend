@@ -5,8 +5,7 @@ import { unwrapCollection } from '@digitalnotes/core'
 import { archiveCourse, listCourses } from '@/shared/api/endpoints/courses'
 import { listDepartments, listLevels, listSemesters } from '@/shared/api/endpoints/organisation'
 import { CourseForm } from '@/features/manage-course'
-import { CollectionTable, type TableColumn } from '@digitalnotes/core'
-import { PageContainer } from '@/widgets/page-container'
+import { CollectionTable, PageContainer, type TableColumn } from '@digitalnotes/core'
 import { queryKeys } from '@/shared/api/query-client'
 
 const breadcrumbs = [{ label: 'Home', to: '/' as const }, { label: 'Courses' }]

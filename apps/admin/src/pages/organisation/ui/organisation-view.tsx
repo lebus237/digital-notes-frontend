@@ -9,8 +9,7 @@ import {
   listSemesters,
   listUniversities,
 } from '@/shared/api/endpoints'
-import { CollectionTable, type TableColumn } from '@digitalnotes/core'
-import { PageContainer } from '@/widgets/page-container'
+import { CollectionTable, PageContainer, type TableColumn } from '@digitalnotes/core'
 import { queryClient, queryKeys } from '@/shared/api/query-client'
 import { UniversityForm } from './forms/university-form'
 import { FacultyForm } from './forms/faculty-form'

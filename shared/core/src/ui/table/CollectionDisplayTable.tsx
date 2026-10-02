@@ -25,7 +25,7 @@ function CollectionDisplayTable({
     <CollectionDisplay
       {...base}
       renderBody={() => (
-        <Card radius="md" shadow="xs">
+        <Card radius="md" shadow="none">
           <Card.Section p="xs">
             <AppTable
               records={records}

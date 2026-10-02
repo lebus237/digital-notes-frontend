@@ -4,7 +4,7 @@
  */
 export const DEFAULT_RADIUS = 'sm' as const
 export const DEFAULT_SIZE = 'sm' as const
-export const DEFAULT_SHADOW = 'sm' as const
+export const DEFAULT_SHADOW = 'xs' as const
 export const OVERLAY_SHADOW = 'xl' as const
 
 /** Flush panels (drawers) stay square against the viewport edge. */

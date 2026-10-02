@@ -8,5 +8,5 @@ export const ButtonComponent = Button.extend({
       root: {
          fontWeight: 400,
       },
-   },
+  },
 })

@@ -21,15 +21,60 @@
 .actionBar {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  height: 4rem;
-  padding-inline: 1.25rem;
-  border-bottom: 1px dashed light-dark(#d1d5db, #374151);
+  justify-content: space-between;
+  min-height: 4rem;
+  padding: var(--mantine-spacing-md);
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.titleIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  background: light-dark(#f3f4f6, #1f2937);
+  color: light-dark(#374151, #e5e7eb);
+}
+
+.titleText {
+  min-width: 0;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.pageDescription {
+  margin: 0.125rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: light-dark(#6b7280, #9ca3af);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .body {
   flex: 1;
   overflow: auto;
+  padding: var(--mantine-spacing-md);
 }
 
 .panel {

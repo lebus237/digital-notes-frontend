@@ -1,4 +1,5 @@
 import { Alert, Button, Modal, Select } from '@mantine/core'
+import { IconBook } from '@tabler/icons-react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { unwrapCollection } from '@digitalnotes/core'
@@ -63,8 +64,11 @@ export function CoursesView() {
   return (
     <PageContainer
       breadcrumbs={breadcrumbs}
+      title="Courses"
+      description="Manage the course catalog"
+      icon={<IconBook size={20} />}
       actions={(
-        <Button size="xs" onClick={() => setCreateOpen(true)}>New course</Button>
+        <Button onClick={() => setCreateOpen(true)}>New course</Button>
       )}
     >
       {feedback && <Alert color="blue">{feedback}</Alert>}

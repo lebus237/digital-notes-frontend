@@ -1,5 +1,5 @@
 import { Button, Select } from '@mantine/core'
-import { IconPlus } from '@tabler/icons-react'
+import { IconNotes, IconPlus } from '@tabler/icons-react'
 import { useRouterState } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
 import {
@@ -84,6 +84,9 @@ export function NotesView() {
   return (
     <PageContainer
       breadcrumbs={breadcrumbs}
+      title={creating ? 'Submit note' : 'My notes'}
+      description={creating ? 'Submit a new note for review' : 'Create and track your notes'}
+      icon={<IconNotes size={20} />}
       actions={(
         <Button leftSection={<IconPlus size={18} />} onClick={() => setPanelOpen(true)}>
           New note

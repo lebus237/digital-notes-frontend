@@ -1,4 +1,5 @@
 import { Alert, Button, Modal, Select } from '@mantine/core'
+import { IconUsers } from '@tabler/icons-react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { unwrapCollection } from '@digitalnotes/core'
@@ -59,6 +60,9 @@ export function EmployeesView() {
   return (
     <PageContainer
       breadcrumbs={breadcrumbs}
+      title="Employees"
+      description="Manage employee accounts and access"
+      icon={<IconUsers size={20} />}
       actions={<Button size="xs" onClick={() => setCreateOpen(true)}>New employee</Button>}
     >
       {feedback && <Alert color="blue">{feedback}</Alert>}

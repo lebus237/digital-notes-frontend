@@ -1,4 +1,5 @@
 import { Alert, Button, Group, Modal, Tabs } from '@mantine/core'
+import { IconBuilding } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { unwrapCollection } from '@digitalnotes/core'
@@ -66,6 +67,9 @@ export function OrganisationView() {
   return (
     <PageContainer
       breadcrumbs={breadcrumbs}
+      title="Organisation"
+      description="Manage universities, faculties and departments"
+      icon={<IconBuilding size={20} />}
       actions={(
         <Group gap="xs">
           <Button size="xs" variant={tab === 'universities' ? 'filled' : 'light'} onClick={() => { setTab('universities'); setModal('university') }}>New university</Button>

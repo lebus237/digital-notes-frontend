@@ -12,12 +12,15 @@ type PagePanel = {
 
 type PageContainerProps = {
   breadcrumbs: ShellCrumb[]
+  title?: ReactNode
+  description?: ReactNode
+  icon?: ReactNode
   actions?: ReactNode
   panel?: PagePanel
   children: ReactNode
 }
 
-export function PageContainer({ breadcrumbs, actions, panel, children }: Readonly<PageContainerProps>) {
+export function PageContainer({ breadcrumbs, title, description, icon, actions, panel, children }: Readonly<PageContainerProps>) {
   const { setBreadcrumbs } = useShell()
   const panelOpen = Boolean(panel?.opened)
 
@@ -29,7 +32,18 @@ export function PageContainer({ breadcrumbs, actions, panel, children }: Readonl
   return (
     <div className={styles.frame}>
       <div className={`${styles.content} ${panelOpen ? styles.contentShifted : ''}`}>
-        <header className={styles.actionBar}>{actions}</header>
+        <header className={styles.actionBar}>
+          {(title ?? description ?? icon) && (
+            <div className={styles.titleGroup}>
+              {icon && <span className={styles.titleIcon}>{icon}</span>}
+              <div className={styles.titleText}>
+                {title && <h1 className={styles.pageTitle}>{title}</h1>}
+                {description && <p className={styles.pageDescription}>{description}</p>}
+              </div>
+            </div>
+          )}
+          <div className={styles.actions}>{actions}</div>
+        </header>
         <div className={styles.body}>{children}</div>
       </div>
       <aside

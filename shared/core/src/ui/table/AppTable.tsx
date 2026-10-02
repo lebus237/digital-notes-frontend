@@ -362,7 +362,7 @@ function AppTable<T extends Record<string, any>>({
 
   return (
     <div className={classes.root} style={rootStyle}>
-      {height ? <ScrollArea h={height}>{tableContent}</ScrollArea> : tableContent}
+      {height ? <ScrollArea h={height} scrollbarSize={4} type="auto">{tableContent}</ScrollArea> : tableContent}
     </div>
   )
 }

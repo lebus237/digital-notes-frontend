@@ -2,10 +2,8 @@ import { Alert, Button, Modal, Select } from "@mantine/core";
 import { IconPlus, IconUsers } from "@tabler/icons-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { unwrapCollection } from "@digitalnotes/core";
 import { listEmployees } from "@/shared/api/endpoints/employees";
-import { listUniversities } from "@/shared/api/endpoints/organisation";
-import { EmployeeForm } from "@/features/manage-employee";
+import { EmployeeForm } from "./employee-form";
 import {
   CollectionTable,
   PageContainer,
@@ -71,7 +69,13 @@ export function EmployeesView() {
       description="Manage employee accounts and access"
       icon={<IconUsers size={20} />}
       actions={[
-        { key: "new-employee", label: "New employee", icon: <IconPlus size={16} />, size: "xs", onClick: () => setCreateOpen(true) },
+        {
+          key: "new-employee",
+          label: "New employee",
+          icon: <IconPlus size={16} />,
+          size: "xs",
+          onClick: () => setCreateOpen(true),
+        },
       ]}
     >
       {feedback && <Alert color="blue">{feedback}</Alert>}

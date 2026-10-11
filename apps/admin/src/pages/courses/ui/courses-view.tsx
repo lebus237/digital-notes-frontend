@@ -9,7 +9,7 @@ import {
   listLevels,
   listSemesters,
 } from "@/shared/api/endpoints/organisation";
-import { CourseForm } from "@/features/manage-course";
+import { CourseForm } from "./course-form";
 
 import {
   CollectionTable,

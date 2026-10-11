@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createNote, NoteList, type Note } from '@/entities/note'
-import { CreateNoteForm } from '@/features/create-note'
+import { CreateNoteForm } from './create-note-form'
 import styles from './notes-workspace.module.scss'
 
 export function NotesWorkspace() {

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './app/routes/__root'
 import { Route as AppRouteImport } from './app/routes/_app'
 import { Route as LoginRouteImport } from './app/routes/login'
+import { Route as LogoutRouteImport } from './app/routes/logout'
 import { Route as AppIndexRouteImport } from './app/routes/_app/index'
 import { Route as AppSubmitRouteImport } from './app/routes/_app/submit'
 
@@ -21,6 +22,11 @@ const AppRoute = AppRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LogoutRoute = LogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -37,10 +43,12 @@ const AppSubmitRoute = AppSubmitRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/submit': typeof AppSubmitRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/submit': typeof AppSubmitRoute
   '/': typeof AppIndexRoute
 }
@@ -48,20 +56,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/_app/submit': typeof AppSubmitRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/submit'
+  fullPaths: '/' | '/login' | '/logout' | '/submit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/submit' | '/'
-  id: '__root__' | '/_app' | '/login' | '/_app/submit' | '/_app/'
+  to: '/login' | '/logout' | '/submit' | '/'
+  id: '__root__' | '/_app' | '/login' | '/logout' | '/_app/submit' | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
+  LogoutRoute: typeof LogoutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,6 +88,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/': {
@@ -112,6 +129,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
+  LogoutRoute: LogoutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

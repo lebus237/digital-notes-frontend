@@ -41,17 +41,42 @@ class LocalStorage {
       return null
    }
 
-   static setAppContext(context: object) {
-      if (this.isBrowser()) {
-         localStorage.setItem('app-context', JSON.stringify(context))
-      }
-   }
+    static setAppContext(context: object) {
+       if (this.isBrowser()) {
+          localStorage.setItem('app-context', JSON.stringify(context))
+       }
+    }
 
-   static clearAppContext() {
-      if (this.isBrowser()) {
-         localStorage.removeItem('app-context')
-      }
-   }
+    static clearAppContext() {
+       if (this.isBrowser()) {
+          localStorage.removeItem('app-context')
+       }
+    }
+
+    static setUser(user: object) {
+       if (this.isBrowser()) {
+          localStorage.setItem('app-user', JSON.stringify(user))
+       }
+    }
+
+    static getUser<T = any>(): T | null {
+       if (this.isBrowser()) {
+          try {
+             const user = localStorage.getItem('app-user')
+             return user ? (JSON.parse(user) as T) : null
+          } catch {
+             return null
+          }
+       }
+
+       return null
+    }
+
+    static clearUser() {
+       if (this.isBrowser()) {
+          localStorage.removeItem('app-user')
+       }
+    }
 
    static setInstance(context: object) {
       if (this.isBrowser()) {
@@ -116,11 +141,12 @@ class LocalStorage {
       }
    }
 
-   static clearAll() {
-      this.clearRefreshToken()
-      this.clearAuthToken()
-      this.clearAppContext()
-   }
+    static clearAll() {
+       this.clearRefreshToken()
+       this.clearAuthToken()
+       this.clearAppContext()
+       this.clearUser()
+    }
 }
 
 export default LocalStorage

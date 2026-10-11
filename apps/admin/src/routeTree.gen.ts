@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './app/routes/__root'
 import { Route as AppRouteImport } from './app/routes/_app'
 import { Route as LoginRouteImport } from './app/routes/login'
+import { Route as LogoutRouteImport } from './app/routes/logout'
 import { Route as AppIndexRouteImport } from './app/routes/_app/index'
 import { Route as AppCoursesRouteImport } from './app/routes/_app/courses'
 import { Route as AppEmployeesRouteImport } from './app/routes/_app/employees'
@@ -23,6 +24,11 @@ const AppRoute = AppRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LogoutRoute = LogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -49,12 +55,14 @@ const AppOrganisationRoute = AppOrganisationRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/courses': typeof AppCoursesRoute
   '/employees': typeof AppEmployeesRoute
   '/organisation': typeof AppOrganisationRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/courses': typeof AppCoursesRoute
   '/employees': typeof AppEmployeesRoute
   '/organisation': typeof AppOrganisationRoute
@@ -64,6 +72,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/_app/courses': typeof AppCoursesRoute
   '/_app/employees': typeof AppEmployeesRoute
   '/_app/organisation': typeof AppOrganisationRoute
@@ -71,13 +80,15 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/courses' | '/employees' | '/organisation'
+  fullPaths:
+    '/' | '/login' | '/logout' | '/courses' | '/employees' | '/organisation'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/courses' | '/employees' | '/organisation' | '/'
+  to: '/login' | '/logout' | '/courses' | '/employees' | '/organisation' | '/'
   id:
     | '__root__'
     | '/_app'
     | '/login'
+    | '/logout'
     | '/_app/courses'
     | '/_app/employees'
     | '/_app/organisation'
@@ -87,6 +98,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
+  LogoutRoute: typeof LogoutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -103,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/': {
@@ -155,6 +174,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
+  LogoutRoute: LogoutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

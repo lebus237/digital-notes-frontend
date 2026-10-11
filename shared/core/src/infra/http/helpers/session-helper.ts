@@ -11,13 +11,16 @@ export const authSuccess = (props: any) => {
    axios.defaults.headers.Authorization = `Bearer ${props.token}`
 }
 
-export const logout = () => {
-   /**
-    * Should not provide redirect and reload arguments at the same time
-    * */
-
+export const clearSession = () => {
    delete axios.defaults.headers.Authorization
 
    LocalStorage.clearAll()
-   window.location.reload()
+}
+
+export const logout = (redirectTo = '/login') => {
+   clearSession()
+
+   if (typeof window !== 'undefined') {
+      window.location.replace(redirectTo)
+   }
 }

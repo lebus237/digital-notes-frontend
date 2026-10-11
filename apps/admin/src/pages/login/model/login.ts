@@ -52,15 +52,11 @@ function persistSession(data: LoginResponse) {
   LocalStorage.setAuthToken(data.accessToken)
   if (data.refreshToken) LocalStorage.setRefreshToken(data.refreshToken)
   LocalStorage.setAppContext((data.context as object) ?? {})
-  try {
-    localStorage.setItem('app-user', JSON.stringify({
-      fullName: data.user?.fullName,
-      email: data.user?.email,
-      phoneNumber: data.user?.phoneNumber,
-    }))
-  } catch {
-    return
-  }
+  LocalStorage.setUser({
+    fullName: data.user?.fullName,
+    email: data.user?.email,
+    phoneNumber: data.user?.phoneNumber,
+  })
   refreshAuthHeader()
 }
 

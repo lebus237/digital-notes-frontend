@@ -1,5 +1,5 @@
 import { Alert, Button, Modal, Select } from "@mantine/core";
-import { IconUsers } from "@tabler/icons-react";
+import { IconPlus, IconUsers } from "@tabler/icons-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { unwrapCollection } from "@digitalnotes/core";
@@ -70,11 +70,9 @@ export function EmployeesView() {
       title="Employees"
       description="Manage employee accounts and access"
       icon={<IconUsers size={20} />}
-      actions={
-        <Button size="xs" onClick={() => setCreateOpen(true)}>
-          New employee
-        </Button>
-      }
+      actions={[
+        { key: "new-employee", label: "New employee", icon: <IconPlus size={16} />, size: "xs", onClick: () => setCreateOpen(true) },
+      ]}
     >
       {feedback && <Alert color="blue">{feedback}</Alert>}
       <CollectionTable

@@ -1,5 +1,6 @@
+import { ActionIcon, Affix, Button, Tooltip, Tabs, type ButtonProps } from '@mantine/core'
 import { IconX } from '@tabler/icons-react'
-import { useEffect, type ReactNode } from 'react'
+import { Children, useEffect, useState, type ReactNode } from 'react'
 import { useShell, type ShellCrumb } from '../../app-shell/model/shell-context'
 import styles from './page-container.module.scss'
 
@@ -10,19 +11,91 @@ type PagePanel = {
   children: ReactNode
 }
 
+export type PageTab = {
+  value: string
+  label: ReactNode
+  leftSection?: ReactNode
+  rightSection?: ReactNode
+  disabled?: boolean
+}
+
+export type PageAction = {
+  key: string
+  label: string
+  icon?: ReactNode
+  onClick: () => void
+  variant?: ButtonProps['variant']
+  color?: ButtonProps['color']
+  size?: ButtonProps['size']
+  disabled?: boolean
+  loading?: boolean
+  tabValue?: string
+}
+
+function actionLabelAbbreviation(label: string) {
+  const initials = label
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+  return initials.toUpperCase() || '?'
+}
+
 type PageContainerProps = {
   breadcrumbs: ShellCrumb[]
   title?: ReactNode
   description?: ReactNode
   icon?: ReactNode
-  actions?: ReactNode
+  actions?: PageAction[]
   panel?: PagePanel
-  children: ReactNode
+  children?: ReactNode
+  tabs?: PageTab[]
+  tabValue?: string | null
+  defaultTabValue?: string
+  onTabChange?: (value: string | null) => void
+  keepMounted?: boolean
 }
 
-export function PageContainer({ breadcrumbs, title, description, icon, actions, panel, children }: Readonly<PageContainerProps>) {
+export function PageContainer({
+  breadcrumbs,
+  title,
+  description,
+  icon,
+  actions,
+  panel,
+  children,
+  tabs,
+  tabValue,
+  defaultTabValue,
+  onTabChange,
+  keepMounted = true,
+}: Readonly<PageContainerProps>) {
   const { setBreadcrumbs } = useShell()
   const panelOpen = Boolean(panel?.opened)
+  const hasTabs = Boolean(tabs && tabs.length > 0)
+  const childArray = Children.toArray(children)
+  const tabPanels = hasTabs ? childArray.slice(0, tabs?.length) : []
+  const otherChildren = hasTabs ? childArray.slice(tabs?.length) : childArray
+  const [internalTab, setInternalTab] = useState<string | null>(defaultTabValue ?? tabs?.[0]?.value ?? null)
+  const activeTab = tabValue !== undefined ? tabValue : internalTab
+
+  function handleTabChange(value: string | null) {
+    if (tabValue === undefined) {
+      setInternalTab(value)
+    }
+    onTabChange?.(value)
+  }
+
+  function resolveVariant(action: PageAction): ButtonProps['variant'] {
+    if (action.variant) {
+      return action.variant
+    }
+    if (action.tabValue !== undefined && hasTabs) {
+      return action.tabValue === activeTab ? 'filled' : 'light'
+    }
+    return undefined
+  }
 
   useEffect(() => {
     setBreadcrumbs(breadcrumbs)
@@ -42,10 +115,75 @@ export function PageContainer({ breadcrumbs, title, description, icon, actions, 
               </div>
             </div>
           )}
-          <div className={styles.actions}>{actions}</div>
+          <div className={styles.actions}>
+            {actions && actions.length > 0 && (
+              <div className={styles.desktopActions}>
+                {actions.map((action) => (
+                  <Button
+                    key={action.key}
+                    size={action.size}
+                    variant={resolveVariant(action)}
+                    color={action.color}
+                    leftSection={action.icon}
+                    disabled={action.disabled}
+                    loading={action.loading}
+                    onClick={action.onClick}
+                  >
+                    {action.label}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </div>
         </header>
-        <div className={styles.body}>{children}</div>
+        <div className={styles.body}>
+          {hasTabs && (
+            <Tabs value={activeTab} onChange={handleTabChange} keepMounted={keepMounted}>
+              <Tabs.List>
+                {tabs?.map((tab) => (
+                  <Tabs.Tab
+                    key={tab.value}
+                    value={tab.value}
+                    leftSection={tab.leftSection}
+                    rightSection={tab.rightSection}
+                    disabled={tab.disabled}
+                  >
+                    {tab.label}
+                  </Tabs.Tab>
+                ))}
+              </Tabs.List>
+              {tabs?.map((tab, index) => (
+                <Tabs.Panel key={tab.value} value={tab.value} pt="md">
+                  {tabPanels[index]}
+                </Tabs.Panel>
+              ))}
+            </Tabs>
+          )}
+          {otherChildren}
+        </div>
       </div>
+      {actions && actions.length > 0 && (
+        <Affix position={{ bottom: '1rem', right: '1rem' }}>
+          <div className={styles.fabStack}>
+            {actions.map((action) => (
+              <Tooltip key={action.key} label={action.label} position="left">
+                <ActionIcon
+                  size="xl"
+                  radius="xl"
+                  variant="filled"
+                  color={action.color}
+                  disabled={action.disabled}
+                  loading={action.loading}
+                  onClick={action.onClick}
+                  aria-label={action.label}
+                >
+                  {action.icon ?? <span className={styles.fabFallback}>{actionLabelAbbreviation(action.label)}</span>}
+                </ActionIcon>
+              </Tooltip>
+            ))}
+          </div>
+        </Affix>
+      )}
       <aside
         className={`${styles.panel} ${panelOpen ? styles.panelOpen : ''}`}
         aria-hidden={!panelOpen}

@@ -1,1 +1,1 @@
-export { PageContainer } from './ui/page-container'
+export { PageContainer, type PageAction, type PageTab } from './ui/page-container'

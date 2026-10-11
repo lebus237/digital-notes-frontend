@@ -17,19 +17,14 @@ import {
   type TableColumn,
 } from "@digitalnotes/core";
 import { login } from "@/shared/api/endpoints";
+import { queryClient } from "@/shared/api/query-client";
 
 const breadcrumbs = [{ label: "Home", to: "/" as const }, { label: "Courses" }];
 
 export function CoursesView() {
-  const queryClient = useQueryClient();
   const [departmentId, setDepartmentId] = useState<string | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
-
-  useQuery({
-    queryKey: ["login"],
-    queryFn: () => login({ phoneNumber: "5555", password: "jnskkf" }),
-  });
 
   const archiveMutation = useMutation({
     mutationFn: (id: string) => archiveCourse(id, {}),
@@ -47,8 +42,12 @@ export function CoursesView() {
     { accessor: "code", title: "Code", render: (row: any) => row.code },
     { accessor: "name", title: "Name", render: (row: any) => row.name },
     {
-      accessor: "departmentId",
+      accessor: "departmentName",
       title: "Department",
+    },
+    {
+      accessor: "semesterName",
+      title: "Semester",
     },
     {
       accessor: "actions",
@@ -68,11 +67,6 @@ export function CoursesView() {
       ),
     },
   ];
-
-  const coursesQuery = useQuery({
-    queryKey: ["ok"],
-    queryFn: () => listCourses({ departmentId }),
-  });
 
   return (
     <PageContainer

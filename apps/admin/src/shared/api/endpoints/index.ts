@@ -1,16 +1,9 @@
 import {
-  axios,
   callAction,
-  getApiEndpoint,
-  LocalStorage,
+  ensureApiConfigured,
 } from "@digitalnotes/core";
 
-const appToken = LocalStorage.getAuthToken();
-axios.defaults.baseURL = getApiEndpoint();
-
-if (appToken) {
-  axios.defaults.headers.common.Authorization = `Bearer ${appToken}`;
-}
+ensureApiConfigured();
 
 export const login = callAction("/api/login", "POST");
 

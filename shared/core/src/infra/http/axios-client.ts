@@ -1,6 +1,7 @@
 import axios, { type AxiosResponse } from 'axios'
 import LocalStorage from '#/infra/local-storage/LocalStorage'
 import { authSuccess } from '#/infra/http/helpers/session-helper'
+import { getApiEndpoint } from '#/lib/utils/runtime-config'
 
 const AxiosInstance = axios
 export const getIsOk = (res: AxiosResponse<any>) => [200, 202, 201, 204, 203].includes(res.status)
@@ -42,6 +43,26 @@ const redirectToLogout = () => {
       window.location.href = '/logout'
    }
 }
+
+AxiosInstance.interceptors.request.use((config) => {
+   // Resolve baseURL per request so import order / SSR can't leave it empty.
+   // getApiEndpoint() returns '' on the server or when no env is set -> keep relative URL then.
+   const base = getApiEndpoint()
+   if (base && !config.baseURL) {
+      config.baseURL = base
+   }
+   // Refresh auth header per request so login/logout takes effect without reload.
+   try {
+      const token = LocalStorage.getAuthToken()
+      if (token && !config.headers?.Authorization) {
+         config.headers = config.headers ?? ({} as any)
+         ;(config.headers as any).Authorization = `Bearer ${token}`
+      }
+   } catch {
+      // ignore (SSR)
+   }
+   return config
+})
 
 AxiosInstance.interceptors.response.use(
    response => response,

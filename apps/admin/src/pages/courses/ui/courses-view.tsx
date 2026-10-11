@@ -16,7 +16,6 @@ import {
   PageContainer,
   type TableColumn,
 } from "@digitalnotes/core";
-import { login } from "@/shared/api/endpoints";
 import { queryClient } from "@/shared/api/query-client";
 
 const breadcrumbs = [{ label: "Home", to: "/" as const }, { label: "Courses" }];

@@ -11,7 +11,7 @@ import {
   listUniversities,
 } from '@/shared/api/endpoints'
 import { CollectionTable, PageContainer, type TableColumn } from '@digitalnotes/core'
-import { queryClient, queryKeys } from '@/shared/api/query-client'
+import { queryClient } from '@/shared/api/query-client'
 import { UniversityForm } from './forms/university-form'
 import { FacultyForm } from './forms/faculty-form'
 import { DepartmentForm } from './forms/department-form'

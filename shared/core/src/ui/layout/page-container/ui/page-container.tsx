@@ -241,7 +241,7 @@ export function PageContainer({
               <Tooltip key={action.key} label={action.label} position="left">
                 <ActionIcon
                   size="xl"
-                  radius="xl"
+                  radius="md"
                   variant="filled"
                   color={action.color}
                   disabled={action.disabled}

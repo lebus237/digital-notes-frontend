@@ -52,7 +52,6 @@ export function EmployeesView() {
         <Button
           type="button"
           variant="subtle"
-          size="xs"
           loading={resetMutation.isPending}
           onClick={() => resetMutation.mutate(row.id)}
         >
@@ -72,8 +71,7 @@ export function EmployeesView() {
         {
           key: "new-employee",
           label: "New employee",
-          icon: <IconPlus size={16} />,
-          size: "xs",
+          icon: <IconPlus size={20} />,
           onClick: () => setCreateOpen(true),
         },
       ]}

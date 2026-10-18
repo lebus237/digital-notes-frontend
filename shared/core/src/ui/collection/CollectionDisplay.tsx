@@ -15,58 +15,62 @@ import {
   Text,
   TextInput,
   Title,
-} from '@mantine/core'
-import { IconAdjustmentsHorizontal, IconCircleDot, IconSearch } from '@tabler/icons-react'
-import React, { useState } from 'react'
+} from "@mantine/core";
+import {
+  IconAdjustmentsHorizontal,
+  IconCircleDot,
+  IconSearch,
+} from "@tabler/icons-react";
+import React, { useState } from "react";
 
-import { type CollectionServiceReturnType } from '#/hooks/use-collection-service'
-import { useViewPort } from '#/hooks/use-view-port'
-import { SafeI18nLabel, useSafeTranslate } from '#/lib/helpers/i18n-safe'
-import { ExportWidget } from './ExportWidget'
+import { type CollectionServiceReturnType } from "#/hooks/use-collection-service";
+import { useViewPort } from "#/hooks/use-view-port";
+import { SafeI18nLabel, useSafeTranslate } from "#/lib/helpers/i18n-safe";
+import { ExportWidget } from "./ExportWidget";
 
 export type AnalyticsItemType = {
-  label: string
-  key: string
-  parseValue?: (value?: string | number) => string | any
-  icon?: any
-  color?: any
-}
+  label: string;
+  key: string;
+  parseValue?: (value?: string | number) => string | any;
+  icon?: any;
+  color?: any;
+};
 
 export type ToolSizes = {
-  searchSize: number
-  size?: number
-  container?: number
-  customFilter?: number
-}
+  searchSize: number;
+  size?: number;
+  container?: number;
+  customFilter?: number;
+};
 
 export type HidePlugins = {
-  search?: boolean
-  pagination?: boolean
-  filters?: boolean
-  order?: boolean
-  range?: boolean
-  export?: boolean
-}
+  search?: boolean;
+  pagination?: boolean;
+  filters?: boolean;
+  order?: boolean;
+  range?: boolean;
+  export?: boolean;
+};
 
 export type CollectionDisplayBaseProps = {
-  controller?: CollectionServiceReturnType
-  analytics?: AnalyticsItemType[]
-  marginBottom?: string
-  toolSizes?: ToolSizes
-  toolbarExtra?: React.ReactNode
-  hidePlugins?: HidePlugins
-  collectionExportName?: string
-}
+  controller?: CollectionServiceReturnType;
+  analytics?: AnalyticsItemType[];
+  marginBottom?: string;
+  toolSizes?: ToolSizes;
+  toolbarExtra?: React.ReactNode;
+  hidePlugins?: HidePlugins;
+  collectionExportName?: string;
+};
 
 function AnalyticsCard({
   title,
   value,
   icon,
 }: {
-  title: string
-  value?: number | string
-  icon?: React.ReactNode
-  color?: any
+  title: string;
+  value?: number | string;
+  icon?: React.ReactNode;
+  color?: any;
 }) {
   return (
     <Card radius="md" shadow="xs">
@@ -84,11 +88,15 @@ function AnalyticsCard({
         </Flex>
       </Card.Section>
     </Card>
-  )
+  );
 }
 
 function Label({ text }: { text: string | number }) {
-  return <span style={{ fontSize: 'var(--mantine-font-size-sm)' }}>{String(text)}</span>
+  return (
+    <span style={{ fontSize: "var(--mantine-font-size-sm)" }}>
+      {String(text)}
+    </span>
+  );
 }
 
 function SimpleDateRange({
@@ -96,9 +104,9 @@ function SimpleDateRange({
   value,
   onChange,
 }: {
-  w?: string
-  value: [string | null | undefined, string | null | undefined]
-  onChange: (values: [string | undefined, string | undefined]) => void
+  w?: string;
+  value: [string | null | undefined, string | null | undefined];
+  onChange: (values: [string | undefined, string | undefined]) => void;
 }) {
   return (
     <Group gap="xs" w={w} wrap="nowrap">
@@ -106,72 +114,86 @@ function SimpleDateRange({
         type="date"
         w="100%"
         aria-label="From date"
-        value={value[0] ?? ''}
-        onChange={(event) => onChange([event.currentTarget.value || undefined, value[1] ?? undefined])}
+        value={value[0] ?? ""}
+        onChange={(event) =>
+          onChange([
+            event.currentTarget.value || undefined,
+            value[1] ?? undefined,
+          ])
+        }
       />
       <TextInput
         type="date"
         w="100%"
         aria-label="To date"
-        value={value[1] ?? ''}
-        onChange={(event) => onChange([value[0] ?? undefined, event.currentTarget.value || undefined])}
+        value={value[1] ?? ""}
+        onChange={(event) =>
+          onChange([
+            value[0] ?? undefined,
+            event.currentTarget.value || undefined,
+          ])
+        }
       />
     </Group>
-  )
+  );
 }
 
 function CollectionDisplay({
-  marginBottom = '100px',
+  marginBottom = "100px",
   hidePlugins = {},
   renderBody,
   ...props
 }: CollectionDisplayBaseProps & {
-  renderBody: () => React.ReactNode
+  renderBody: () => React.ReactNode;
 }) {
-  const { trans } = useSafeTranslate()
-  const viewPort = useViewPort()
-  const [mobileControlsOpened, setMobileControlsOpened] = useState(false)
+  const { trans } = useSafeTranslate();
+  const viewPort = useViewPort();
+  const [mobileControlsOpened, setMobileControlsOpened] = useState(false);
 
-  const activeQuery = props.controller?.query
-  const activeDateRange = activeQuery?.dateRange ?? (props.controller?.meta as any)?.dateRange
+  const activeQuery = props.controller?.query;
+  const activeDateRange =
+    activeQuery?.dateRange ?? (props.controller?.meta as any)?.dateRange;
   const hasToolbarControls = Boolean(
     (!hidePlugins.order && (props.controller?.meta as any)?.order) ||
-      (!hidePlugins.range && activeDateRange) ||
-      props.toolbarExtra,
-  )
+    (!hidePlugins.range && activeDateRange) ||
+    props.toolbarExtra,
+  );
 
-  const total = props.controller?.meta?.pagination.total ?? 0
-  const currentPage = props.controller?.meta?.pagination.page ?? 1
-  const limit = props.controller?.meta?.pagination.limit ?? 10
-  const totalPages = Math.max(1, Math.ceil(total / limit))
+  const total = props.controller?.meta?.pagination.total ?? 0;
+  const currentPage = props.controller?.meta?.pagination.page ?? 1;
+  const limit = props.controller?.meta?.pagination.limit ?? 10;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
 
   const formatValue = (value: any, item: string) => {
-    const isMoney = ['amount', 'price', 'cost', 'revenue', 'total', 'fee'].some((k) =>
-      item.toLowerCase().includes(k),
-    )
+    const isMoney = ["amount", "price", "cost", "revenue", "total", "fee"].some(
+      (k) => item.toLowerCase().includes(k),
+    );
     return isMoney
-      ? Number(value ?? 0).toLocaleString('en-FR', { style: 'currency', currency: 'XAF' })
-      : String(value ?? 0)
-  }
+      ? Number(value ?? 0).toLocaleString("en-FR", {
+          style: "currency",
+          currency: "XAF",
+        })
+      : String(value ?? 0);
+  };
 
   const handleFilterChange = (value: string) => {
-    const newFilter = activeQuery?.filter === value ? null : value
-    props.controller?.onChangeFilter(newFilter ?? '')
-  }
+    const newFilter = activeQuery?.filter === value ? null : value;
+    props.controller?.onChangeFilter(newFilter ?? "");
+  };
 
   React.useEffect(() => {
-    if (!viewPort.isMobile) setMobileControlsOpened(false)
-  }, [viewPort.isMobile])
+    if (!viewPort.isMobile) setMobileControlsOpened(false);
+  }, [viewPort.isMobile]);
 
   const renderToolbarControls = (mobile = false) => {
     const inlineDropdownProps = mobile
       ? {
           withinPortal: false,
           middlewares: { flip: false, shift: false },
-          floatingStrategy: 'absolute' as const,
+          floatingStrategy: "absolute" as const,
         }
-      : undefined
-    const mobileInputStyles = mobile ? { fontSize: 16 } : undefined
+      : undefined;
+    const mobileInputStyles = mobile ? { fontSize: 16 } : undefined;
 
     const orderControl =
       (props.controller?.meta as any)?.order && !hidePlugins.order ? (
@@ -180,19 +202,22 @@ function CollectionDisplay({
           m={0}
           styles={{
             input: {
-              padding: 'var(--mantine-spacing-xs)',
+              padding: "var(--mantine-spacing-xs)",
               ...mobileInputStyles,
             },
           }}
           value={activeQuery?.order || null}
-          onChange={(value) => props.controller?.onChangeOrder(value ?? '')}
-          data={(((props.controller?.meta as any)?.order as unknown as string[]) ?? []).map((item) => ({
+          onChange={(value) => props.controller?.onChangeOrder(value ?? "")}
+          data={(
+            ((props.controller?.meta as any)?.order as unknown as string[]) ??
+            []
+          ).map((item) => ({
             label: trans(`text.${item}`),
             value: item,
           }))}
           comboboxProps={inlineDropdownProps}
         />
-      ) : null
+      ) : null;
 
     const dateRangeControl =
       !hidePlugins.range && activeDateRange ? (
@@ -200,10 +225,13 @@ function CollectionDisplay({
           w="100%"
           value={[activeDateRange?.fromDate, activeDateRange?.toDate]}
           onChange={(values) =>
-            props.controller?.onDateChange(values[0] ?? undefined, values[1] ?? undefined)
+            props.controller?.onDateChange(
+              values[0] ?? undefined,
+              values[1] ?? undefined,
+            )
           }
         />
-      ) : null
+      ) : null;
 
     const exportControl =
       !hidePlugins.export && (props.controller?.meta as any)?.exports ? (
@@ -211,7 +239,7 @@ function CollectionDisplay({
           options={(props.controller?.meta as any).exports}
           fileName={props.collectionExportName}
         />
-      ) : null
+      ) : null;
 
     if (mobile) {
       return (
@@ -220,7 +248,7 @@ function CollectionDisplay({
           {dateRangeControl}
           {props.toolbarExtra && <Box w="100%">{props.toolbarExtra}</Box>}
         </Stack>
-      )
+      );
     }
 
     return (
@@ -241,24 +269,29 @@ function CollectionDisplay({
           </Grid.Col>
         )}
         {props.toolbarExtra && (
-          <Grid.Col span={{ base: 6, md: props.toolSizes?.customFilter ?? 3 }} my="xs">
+          <Grid.Col
+            span={{ base: 6, md: props.toolSizes?.customFilter ?? 3 }}
+            my="xs"
+          >
             {props.toolbarExtra}
           </Grid.Col>
         )}
       </Grid>
-    )
-  }
+    );
+  };
 
   const searchInput = !hidePlugins.search ? (
     <TextInput
       w="100%"
       leftSection={<IconSearch size="20px" />}
-      value={activeQuery?.query ?? ''}
-      onChange={(event) => props.controller?.onSearch(event.currentTarget.value)}
-      placeholder={trans('text.search')}
+      value={activeQuery?.query ?? ""}
+      onChange={(event) =>
+        props.controller?.onSearch(event.currentTarget.value)
+      }
+      placeholder={trans("text.search")}
       styles={viewPort.isMobile ? { input: { fontSize: 16 } } : undefined}
     />
-  ) : null
+  ) : null;
 
   const mobileExportControl =
     !hidePlugins.export && (props.controller?.meta as any)?.exports ? (
@@ -267,7 +300,7 @@ function CollectionDisplay({
         options={(props.controller?.meta as any).exports}
         fileName={props.collectionExportName}
       />
-    ) : null
+    ) : null;
 
   return (
     <Grid gap={0}>
@@ -283,7 +316,9 @@ function CollectionDisplay({
                       color={item.color}
                       value={
                         item.parseValue
-                          ? item.parseValue(props.controller?.analytics[item.key] ?? 0)
+                          ? item.parseValue(
+                              props.controller?.analytics[item.key] ?? 0,
+                            )
                           : (props.controller?.analytics[item.key] ?? 0)
                       }
                     />
@@ -293,7 +328,10 @@ function CollectionDisplay({
                   <Grid.Col span={{ base: 12, sm: 3, md: 2 }} key={item}>
                     <AnalyticsCard
                       title={trans(`text.${item}`)}
-                      value={formatValue(props.controller?.analytics[item], item)}
+                      value={formatValue(
+                        props.controller?.analytics[item],
+                        item,
+                      )}
                     />
                   </Grid.Col>
                 ))}
@@ -304,7 +342,7 @@ function CollectionDisplay({
       <Grid.Col span={12} my={0}>
         {viewPort.isMobile ? (
           <Group
-            justify={searchInput ? 'space-between' : 'end'}
+            justify={searchInput ? "space-between" : "end"}
             align="center"
             wrap="nowrap"
             gap="xs"
@@ -314,11 +352,11 @@ function CollectionDisplay({
             {hasToolbarControls && (
               <ActionIcon
                 variant="outline"
-                size={36}
-                aria-label={trans('text.filters')}
+                size="40"
+                aria-label={trans("text.filters")}
                 onClick={() => setMobileControlsOpened(true)}
               >
-                <IconAdjustmentsHorizontal size={20} />
+                <IconAdjustmentsHorizontal size={22} />
               </ActionIcon>
             )}
           </Group>
@@ -333,7 +371,9 @@ function CollectionDisplay({
               </Grid.Col>
             )}
 
-            <Grid.Col span={{ base: 12, xs: 6, md: props.toolSizes?.container ?? 9 }}>
+            <Grid.Col
+              span={{ base: 12, xs: 6, md: props.toolSizes?.container ?? 9 }}
+            >
               {renderToolbarControls()}
             </Grid.Col>
           </Grid>
@@ -351,17 +391,22 @@ function CollectionDisplay({
           xOffset={0}
           yOffset={0}
           overlayProps={{ backgroundOpacity: 0.45, blur: 3 }}
-          transitionProps={{ transition: 'slide-up', duration: 220 }}
+          transitionProps={{ transition: "slide-up", duration: 220 }}
           styles={{
-            inner: { alignItems: 'flex-end', padding: 0 },
+            inner: { alignItems: "flex-end", padding: 0 },
             content: {
-              width: '100%',
-              maxWidth: '100%',
-              height: '40vh',
-              maxHeight: '60vh',
-              borderRadius: 'var(--mantine-radius-md) var(--mantine-radius-md) 0 0',
+              width: "100%",
+              maxWidth: "100%",
+              height: "40vh",
+              maxHeight: "60vh",
+              borderRadius:
+                "var(--mantine-radius-md) var(--mantine-radius-md) 0 0",
             },
-            body: { height: 'calc(60vh - 70px)', overflowY: 'auto', padding: 0 },
+            body: {
+              height: "calc(60vh - 70px)",
+              overflowY: "auto",
+              padding: 0,
+            },
           }}
         >
           <Divider w="100%" variant="dashed" />
@@ -373,19 +418,22 @@ function CollectionDisplay({
         <Grid.Col span={12} mt="sm">
           <ScrollArea type="auto" scrollbarSize={4} offsetScrollbars w="100%">
             <Group gap="xs" wrap="nowrap">
-              {(((props.controller?.meta as any)?.filter as unknown as string[]) ?? []).map((item) => (
+              {(
+                ((props.controller?.meta as any)
+                  ?.filter as unknown as string[]) ?? []
+              ).map((item) => (
                 <Pill
                   key={item}
                   size="sm"
                   onClick={() => handleFilterChange(item)}
                   style={{
-                    cursor: 'pointer',
+                    cursor: "pointer",
                     background:
                       activeQuery?.filter === item
-                        ? 'light-dark(var(--mantine-color-default-6), var(--mantine-color-default-8))'
-                        : 'light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-2))',
-                    color: activeQuery?.filter === item ? 'white' : 'black',
-                    transition: 'all 200ms ease',
+                        ? "light-dark(var(--mantine-color-default-6), var(--mantine-color-default-8))"
+                        : "light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-2))",
+                    color: activeQuery?.filter === item ? "white" : "black",
+                    transition: "all 200ms ease",
                   }}
                 >
                   <SafeI18nLabel label={`text.${item}`} />
@@ -407,7 +455,7 @@ function CollectionDisplay({
             align="center"
             w="100%"
             gap="sm"
-            direction={{ base: 'column', sm: 'row' }}
+            direction={{ base: "column", sm: "row" }}
           >
             <Group gap="xs">
               <Label text={total} />
@@ -419,13 +467,13 @@ function CollectionDisplay({
                 size="xs"
                 value={String(limit)}
                 onChange={(value) => {
-                  if (value) props.controller?.onPaginate(1, parseInt(value))
+                  if (value) props.controller?.onPaginate(1, parseInt(value));
                 }}
                 data={[
-                  { label: '10', value: '10' },
-                  { label: '20', value: '20' },
-                  { label: '50', value: '50' },
-                  { label: '100', value: '100' },
+                  { label: "10", value: "10" },
+                  { label: "20", value: "20" },
+                  { label: "50", value: "50" },
+                  { label: "100", value: "100" },
                 ]}
                 searchable={false}
               />
@@ -441,7 +489,7 @@ function CollectionDisplay({
         </Grid.Col>
       )}
     </Grid>
-  )
+  );
 }
 
-export default CollectionDisplay
+export default CollectionDisplay;

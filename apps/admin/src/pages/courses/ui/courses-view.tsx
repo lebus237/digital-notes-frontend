@@ -1,14 +1,9 @@
 import { Alert, Button, Group, Modal, Select } from "@mantine/core";
 import { IconBook, IconPlus } from "@tabler/icons-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { unwrapCollection } from "@digitalnotes/core";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { archiveCourse, listCourses } from "@/shared/api/endpoints/courses";
-import {
-  listDepartments,
-  listLevels,
-  listSemesters,
-} from "@/shared/api/endpoints/organisation";
+
 import { CourseForm } from "./course-form";
 
 import {
@@ -73,7 +68,14 @@ export function CoursesView() {
       title="Courses"
       description="Manage the course catalog"
       icon={<IconBook size={20} />}
-      actions={[{ key: "new-course", label: "New course", icon: <IconPlus size={16} />, onClick: () => setCreateOpen(true) }]}
+      actions={[
+        {
+          key: "new-course",
+          label: "New course",
+          icon: <IconPlus size={20} />,
+          onClick: () => setCreateOpen(true),
+        },
+      ]}
     >
       {feedback && <Alert color="blue">{feedback}</Alert>}
       <CollectionTable

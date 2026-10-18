@@ -121,7 +121,7 @@ export function OrganisationView() {
       >
         <Group justify="end">
           <Button
-            leftSection={<IconPlus size={16} />}
+            leftSection={<IconPlus size={20} />}
             onClick={() => setModal("university")}
           >
             New university
@@ -136,7 +136,7 @@ export function OrganisationView() {
       >
         <Group justify="end">
           <Button
-            leftSection={<IconPlus size={16} />}
+            leftSection={<IconPlus size={20} />}
             onClick={() => setModal("faculty")}
           >
             New faculty
@@ -151,7 +151,7 @@ export function OrganisationView() {
       >
         <Group justify="end">
           <Button
-            leftSection={<IconPlus size={16} />}
+            leftSection={<IconPlus size={20} />}
             onClick={() => setModal("department")}
           >
             New department
@@ -166,7 +166,7 @@ export function OrganisationView() {
       >
         <Group justify="end">
           <Button
-            leftSection={<IconPlus size={16} />}
+            leftSection={<IconPlus size={20} />}
             onClick={() => setModal("level")}
           >
             New level
@@ -181,7 +181,7 @@ export function OrganisationView() {
       >
         <Group justify="end">
           <Button
-            leftSection={<IconPlus size={16} />}
+            leftSection={<IconPlus size={20} />}
             onClick={() => setModal("semester")}
           >
             New semester

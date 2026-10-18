@@ -9,12 +9,12 @@ export const DrawerComponent = Drawer.extend({
    },
    styles: {
       content: {
-         backgroundColor: 'light-dark(#ffffff, var(--mantine-color-dark-7))',
+          backgroundColor: 'light-dark(var(--mantine-color-white), var(--mantine-color-dark-8))',
       },
       header: {
-         backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))',
+          backgroundColor: 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-8))',
          borderBottom:
-            'light-dark(3px solid --mantine-color-gray-3), 3px solid var(--mantine-color-dark-5))',
+             'light-dark(1px solid var(--mantine-color-gray-2), 1px solid var(--mantine-color-dark-6))',
          paddingBottom: '1rem',
       },
       close: {

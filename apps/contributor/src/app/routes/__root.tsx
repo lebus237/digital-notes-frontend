@@ -2,7 +2,7 @@ import '@mantine/core/styles.css'
 import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { theme } from '@/app/theme'
+import { theme } from '@digitalnotes/core'
 
 export const Route = createRootRoute({
   head: () => ({

@@ -3,10 +3,10 @@ import { AppShell } from '@mantine/core'
 export const AppShellNavbarComponent = AppShell.Navbar.extend({
    styles: {
       navbar: {
-         backgroundColor: 'light-dark(#2d3748, var(--mantine-color-dark-9))',
+          backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8))',
          border: 'none',
          borderRight:
-            'light-dark(1px solid rgba(255, 255, 255, 0.1), 1px solid var(--mantine-color-dark-5))',
+             'light-dark(1px solid var(--mantine-color-gray-2), 1px solid var(--mantine-color-dark-6))',
       },
    },
 })

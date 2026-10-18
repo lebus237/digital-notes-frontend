@@ -2,7 +2,7 @@
  * Semantic defaults shared by all themed Mantine components.
  * Import these instead of hardcoding radius / size / shadow keys.
  */
-export const DEFAULT_RADIUS = "xs" as const;
+export const DEFAULT_RADIUS = "sm" as const;
 export const DEFAULT_SIZE = "md" as const;
 export const DEFAULT_SHADOW = "xs" as const;
 export const OVERLAY_SHADOW = "xl" as const;

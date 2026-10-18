@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css'
+import { ColorSchemeScript } from '@mantine/core'
 import { AppProvider } from '@/app/providers'
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
@@ -26,8 +27,9 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <ColorSchemeScript defaultColorScheme="auto" />
         <HeadContent />
       </head>
       <body>

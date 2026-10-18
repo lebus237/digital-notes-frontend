@@ -14,7 +14,7 @@ export const TabsComponent = Tabs.extend({
    },
    styles: {
       panel: {
-         backgroundColor: 'light-dark(#ffffff, var(--mantine-color-dark-6))',
+          backgroundColor: 'light-dark(var(--mantine-color-white), var(--mantine-color-dark-8))',
       },
    },
 })

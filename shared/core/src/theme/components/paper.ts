@@ -9,8 +9,8 @@ export const PaperComponent = Paper.extend({
    },
    styles: {
       root: {
-         backgroundColor: 'light-dark(#ffffff, var(--mantine-color-dark-6))',
-         border: 'light-dark(1px solid #f1f3f4, 1px solid var(--mantine-color-dark-5))',
+          backgroundColor: 'light-dark(var(--mantine-color-white), var(--mantine-color-dark-8))',
+          border: 'light-dark(1px solid var(--mantine-color-gray-2), 1px solid var(--mantine-color-dark-6))',
       },
    },
 })

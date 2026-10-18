@@ -65,7 +65,7 @@ function AppTableRowInner<T extends Record<string, any>>({
 
   return (
     <Table.Tr
-      bg={selected ? 'var(--mantine-color-blue-light)' : undefined}
+      bg={selected ? 'var(--mantine-color-brand-light)' : undefined}
       style={{ cursor: onRowClick ? 'pointer' : undefined }}
       onClick={handleClick}
     >

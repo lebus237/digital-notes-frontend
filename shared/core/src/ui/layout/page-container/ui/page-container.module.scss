@@ -41,8 +41,8 @@
   height: 2.25rem;
   flex-shrink: 0;
   border-radius: 0.5rem;
-  background: light-dark(#f3f4f6, #1f2937);
-  color: light-dark(#374151, #e5e7eb);
+  background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-7));
+  color: light-dark(var(--mantine-color-gray-8), var(--mantine-color-dark-1));
 }
 
 .titleText {
@@ -60,7 +60,7 @@
   margin: 0.125rem 0 0;
   font-size: 0.8125rem;
   line-height: 1.4;
-  color: light-dark(#6b7280, #9ca3af);
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
 }
 
 .actions {
@@ -131,15 +131,15 @@
     &::before {
       left: 0;
       background:
-        linear-gradient(to right, light-dark(rgb(17 24 39 / 3%), rgb(0 0 0 / 15%)), transparent),
-        linear-gradient(to right, light-dark(#ffffff, #030712), transparent);
+        linear-gradient(to right, light-dark(rgb(39 39 32 / 3%), rgb(0 0 0 / 15%)), transparent),
+        linear-gradient(to right, light-dark(var(--mantine-color-white), var(--mantine-color-dark-9)), transparent);
     }
 
     &::after {
       right: 0;
       background:
-        linear-gradient(to left, light-dark(rgb(17 24 39 / 3%), rgb(0 0 0 / 15%)), transparent),
-        linear-gradient(to left, light-dark(#ffffff, #030712), transparent);
+        linear-gradient(to left, light-dark(rgb(39 39 32 / 3%), rgb(0 0 0 / 15%)), transparent),
+        linear-gradient(to left, light-dark(var(--mantine-color-white), var(--mantine-color-dark-9)), transparent);
     }
 
     &[data-can-scroll-left]::before {
@@ -184,8 +184,8 @@
   width: min(24rem, 100%);
   height: 100%;
   overflow: auto;
-  background: light-dark(#ffffff, #030712);
-  border-left: 1px solid light-dark(#e5e7eb, #1f2937);
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-9));
+  border-left: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-7));
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%);
   transform: translateX(100%);
   transition: transform 300ms ease-in-out;
@@ -204,7 +204,7 @@
   gap: 1rem;
   height: 4rem;
   padding-inline: 0.75rem;
-  border-bottom: 1px dashed light-dark(#d1d5db, #374151);
+  border-bottom: 1px dashed light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-5));
 }
 
 .panelTitle {
@@ -218,14 +218,14 @@
   align-items: center;
   justify-content: center;
   padding: 0.5rem;
-  border: 1px solid light-dark(#d4d4d8, #3f3f46);
+  border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-6));
   border-radius: 0.375rem;
-  background: light-dark(#ffffff, #030712);
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-9));
   color: inherit;
   cursor: pointer;
 
   &:focus-visible {
-    outline: 2px solid #2563eb;
+    outline: 2px solid var(--mantine-color-brand-6);
     outline-offset: 2px;
   }
 }

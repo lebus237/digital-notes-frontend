@@ -19,7 +19,7 @@ export const ActionHelper: React.FC<ActionHelperProps> = (props) => {
         </ActionIcon>
       )}
       {editAction && (
-        <ActionIcon variant="subtle" color="blue" onClick={() => editAction()}>
+        <ActionIcon variant="subtle" color="brand" onClick={() => editAction()}>
           <IconEdit size={20} />
         </ActionIcon>
       )}

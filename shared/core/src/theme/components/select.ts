@@ -18,7 +18,7 @@ const styles = {
       label: inputLabelStyles,
       dropdown: {
          boxShadow: 'var(--mantine-shadow-lg)',
-         border: 'light-dark(1px solid #dee2e6, 1px solid var(--mantine-color-dark-4))',
+          border: 'light-dark(1px solid var(--mantine-color-gray-2), 1px solid var(--mantine-color-dark-6))',
       },
    },
 }

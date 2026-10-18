@@ -1,7 +1,7 @@
 import { ActionIcon, Affix, Button, Tooltip, Tabs, type ButtonProps } from '@mantine/core'
 import { IconX } from '@tabler/icons-react'
-import { Children, useEffect, useState, type ReactNode } from 'react'
-import { useShell, type ShellCrumb } from '../../app-shell/model/shell-context'
+import { Children, useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useShell, type ShellCrumb } from '../../../app-shell/model/shell-context'
 import styles from './page-container.module.scss'
 
 type PagePanel = {
@@ -79,6 +79,40 @@ export function PageContainer({
   const otherChildren = hasTabs ? childArray.slice(tabs?.length) : childArray
   const [internalTab, setInternalTab] = useState<string | null>(defaultTabValue ?? tabs?.[0]?.value ?? null)
   const activeTab = tabValue !== undefined ? tabValue : internalTab
+  const tabsScrollRef = useRef<HTMLDivElement | null>(null)
+
+  const syncTabsScrollShadow = useCallback(() => {
+    const host = tabsScrollRef.current
+    const scroller = host?.firstElementChild as HTMLElement | null | undefined
+    if (!host || !scroller) return
+    host.toggleAttribute('data-can-scroll-left', scroller.scrollLeft > 1)
+    host.toggleAttribute(
+      'data-can-scroll-right',
+      scroller.scrollLeft + scroller.clientWidth < scroller.scrollWidth - 1,
+    )
+  }, [])
+
+  const scrollActiveTabIntoView = useCallback(() => {
+    const host = tabsScrollRef.current
+    const scroller = host?.firstElementChild as HTMLElement | null | undefined
+    if (!host || !scroller || scroller.scrollWidth <= scroller.clientWidth + 1) return
+    scroller
+      .querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')
+      ?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+  }, [])
+
+  useEffect(() => {
+    if (!hasTabs) return
+    syncTabsScrollShadow()
+    scrollActiveTabIntoView()
+    const scroller = tabsScrollRef.current?.firstElementChild as HTMLElement | null | undefined
+    if (!scroller) return
+    const observer = new ResizeObserver(syncTabsScrollShadow)
+    observer.observe(scroller)
+    const tablist = scroller.firstElementChild
+    if (tablist) observer.observe(tablist)
+    return () => observer.disconnect()
+  }, [hasTabs, activeTab, syncTabsScrollShadow, scrollActiveTabIntoView])
 
   function handleTabChange(value: string | null) {
     if (tabValue === undefined) {
@@ -139,19 +173,23 @@ export function PageContainer({
         <div className={styles.body}>
           {hasTabs && (
             <Tabs value={activeTab} onChange={handleTabChange} keepMounted={keepMounted}>
-              <Tabs.List>
-                {tabs?.map((tab) => (
-                  <Tabs.Tab
-                    key={tab.value}
-                    value={tab.value}
-                    leftSection={tab.leftSection}
-                    rightSection={tab.rightSection}
-                    disabled={tab.disabled}
-                  >
-                    {tab.label}
-                  </Tabs.Tab>
-                ))}
-              </Tabs.List>
+              <div className={styles.tabsScroll} ref={tabsScrollRef}>
+                <div className={styles.tabsScroller} onScroll={syncTabsScrollShadow}>
+                  <Tabs.List>
+                    {tabs?.map((tab) => (
+                      <Tabs.Tab
+                        key={tab.value}
+                        value={tab.value}
+                        leftSection={tab.leftSection}
+                        rightSection={tab.rightSection}
+                        disabled={tab.disabled}
+                      >
+                        {tab.label}
+                      </Tabs.Tab>
+                    ))}
+                  </Tabs.List>
+                </div>
+              </div>
               {tabs?.map((tab, index) => (
                 <Tabs.Panel key={tab.value} value={tab.value} pt="md">
                   {tabPanels[index]}

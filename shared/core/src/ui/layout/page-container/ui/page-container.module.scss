@@ -105,6 +105,76 @@
   padding: var(--mantine-spacing-md);
 }
 
+/* Mobile: tab row scrolls horizontally instead of wrapping. Scrollbar is
+   hidden; edge shadows appear only on sides where a label is cut off
+   (data attributes toggled by page-container.tsx).
+   .tabsScroll is the positioned shadow host; .tabsScroller is the actual
+   scroll container — kept separate so the ::before/::after overlays stay
+   docked to the visible edges instead of scrolling away with content. */
+@media (max-width: 36rem) {
+  .tabsScroll {
+    position: relative;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      z-index: 1;
+      width: 0.75rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 150ms ease;
+    }
+
+    &::before {
+      left: 0;
+      background:
+        linear-gradient(to right, light-dark(rgb(17 24 39 / 3%), rgb(0 0 0 / 15%)), transparent),
+        linear-gradient(to right, light-dark(#ffffff, #030712), transparent);
+    }
+
+    &::after {
+      right: 0;
+      background:
+        linear-gradient(to left, light-dark(rgb(17 24 39 / 3%), rgb(0 0 0 / 15%)), transparent),
+        linear-gradient(to left, light-dark(#ffffff, #030712), transparent);
+    }
+
+    &[data-can-scroll-left]::before {
+      opacity: 1;
+    }
+
+    &[data-can-scroll-right]::after {
+      opacity: 1;
+    }
+  }
+
+  .tabsScroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    [role='tablist'] {
+      flex-wrap: nowrap;
+      width: max-content;
+      min-width: 100%;
+    }
+
+    [role='tab'] {
+      white-space: nowrap;
+    }
+  }
+}
+
 .panel {
   position: absolute;
   top: 0;

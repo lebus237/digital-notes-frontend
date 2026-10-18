@@ -1,14 +1,15 @@
-import './theme/scrollbars.css'
+import "./theme/scrollbars.css";
 
-export * from './ui/form'
-export * from './infra/http'
-export { default as LocalStorage } from './infra/local-storage/LocalStorage'
-export * from './pages/logout'
-export * from './lib/utils'
-export * from './lib/helpers'
-export * from './types'
-export * from './hooks'
-export * from './ui/table'
-export * from './ui/collection'
-export * from './ui/layout/app-shell'
-export * from './ui/layout/page-container'
+export * from "./ui/form";
+export * from "./infra/http";
+export { default as LocalStorage } from "./infra/local-storage/LocalStorage";
+export * from "./pages/logout";
+export * from "./lib/utils";
+export * from "./lib/helpers";
+export * from "./types";
+export * from "./hooks";
+export * from "./ui/table";
+export * from "./ui/collection";
+export * from "./ui/layout/app-shell";
+export * from "./ui/layout/page-container";
+export { theme } from "./theme";

@@ -1,33 +1,21 @@
 export const colors = {
-   black: '#212121',
-   white: '#fcfcfc',
+  black: "#212121",
+  white: "#fcfcfc",
 
-   primaryColor: 'default',
+  primaryColor: "ink",
 
-   colors: {
-      gray: [
-         '#f8f9fa',
-         '#f1f3f4',
-         '#e9ecef',
-         '#dee2e6',
-         '#ced4da',
-         '#adb5bd',
-         '#6c757d',
-         '#495057',
-         '#343a40',
-         '#212529',
-      ],
-      default: [
-         '#fdf2f8',
-         '#fce7f3',
-         '#fbcfe8',
-         '#f9a8d4',
-         '#f472b6',
-         '#ec4899',
-         '#db2777',
-         '#be185d',
-         '#9d174d',
-         '#831843',
-      ],
-   },
-}
+  colors: {
+    ink: [
+      "#f9fafb",
+      "#f3f4f6",
+      "#e5e7eb",
+      "#d1d5db",
+      "#9ca3af",
+      "#6b7280",
+      "#4b5563",
+      "#374151",
+      "#1f2937",
+      "#030712",
+    ],
+  },
+};

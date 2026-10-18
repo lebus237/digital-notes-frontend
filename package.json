@@ -20,6 +20,7 @@
     "translate:check-consistency": "node shared/i18n/scripts/checkTranslationConsistency.js"
   },
   "dependencies": {
+    "@mantine/dates": "^9.7.3",
     "@tabler/icons-react": "^3.48.0",
     "@tanstack/react-form": "^1.33.5",
     "@tanstack/react-query": "^5.104.0",

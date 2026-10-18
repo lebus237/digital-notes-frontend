@@ -1,7 +1,7 @@
 import { ActionIcon, Affix, Button, Tooltip, Tabs, type ButtonProps } from '@mantine/core'
 import { IconX } from '@tabler/icons-react'
 import { Children, useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
-import { useShell, type ShellCrumb } from '../../../app-shell/model/shell-context'
+import { useShell, type ShellCrumb } from '../../app-shell/model/shell-context'
 import styles from './page-container.module.scss'
 
 type PagePanel = {

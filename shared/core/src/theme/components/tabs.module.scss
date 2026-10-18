@@ -1,13 +1,17 @@
 .tab {
-  font-weight: 500;
-  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+    font-weight: 500;
+    color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
 
-  &[data-active] {
-    color: var(--mantine-color-brand-7);
-    border-color: var(--mantine-color-brand-6);
-  }
+    &[data-active] {
+        color: var(--mantine-color-brand-7);
+        border-color: var(--mantine-color-brand-7);
+        border-bottom-width: 3px;
+    }
 
-  &:hover {
-    color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-dark-0));
-  }
+    &:hover {
+        color: light-dark(
+            var(--mantine-color-gray-9),
+            var(--mantine-color-dark-0)
+        );
+    }
 }

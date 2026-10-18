@@ -1,8 +1,8 @@
-import AppTable, { type TableColumn } from '#/ui/table/AppTable'
+import AppTable, { type TableColumn } from "#/ui/table/AppTable";
 import CollectionDisplay, {
   type CollectionDisplayBaseProps,
-} from '#/ui/collection/CollectionDisplay'
-import { Card } from '@mantine/core'
+} from "#/ui/collection/CollectionDisplay";
+import { Card } from "@mantine/core";
 
 function CollectionDisplayTable({
   records,
@@ -13,19 +13,19 @@ function CollectionDisplayTable({
   height,
   ...base
 }: CollectionDisplayBaseProps & {
-  records: any[]
-  columns: TableColumn[]
-  onRowClick?: (data: any) => void
-  withSelection?: boolean
-  onSelectionChange?: (selected: any[]) => void
-  height?: string
-  hidden?: boolean
+  records: any[];
+  columns: TableColumn[];
+  onRowClick?: (data: any) => void;
+  withSelection?: boolean;
+  onSelectionChange?: (selected: any[]) => void;
+  height?: string;
+  hidden?: boolean;
 }) {
   return (
     <CollectionDisplay
       {...base}
       renderBody={() => (
-        <Card radius="md" shadow="none">
+        <Card radius="sm" shadow="none">
           <Card.Section p="xs">
             <AppTable
               records={records}
@@ -37,10 +37,12 @@ function CollectionDisplayTable({
               loading={base.controller?.isLoading}
               onPageChange={base.controller?.onPaginate}
               pagination={
-                (base.controller?.meta as any)?.pagination && !base.hidePlugins?.pagination
+                (base.controller?.meta as any)?.pagination &&
+                !base.hidePlugins?.pagination
                   ? {
                       page: (base.controller?.meta as any).pagination.page ?? 1,
-                      limit: (base.controller?.meta as any).pagination.limit ?? 10,
+                      limit:
+                        (base.controller?.meta as any).pagination.limit ?? 10,
                     }
                   : undefined
               }
@@ -49,7 +51,7 @@ function CollectionDisplayTable({
         </Card>
       )}
     />
-  )
+  );
 }
 
-export default CollectionDisplayTable
+export default CollectionDisplayTable;

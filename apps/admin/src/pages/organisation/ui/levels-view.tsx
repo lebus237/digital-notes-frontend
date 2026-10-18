@@ -6,13 +6,13 @@ import { PageContainer } from "@digitalnotes/core";
 import { listLevels } from "@/shared/api/endpoints";
 import { queryClient } from "@/shared/api/query-client";
 import { LevelForm } from "./forms/level-form";
-import { OrganisationEntityGrid } from "./organisation-cards";
+import { OrganisationEntityGrid } from "./components/organisation-cards";
 import {
   departmentsUrl,
   facultiesUrl,
   levelsUrl,
   universitiesUrl,
-} from "./organisation-navigation";
+} from "./components/organisation-navigation";
 
 const levelsRoute = getRouteApi("/_app/organisation/levels");
 

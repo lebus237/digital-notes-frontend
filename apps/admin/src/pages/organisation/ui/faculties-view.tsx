@@ -6,8 +6,8 @@ import { PageContainer } from "@digitalnotes/core";
 import { listFaculties } from "@/shared/api/endpoints";
 import { queryClient } from "@/shared/api/query-client";
 import { FacultyForm } from "./forms/faculty-form";
-import { OrganisationEntityGrid } from "./organisation-cards";
-import { universitiesUrl } from "./organisation-navigation";
+import { OrganisationEntityGrid } from "./components/organisation-cards";
+import { universitiesUrl } from "./components/organisation-navigation";
 
 const facultiesRoute = getRouteApi("/_app/organisation/faculties");
 

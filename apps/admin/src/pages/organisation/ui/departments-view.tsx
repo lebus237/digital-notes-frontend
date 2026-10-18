@@ -6,12 +6,12 @@ import { PageContainer } from "@digitalnotes/core";
 import { listDepartments } from "@/shared/api/endpoints";
 import { queryClient } from "@/shared/api/query-client";
 import { DepartmentForm } from "./forms/department-form";
-import { OrganisationEntityGrid } from "./organisation-cards";
+import { OrganisationEntityGrid } from "./components/organisation-cards";
 import {
   departmentsUrl,
   facultiesUrl,
   universitiesUrl,
-} from "./organisation-navigation";
+} from "./components/organisation-navigation";
 
 const departmentsRoute = getRouteApi("/_app/organisation/departments");
 

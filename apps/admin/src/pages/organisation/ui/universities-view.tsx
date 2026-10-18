@@ -6,7 +6,7 @@ import { PageContainer } from "@digitalnotes/core";
 import { listUniversities } from "@/shared/api/endpoints";
 import { queryClient } from "@/shared/api/query-client";
 import { UniversityForm } from "./forms/university-form";
-import { OrganisationEntityGrid } from "./organisation-cards";
+import { OrganisationEntityGrid } from "./components/organisation-cards";
 
 const universitiesRoute = getRouteApi("/_app/organisation/");
 

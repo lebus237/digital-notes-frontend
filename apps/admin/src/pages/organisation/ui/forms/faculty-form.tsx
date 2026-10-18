@@ -1,20 +1,39 @@
+import { useQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 import { Alert, Button, Stack } from '@mantine/core'
 import { formOptions } from '@tanstack/react-form'
-import { useState } from 'react'
-import { FormField, FormWrapper, getServerMessage } from '@digitalnotes/core'
+import {
+  FormField,
+  FormWrapper,
+  getServerMessage,
+  normalizeCollectionResponse,
+} from '@digitalnotes/core'
 import { facultySchema, type FacultyValues } from '@/entities/organisation'
-import { createFaculty } from '@/shared/api/endpoints/organisation'
+import { createFaculty, listUniversities } from '@/shared/api/endpoints/organisation'
 
-type Option = { value: string; label: string }
-
-const facultyOpts = formOptions({
-  defaultValues: { universityId: '', name: '', slug: '' } satisfies FacultyValues,
-  validators: { onSubmit: facultySchema },
-})
-
-export function FacultyForm({ onSuccess }: Readonly<{onSuccess?: () => void }>) {
+export function FacultyForm({
+  universityId,
+  onSuccess,
+}: Readonly<{ universityId?: string; onSuccess?: () => void }>) {
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
+
+  const { data: universities = [] } = useQuery({
+    queryKey: ['admin-universities', 'options'],
+    enabled: !universityId,
+    staleTime: 60_000,
+    queryFn: () => listUniversities({ pagination: { page: 1, limit: 100 } }),
+    select: (payload) => normalizeCollectionResponse<{ id: string; name: string }>(payload).data,
+  })
+
+  const facultyOpts = useMemo(
+    () =>
+      formOptions({
+        defaultValues: { universityId: universityId ?? '', name: '', slug: '' } satisfies FacultyValues,
+        validators: { onSubmit: facultySchema },
+      }),
+    [universityId],
+  )
 
   async function handleSubmit(value: FacultyValues) {
     setError('')
@@ -43,7 +62,15 @@ export function FacultyForm({ onSuccess }: Readonly<{onSuccess?: () => void }>) 
     <FormWrapper formOptions={facultyOpts} onSubmit={handleSubmit}>
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
-        {/*<FormField.Select name="universityId" label="University" placeholder="Select university" data={universities} withAsterisk />*/}
+        {!universityId && (
+          <FormField.Select
+            name="universityId"
+            label="University"
+            placeholder="Select university"
+            data={universities.map((item) => ({ value: item.id, label: item.name }))}
+            withAsterisk
+          />
+        )}
         <FormField.TextInput name="name" label="Faculty name" placeholder="e.g. Faculty of Science" withAsterisk />
         <FormField.TextInput name="slug" label="Slug" placeholder="e.g. faculty-of-science" withAsterisk />
         <Button type="submit" loading={pending}>Create faculty</Button>

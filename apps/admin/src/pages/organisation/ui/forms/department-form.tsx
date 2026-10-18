@@ -1,20 +1,39 @@
+import { useQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 import { Alert, Button, Stack } from '@mantine/core'
 import { formOptions } from '@tanstack/react-form'
-import { useState } from 'react'
-import { FormField, FormWrapper, getServerMessage } from '@digitalnotes/core'
+import {
+  FormField,
+  FormWrapper,
+  getServerMessage,
+  normalizeCollectionResponse,
+} from '@digitalnotes/core'
 import { departmentSchema, type DepartmentValues } from '@/entities/organisation'
-import { createDepartment } from '@/shared/api/endpoints/organisation'
+import { createDepartment, listFaculties } from '@/shared/api/endpoints/organisation'
 
-type Option = { value: string; label: string }
-
-const departmentOpts = formOptions({
-  defaultValues: { facultyId: '', name: '', slug: '' } satisfies DepartmentValues,
-  validators: { onSubmit: departmentSchema },
-})
-
-export function DepartmentForm({ onSuccess }: Readonly<{ onSuccess?: () => void }>) {
+export function DepartmentForm({
+  facultyId,
+  onSuccess,
+}: Readonly<{ facultyId?: string; onSuccess?: () => void }>) {
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
+
+  const { data: faculties = [] } = useQuery({
+    queryKey: ['admin-faculties', 'options'],
+    enabled: !facultyId,
+    staleTime: 60_000,
+    queryFn: () => listFaculties({ pagination: { page: 1, limit: 100 } }),
+    select: (payload) => normalizeCollectionResponse<{ id: string; name: string }>(payload).data,
+  })
+
+  const departmentOpts = useMemo(
+    () =>
+      formOptions({
+        defaultValues: { facultyId: facultyId ?? '', name: '', slug: '' } satisfies DepartmentValues,
+        validators: { onSubmit: departmentSchema },
+      }),
+    [facultyId],
+  )
 
   async function handleSubmit(value: DepartmentValues) {
     setError('')
@@ -43,7 +62,15 @@ export function DepartmentForm({ onSuccess }: Readonly<{ onSuccess?: () => void 
     <FormWrapper formOptions={departmentOpts} onSubmit={handleSubmit}>
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
-        {/*<FormField.Select name="facultyId" label="Faculty" placeholder="Select faculty" data={faculties} withAsterisk />*/}
+        {!facultyId && (
+          <FormField.Select
+            name="facultyId"
+            label="Faculty"
+            placeholder="Select faculty"
+            data={faculties.map((item) => ({ value: item.id, label: item.name }))}
+            withAsterisk
+          />
+        )}
         <FormField.TextInput name="name" label="Department name" placeholder="e.g. Computer Science" withAsterisk />
         <FormField.TextInput name="slug" label="Slug" placeholder="e.g. computer-science" withAsterisk />
         <Button type="submit" loading={pending}>Create department</Button>

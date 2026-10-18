@@ -40,12 +40,12 @@
     width: 2.25rem;
     height: 2.25rem;
     flex-shrink: 0;
-    border-radius: 0.5rem;
+    border-radius: var(--mantine-radius-xs);
     background: light-dark(
-        var(--mantine-color-gray-1),
+        var(--mantine-color-brand-1),
         var(--mantine-color-dark-7)
     );
-    color: light-dark(var(--mantine-color-gray-8), var(--mantine-color-dark-1));
+    color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-1));
 }
 
 .titleText {

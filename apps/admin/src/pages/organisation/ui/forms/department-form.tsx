@@ -29,7 +29,7 @@ export function DepartmentForm({
   const departmentOpts = useMemo(
     () =>
       formOptions({
-        defaultValues: { facultyId: facultyId ?? '', name: '', slug: '' } satisfies DepartmentValues,
+        defaultValues: { facultyId: facultyId ?? '', name: '' } satisfies DepartmentValues,
         validators: { onSubmit: departmentSchema },
       }),
     [facultyId],
@@ -72,7 +72,6 @@ export function DepartmentForm({
           />
         )}
         <FormField.TextInput name="name" label="Department name" placeholder="e.g. Computer Science" withAsterisk />
-        <FormField.TextInput name="slug" label="Slug" placeholder="e.g. computer-science" withAsterisk />
         <Button type="submit" loading={pending}>Create department</Button>
       </Stack>
     </FormWrapper>

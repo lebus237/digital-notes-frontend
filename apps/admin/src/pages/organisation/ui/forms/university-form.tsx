@@ -6,7 +6,7 @@ import { universitySchema, type UniversityValues } from '@/entities/organisation
 import { createUniversity } from '@/shared/api/endpoints/organisation'
 
 const universityOpts = formOptions({
-  defaultValues: { name: '', slug: '' } satisfies UniversityValues,
+  defaultValues: { name: '' } satisfies UniversityValues,
   validators: { onSubmit: universitySchema },
 })
 
@@ -42,7 +42,6 @@ export function UniversityForm({ onSuccess }: Readonly<{ onSuccess?: () => void 
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
         <FormField.TextInput name="name" label="University name" placeholder="e.g. University of Lagos" withAsterisk />
-        <FormField.TextInput name="slug" label="Slug" placeholder="e.g. university-of-lagos" withAsterisk />
         <Button type="submit" loading={pending}>Create university</Button>
       </Stack>
     </FormWrapper>

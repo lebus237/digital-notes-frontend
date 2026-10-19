@@ -29,7 +29,7 @@ export function FacultyForm({
   const facultyOpts = useMemo(
     () =>
       formOptions({
-        defaultValues: { universityId: universityId ?? '', name: '', slug: '' } satisfies FacultyValues,
+        defaultValues: { universityId: universityId ?? '', name: '' } satisfies FacultyValues,
         validators: { onSubmit: facultySchema },
       }),
     [universityId],
@@ -72,7 +72,6 @@ export function FacultyForm({
           />
         )}
         <FormField.TextInput name="name" label="Faculty name" placeholder="e.g. Faculty of Science" withAsterisk />
-        <FormField.TextInput name="slug" label="Slug" placeholder="e.g. faculty-of-science" withAsterisk />
         <Button type="submit" loading={pending}>Create faculty</Button>
       </Stack>
     </FormWrapper>

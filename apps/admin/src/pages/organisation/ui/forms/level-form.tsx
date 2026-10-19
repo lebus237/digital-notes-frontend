@@ -9,7 +9,9 @@ import {
   normalizeCollectionResponse,
 } from '@digitalnotes/core'
 import { levelSchema, type LevelValues } from '@/entities/organisation'
+import { actionKeys } from '@/shared/api/action-keys'
 import { createLevel, listDepartments } from '@/shared/api/endpoints/organisation'
+import { revalidateQuery } from '@/shared/api/revalidate-query'
 
 export function LevelForm({
   departmentId,
@@ -50,6 +52,7 @@ export function LevelForm({
       if (!result?.id) {
         throw new Error(result?.error?.message ?? 'Could not create level.')
       }
+      await revalidateQuery(actionKeys.listLevels)
       onSuccess?.()
     } catch (submitError) {
       setError(getServerMessage(submitError, 'Could not save. Try again.'))

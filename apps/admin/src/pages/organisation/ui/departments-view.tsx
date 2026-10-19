@@ -3,8 +3,8 @@ import { IconBuilding, IconPlus } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageContainer } from "@digitalnotes/core";
-import { listDepartments } from "@/shared/api/endpoints";
-import { queryClient } from "@/shared/api/query-client";
+import { listDepartments } from "@/shared/api/endpoints/organisation";
+import { actionKeys } from "@/shared/api/action-keys";
 import { DepartmentForm } from "./forms/department-form";
 import { OrganisationEntityGrid } from "./components/organisation-cards";
 import {
@@ -22,7 +22,6 @@ export function DepartmentsView() {
 
   function handleCreated() {
     setCreateOpen(false);
-    void queryClient.invalidateQueries({ queryKey: ["admin"] });
   }
 
   return (
@@ -53,7 +52,7 @@ export function DepartmentsView() {
     >
       <OrganisationEntityGrid
         fetchApi={listDepartments}
-        cacheKey="admin-organisation-departments"
+        cacheKey={actionKeys.listDepartments}
         customQuery={{ facultyId }}
         kind="Department"
         openLabel="levels"

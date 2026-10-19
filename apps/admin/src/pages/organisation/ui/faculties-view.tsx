@@ -3,8 +3,8 @@ import { IconBuilding, IconPlus } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageContainer } from "@digitalnotes/core";
-import { listFaculties } from "@/shared/api/endpoints";
-import { queryClient } from "@/shared/api/query-client";
+import { listFaculties } from "@/shared/api/endpoints/organisation";
+import { actionKeys } from "@/shared/api/action-keys";
 import { FacultyForm } from "./forms/faculty-form";
 import { OrganisationEntityGrid } from "./components/organisation-cards";
 import { universitiesUrl } from "./components/organisation-navigation";
@@ -18,7 +18,6 @@ export function FacultiesView() {
 
   function handleCreated() {
     setCreateOpen(false);
-    void queryClient.invalidateQueries({ queryKey: ["admin"] });
   }
 
   return (
@@ -46,7 +45,7 @@ export function FacultiesView() {
     >
       <OrganisationEntityGrid
         fetchApi={listFaculties}
-        cacheKey="admin-organisation-faculties"
+        cacheKey={actionKeys.listFaculties}
         customQuery={{ universityId }}
         kind="Faculty"
         openLabel="departments"

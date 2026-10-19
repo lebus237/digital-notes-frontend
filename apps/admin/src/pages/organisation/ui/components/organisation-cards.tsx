@@ -1,7 +1,10 @@
 import { Card, Group, Stack, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
-import { CollectionDisplayCard, useCollectionService } from "@digitalnotes/core";
-import styles from "./organisation-view.module.scss";
+import {
+  CollectionDisplayCard,
+  useCollectionService,
+} from "@digitalnotes/core";
+import styles from "../organisation-view.module.scss";
 
 export function OrganisationEntityGrid({
   fetchApi,
@@ -39,8 +42,19 @@ export function OrganisationEntityGrid({
       emptyMessage={emptyMessage}
       renderItem={(item) => {
         const card = (
-          <Card className={styles.entityCard} component="article" padding="sm" radius="sm" withBorder>
-            <Group justify="space-between" align="center" gap="sm" wrap="nowrap">
+          <Card
+            className={styles.entityCard}
+            component="article"
+            padding="sm"
+            radius="sm"
+            withBorder
+          >
+            <Group
+              justify="space-between"
+              align="center"
+              gap="sm"
+              wrap="nowrap"
+            >
               <Stack gap={2} style={{ minWidth: 0 }}>
                 <Text className={styles.entityKind} size="xs">
                   {kind}
@@ -48,14 +62,18 @@ export function OrganisationEntityGrid({
                 <Text className={styles.entityName} fw={600} lineClamp={1}>
                   {item.name}
                 </Text>
-                {item.slug && (
+                {/*{item.slug && (
                   <Text c="dimmed" size="xs" lineClamp={1}>
                     {item.slug}
                   </Text>
-                )}
+                )}*/}
               </Stack>
               {onItemClick && (
-                <IconChevronRight className={styles.cardArrow} size={18} aria-hidden="true" />
+                <IconChevronRight
+                  className={styles.cardArrow}
+                  size={18}
+                  aria-hidden="true"
+                />
               )}
             </Group>
           </Card>

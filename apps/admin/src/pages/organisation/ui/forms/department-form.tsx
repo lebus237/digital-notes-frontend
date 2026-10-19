@@ -9,7 +9,9 @@ import {
   normalizeCollectionResponse,
 } from '@digitalnotes/core'
 import { departmentSchema, type DepartmentValues } from '@/entities/organisation'
+import { actionKeys } from '@/shared/api/action-keys'
 import { createDepartment, listFaculties } from '@/shared/api/endpoints/organisation'
+import { revalidateQuery } from '@/shared/api/revalidate-query'
 
 export function DepartmentForm({
   facultyId,
@@ -50,6 +52,7 @@ export function DepartmentForm({
       if (!result?.id) {
         throw new Error(result?.error?.message ?? 'Could not create department.')
       }
+      await revalidateQuery(actionKeys.listDepartments)
       onSuccess?.()
     } catch (submitError) {
       setError(getServerMessage(submitError, 'Could not save. Try again.'))

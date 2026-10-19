@@ -3,7 +3,9 @@ import { formOptions } from '@tanstack/react-form'
 import { useState } from 'react'
 import { FormField, FormWrapper, getServerMessage } from '@digitalnotes/core'
 import { universitySchema, type UniversityValues } from '@/entities/organisation'
+import { actionKeys } from '@/shared/api/action-keys'
 import { createUniversity } from '@/shared/api/endpoints/organisation'
+import { revalidateQuery } from '@/shared/api/revalidate-query'
 
 const universityOpts = formOptions({
   defaultValues: { name: '' } satisfies UniversityValues,
@@ -29,6 +31,7 @@ export function UniversityForm({ onSuccess }: Readonly<{ onSuccess?: () => void 
       if (!result?.id) {
         throw new Error(result?.error?.message ?? 'Could not create university.')
       }
+      await revalidateQuery(actionKeys.listUniversities)
       onSuccess?.()
     } catch (submitError) {
       setError(getServerMessage(submitError, 'Could not save. Try again.'))

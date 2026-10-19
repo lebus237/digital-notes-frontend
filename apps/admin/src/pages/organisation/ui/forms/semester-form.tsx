@@ -3,7 +3,9 @@ import { formOptions } from '@tanstack/react-form'
 import { useState } from 'react'
 import { FormField, FormWrapper, getServerMessage } from '@digitalnotes/core'
 import { semesterSchema, type SemesterValues } from '@/entities/organisation'
+import { actionKeys } from '@/shared/api/action-keys'
 import { createSemester } from '@/shared/api/endpoints/organisation'
+import { revalidateQuery } from '@/shared/api/revalidate-query'
 
 const semesterOpts = formOptions({
   defaultValues: { name: '' } satisfies SemesterValues,
@@ -29,6 +31,7 @@ export function SemesterForm({ onSuccess }: Readonly<{ onSuccess?: () => void }>
       if (!result?.id) {
         throw new Error(result?.error?.message ?? 'Could not create semester.')
       }
+      await revalidateQuery(actionKeys.listSemesters)
       onSuccess?.()
     } catch (submitError) {
       setError(getServerMessage(submitError, 'Could not save. Try again.'))

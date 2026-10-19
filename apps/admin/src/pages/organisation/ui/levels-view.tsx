@@ -3,8 +3,8 @@ import { IconBuilding, IconPlus } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageContainer } from "@digitalnotes/core";
-import { listLevels } from "@/shared/api/endpoints";
-import { queryClient } from "@/shared/api/query-client";
+import { listLevels } from "@/shared/api/endpoints/organisation";
+import { actionKeys } from "@/shared/api/action-keys";
 import { LevelForm } from "./forms/level-form";
 import { OrganisationEntityGrid } from "./components/organisation-cards";
 import {
@@ -22,7 +22,6 @@ export function LevelsView() {
 
   function handleCreated() {
     setCreateOpen(false);
-    void queryClient.invalidateQueries({ queryKey: ["admin"] });
   }
 
   return (
@@ -57,7 +56,7 @@ export function LevelsView() {
     >
       <OrganisationEntityGrid
         fetchApi={listLevels}
-        cacheKey="admin-organisation-levels"
+        cacheKey={actionKeys.listLevels}
         customQuery={{ departmentId }}
         kind="Level"
         emptyMessage="No levels yet. Add the first level to this department."

@@ -9,7 +9,9 @@ import {
   normalizeCollectionResponse,
 } from '@digitalnotes/core'
 import { facultySchema, type FacultyValues } from '@/entities/organisation'
+import { actionKeys } from '@/shared/api/action-keys'
 import { createFaculty, listUniversities } from '@/shared/api/endpoints/organisation'
+import { revalidateQuery } from '@/shared/api/revalidate-query'
 
 export function FacultyForm({
   universityId,
@@ -50,6 +52,7 @@ export function FacultyForm({
       if (!result?.id) {
         throw new Error(result?.error?.message ?? 'Could not create faculty.')
       }
+      await revalidateQuery(actionKeys.listFaculties)
       onSuccess?.()
     } catch (submitError) {
       setError(getServerMessage(submitError, 'Could not save. Try again.'))

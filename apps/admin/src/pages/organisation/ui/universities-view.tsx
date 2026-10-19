@@ -3,8 +3,8 @@ import { IconBuilding, IconPlus } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageContainer } from "@digitalnotes/core";
-import { listUniversities } from "@/shared/api/endpoints";
-import { queryClient } from "@/shared/api/query-client";
+import { listUniversities } from "@/shared/api/endpoints/organisation";
+import { actionKeys } from "@/shared/api/action-keys";
 import { UniversityForm } from "./forms/university-form";
 import { OrganisationEntityGrid } from "./components/organisation-cards";
 
@@ -16,7 +16,6 @@ export function UniversitiesView() {
 
   function handleCreated() {
     setCreateOpen(false);
-    void queryClient.invalidateQueries({ queryKey: ["admin"] });
   }
 
   return (
@@ -40,7 +39,7 @@ export function UniversitiesView() {
     >
       <OrganisationEntityGrid
         fetchApi={listUniversities}
-        cacheKey="admin-organisation-universities"
+        cacheKey={actionKeys.listUniversities}
         kind="University"
         openLabel="faculties"
         emptyMessage="No universities yet. Create a university to begin."

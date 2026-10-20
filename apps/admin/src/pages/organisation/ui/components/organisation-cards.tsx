@@ -1,27 +1,40 @@
-import { Card, Group, Stack, Text, UnstyledButton } from "@mantine/core";
-import { IconChevronRight } from "@tabler/icons-react";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Card,
+  Divider,
+  Group,
+  Stack,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
+import { IconChevronRight, IconPencil } from "@tabler/icons-react";
 import {
   CollectionDisplayCard,
+  getInitials,
   useCollectionService,
 } from "@digitalnotes/core";
 import styles from "../organisation-view.module.scss";
+
+export type OrganisationEntityItem = { id: string; name: string };
 
 export function OrganisationEntityGrid({
   fetchApi,
   cacheKey,
   customQuery,
-  kind,
   openLabel,
   emptyMessage,
   onItemClick,
+  onEdit,
 }: Readonly<{
   fetchApi: (query: any) => Promise<any>;
   cacheKey: string;
   customQuery?: any;
-  kind: string;
   openLabel?: string;
   emptyMessage: string;
-  onItemClick?: (item: any) => void;
+  onItemClick?: (item: OrganisationEntityItem) => void;
+  onEdit?: (item: OrganisationEntityItem) => void;
 }>) {
   const controller = useCollectionService(
     fetchApi,
@@ -40,8 +53,14 @@ export function OrganisationEntityGrid({
       skeletonProps={{ withImage: false, withBadges: false, withFooter: false }}
       marginBottom="0"
       emptyMessage={emptyMessage}
-      renderItem={(item) => {
-        const card = (
+      renderItem={(item: OrganisationEntityItem) => {
+        const name = (
+          <Text className={styles.entityName} fw={600} lineClamp={1}>
+            {item.name}
+          </Text>
+        );
+
+        return (
           <Card
             className={styles.entityCard}
             component="article"
@@ -49,46 +68,43 @@ export function OrganisationEntityGrid({
             radius="sm"
             withBorder
           >
-            <Group
-              justify="space-between"
-              align="center"
-              gap="sm"
-              wrap="nowrap"
-            >
-              <Stack gap={2} style={{ minWidth: 0 }}>
-                <Text className={styles.entityKind} size="xs">
-                  {kind}
-                </Text>
-                <Text className={styles.entityName} fw={600} lineClamp={1}>
+            <Stack gap="xs" h="100%">
+              <Group
+                justify="start"
+                align="start"
+                gap="sm"
+                wrap="nowrap"
+                h="70%"
+                onClick={() => (onItemClick ? onItemClick(item) : null)}
+              >
+                <Box className={styles.entinyInitials}>
+                  <span>{getInitials(item.name)}</span>
+                </Box>
+                <Text
+                  className={styles.entityName}
+                  fw={600}
+                  // lineClamp={1}
+                  size="lg"
+                >
                   {item.name}
                 </Text>
-                {/*{item.slug && (
-                  <Text c="dimmed" size="xs" lineClamp={1}>
-                    {item.slug}
-                  </Text>
-                )}*/}
-              </Stack>
-              {onItemClick && (
-                <IconChevronRight
-                  className={styles.cardArrow}
-                  size={18}
-                  aria-hidden="true"
-                />
+              </Group>
+              {onEdit && (
+                <>
+                  <Divider />
+                  <Button
+                    variant="subtle"
+                    size="xs"
+                    justify="start"
+                    leftSection={<IconPencil size={14} />}
+                    onClick={() => onEdit(item)}
+                  >
+                    Edit
+                  </Button>
+                </>
               )}
-            </Group>
+            </Stack>
           </Card>
-        );
-
-        if (!onItemClick) return card;
-
-        return (
-          <UnstyledButton
-            className={styles.entityCardButton}
-            aria-label={`${item.name}: open ${openLabel}`}
-            onClick={() => onItemClick(item)}
-          >
-            {card}
-          </UnstyledButton>
         );
       }}
       hidePlugins={{ filters: true, order: true, range: true, export: true }}

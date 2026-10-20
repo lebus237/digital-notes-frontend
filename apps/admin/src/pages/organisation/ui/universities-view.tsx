@@ -6,16 +6,21 @@ import { PageContainer } from "@digitalnotes/core";
 import { listUniversities } from "@/shared/api/endpoints/organisation";
 import { actionKeys } from "@/shared/api/action-keys";
 import { UniversityForm } from "./forms/university-form";
-import { OrganisationEntityGrid } from "./components/organisation-cards";
+import {
+  OrganisationEntityGrid,
+  type OrganisationEntityItem,
+} from "./components/organisation-cards";
 
 const universitiesRoute = getRouteApi("/_app/organisation/");
 
 export function UniversitiesView() {
   const navigate = universitiesRoute.useNavigate();
   const [createOpen, setCreateOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<OrganisationEntityItem | null>(null);
 
-  function handleCreated() {
+  function handleSaved() {
     setCreateOpen(false);
+    setEditingItem(null);
   }
 
   return (
@@ -40,7 +45,6 @@ export function UniversitiesView() {
       <OrganisationEntityGrid
         fetchApi={listUniversities}
         cacheKey={actionKeys.listUniversities}
-        kind="University"
         openLabel="faculties"
         emptyMessage="No universities yet. Create a university to begin."
         onItemClick={(item) =>
@@ -49,6 +53,7 @@ export function UniversitiesView() {
             search: { universityId: item.id },
           })
         }
+        onEdit={setEditingItem}
       />
       <Modal
         opened={createOpen}
@@ -56,7 +61,21 @@ export function UniversitiesView() {
         title="Create university"
         centered
       >
-        <UniversityForm onSuccess={handleCreated} />
+        <UniversityForm onSuccess={handleSaved} />
+      </Modal>
+      <Modal
+        opened={editingItem !== null}
+        onClose={() => setEditingItem(null)}
+        title={editingItem ? `Edit ${editingItem.name}` : "Edit university"}
+        centered
+      >
+        {editingItem && (
+          <UniversityForm
+            key={editingItem.id}
+            initialValue={editingItem}
+            onSuccess={handleSaved}
+          />
+        )}
       </Modal>
     </PageContainer>
   );

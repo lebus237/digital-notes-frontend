@@ -6,7 +6,10 @@ import { PageContainer } from "@digitalnotes/core";
 import { listLevels } from "@/shared/api/endpoints/organisation";
 import { actionKeys } from "@/shared/api/action-keys";
 import { LevelForm } from "./forms/level-form";
-import { OrganisationEntityGrid } from "./components/organisation-cards";
+import {
+  OrganisationEntityGrid,
+  type OrganisationEntityItem,
+} from "./components/organisation-cards";
 import {
   departmentsUrl,
   facultiesUrl,
@@ -19,9 +22,11 @@ const levelsRoute = getRouteApi("/_app/organisation/levels");
 export function LevelsView() {
   const { universityId, facultyId, departmentId } = levelsRoute.useSearch();
   const [createOpen, setCreateOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<OrganisationEntityItem | null>(null);
 
-  function handleCreated() {
+  function handleSaved() {
     setCreateOpen(false);
+    setEditingItem(null);
   }
 
   return (
@@ -58,8 +63,8 @@ export function LevelsView() {
         fetchApi={listLevels}
         cacheKey={actionKeys.listLevels}
         customQuery={{ departmentId }}
-        kind="Level"
         emptyMessage="No levels yet. Add the first level to this department."
+        onEdit={setEditingItem}
       />
       <Modal
         opened={createOpen}
@@ -67,7 +72,22 @@ export function LevelsView() {
         title="Create level"
         centered
       >
-        <LevelForm departmentId={departmentId} onSuccess={handleCreated} />
+        <LevelForm departmentId={departmentId} onSuccess={handleSaved} />
+      </Modal>
+      <Modal
+        opened={editingItem !== null}
+        onClose={() => setEditingItem(null)}
+        title={editingItem ? `Edit ${editingItem.name}` : "Edit level"}
+        centered
+      >
+        {editingItem && (
+          <LevelForm
+            key={editingItem.id}
+            departmentId={departmentId}
+            initialValue={editingItem}
+            onSuccess={handleSaved}
+          />
+        )}
       </Modal>
     </PageContainer>
   );

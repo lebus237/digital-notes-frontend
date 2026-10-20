@@ -6,7 +6,10 @@ import { PageContainer } from "@digitalnotes/core";
 import { listFaculties } from "@/shared/api/endpoints/organisation";
 import { actionKeys } from "@/shared/api/action-keys";
 import { FacultyForm } from "./forms/faculty-form";
-import { OrganisationEntityGrid } from "./components/organisation-cards";
+import {
+  OrganisationEntityGrid,
+  type OrganisationEntityItem,
+} from "./components/organisation-cards";
 import { universitiesUrl } from "./components/organisation-navigation";
 
 const facultiesRoute = getRouteApi("/_app/organisation/faculties");
@@ -15,9 +18,11 @@ export function FacultiesView() {
   const { universityId } = facultiesRoute.useSearch();
   const navigate = facultiesRoute.useNavigate();
   const [createOpen, setCreateOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<OrganisationEntityItem | null>(null);
 
-  function handleCreated() {
+  function handleSaved() {
     setCreateOpen(false);
+    setEditingItem(null);
   }
 
   return (
@@ -47,7 +52,6 @@ export function FacultiesView() {
         fetchApi={listFaculties}
         cacheKey={actionKeys.listFaculties}
         customQuery={{ universityId }}
-        kind="Faculty"
         openLabel="departments"
         emptyMessage="No faculties yet. Add the first faculty to this university."
         onItemClick={(item) =>
@@ -59,6 +63,7 @@ export function FacultiesView() {
             },
           })
         }
+        onEdit={setEditingItem}
       />
       <Modal
         opened={createOpen}
@@ -66,7 +71,22 @@ export function FacultiesView() {
         title="Create faculty"
         centered
       >
-        <FacultyForm universityId={universityId} onSuccess={handleCreated} />
+        <FacultyForm universityId={universityId} onSuccess={handleSaved} />
+      </Modal>
+      <Modal
+        opened={editingItem !== null}
+        onClose={() => setEditingItem(null)}
+        title={editingItem ? `Edit ${editingItem.name}` : "Edit faculty"}
+        centered
+      >
+        {editingItem && (
+          <FacultyForm
+            key={editingItem.id}
+            universityId={universityId}
+            initialValue={editingItem}
+            onSuccess={handleSaved}
+          />
+        )}
       </Modal>
     </PageContainer>
   );

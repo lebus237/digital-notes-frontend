@@ -10,15 +10,21 @@ import {
 } from '@digitalnotes/core'
 import { facultySchema, type FacultyValues } from '@/entities/organisation'
 import { actionKeys } from '@/shared/api/action-keys'
-import { createFaculty, listUniversities } from '@/shared/api/endpoints/organisation'
+import { createFaculty, listUniversities, updateFaculty } from '@/shared/api/endpoints/organisation'
 import { revalidateQuery } from '@/shared/api/revalidate-query'
 
 export function FacultyForm({
   universityId,
+  initialValue,
   onSuccess,
-}: Readonly<{ universityId?: string; onSuccess?: () => void }>) {
+}: Readonly<{
+  universityId?: string
+  initialValue?: { id: string; name: string }
+  onSuccess?: () => void
+}>) {
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
+  const isEditing = Boolean(initialValue?.id)
 
   const { data: universities = [] } = useQuery({
     queryKey: ['admin-universities', 'options'],
@@ -31,26 +37,39 @@ export function FacultyForm({
   const facultyOpts = useMemo(
     () =>
       formOptions({
-        defaultValues: { universityId: universityId ?? '', name: '' } satisfies FacultyValues,
+        defaultValues: {
+          universityId: universityId ?? '',
+          name: initialValue?.name ?? '',
+        } satisfies FacultyValues,
         validators: { onSubmit: facultySchema },
       }),
-    [universityId],
+    [universityId, initialValue?.name],
   )
 
   async function handleSubmit(value: FacultyValues) {
     setError('')
     setPending(true)
     try {
-      const result = (await createFaculty(value)) as {
-        id?: string
-        status?: string
-        error?: { message?: string }
-      }
-      if (result !== null && typeof result === 'object' && 'status' in result && result.status === 'error') {
-        throw new Error(result.error?.message ?? 'Could not create faculty.')
-      }
-      if (!result?.id) {
-        throw new Error(result?.error?.message ?? 'Could not create faculty.')
+      if (isEditing && initialValue?.id) {
+        const result = (await updateFaculty(initialValue.id, value)) as {
+          status?: string
+          error?: { message?: string }
+        } | null
+        if (result !== null && typeof result === 'object' && 'status' in result && result.status === 'error') {
+          throw new Error(result.error?.message ?? 'Could not update faculty.')
+        }
+      } else {
+        const result = (await createFaculty(value)) as {
+          id?: string
+          status?: string
+          error?: { message?: string }
+        }
+        if (result !== null && typeof result === 'object' && 'status' in result && result.status === 'error') {
+          throw new Error(result.error?.message ?? 'Could not create faculty.')
+        }
+        if (!result?.id) {
+          throw new Error(result?.error?.message ?? 'Could not create faculty.')
+        }
       }
       await revalidateQuery(actionKeys.listFaculties)
       onSuccess?.()
@@ -62,7 +81,7 @@ export function FacultyForm({
   }
 
   return (
-    <FormWrapper formOptions={facultyOpts} onSubmit={handleSubmit}>
+    <FormWrapper key={initialValue?.id ?? 'new'} formOptions={facultyOpts} onSubmit={handleSubmit}>
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
         {!universityId && (
@@ -75,7 +94,7 @@ export function FacultyForm({
           />
         )}
         <FormField.TextInput name="name" label="Faculty name" placeholder="e.g. Faculty of Science" withAsterisk />
-        <Button type="submit" loading={pending}>Create faculty</Button>
+        <Button type="submit" loading={pending}>{isEditing ? 'Save changes' : 'Create faculty'}</Button>
       </Stack>
     </FormWrapper>
   )

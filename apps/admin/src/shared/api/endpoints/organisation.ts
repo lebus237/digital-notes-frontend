@@ -14,5 +14,11 @@ export const createDepartment = callAction('/api/v1/admin/departments', 'POST')
 export const createLevel = callAction('/api/v1/admin/levels', 'POST')
 export const createSemester = callAction('/api/v1/admin/semesters', 'POST')
 
+export const updateUniversity = callActionWithId('/api/v1/admin/universities/{id}', 'PATCH')
+export const updateFaculty = callActionWithId('/api/v1/admin/faculties/{id}', 'PATCH')
+export const updateDepartment = callActionWithId('/api/v1/admin/departments/{id}', 'PATCH')
+export const updateLevel = callActionWithId('/api/v1/admin/levels/{id}', 'PATCH')
+export const updateSemester = callActionWithId('/api/v1/admin/semesters/{id}', 'PATCH')
+
 export const getFaculty = callActionWithId('/api/v1/faculties/{id}', 'GET')
 export const getDepartment = callActionWithId('/api/v1/departments/{id}', 'GET')

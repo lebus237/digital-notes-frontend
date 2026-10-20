@@ -10,15 +10,21 @@ import {
 } from '@digitalnotes/core'
 import { departmentSchema, type DepartmentValues } from '@/entities/organisation'
 import { actionKeys } from '@/shared/api/action-keys'
-import { createDepartment, listFaculties } from '@/shared/api/endpoints/organisation'
+import { createDepartment, listFaculties, updateDepartment } from '@/shared/api/endpoints/organisation'
 import { revalidateQuery } from '@/shared/api/revalidate-query'
 
 export function DepartmentForm({
   facultyId,
+  initialValue,
   onSuccess,
-}: Readonly<{ facultyId?: string; onSuccess?: () => void }>) {
+}: Readonly<{
+  facultyId?: string
+  initialValue?: { id: string; name: string }
+  onSuccess?: () => void
+}>) {
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
+  const isEditing = Boolean(initialValue?.id)
 
   const { data: faculties = [] } = useQuery({
     queryKey: ['admin-faculties', 'options'],
@@ -31,26 +37,39 @@ export function DepartmentForm({
   const departmentOpts = useMemo(
     () =>
       formOptions({
-        defaultValues: { facultyId: facultyId ?? '', name: '' } satisfies DepartmentValues,
+        defaultValues: {
+          facultyId: facultyId ?? '',
+          name: initialValue?.name ?? '',
+        } satisfies DepartmentValues,
         validators: { onSubmit: departmentSchema },
       }),
-    [facultyId],
+    [facultyId, initialValue?.name],
   )
 
   async function handleSubmit(value: DepartmentValues) {
     setError('')
     setPending(true)
     try {
-      const result = (await createDepartment(value)) as {
-        id?: string
-        status?: string
-        error?: { message?: string }
-      }
-      if (result !== null && typeof result === 'object' && 'status' in result && result.status === 'error') {
-        throw new Error(result.error?.message ?? 'Could not create department.')
-      }
-      if (!result?.id) {
-        throw new Error(result?.error?.message ?? 'Could not create department.')
+      if (isEditing && initialValue?.id) {
+        const result = (await updateDepartment(initialValue.id, value)) as {
+          status?: string
+          error?: { message?: string }
+        } | null
+        if (result !== null && typeof result === 'object' && 'status' in result && result.status === 'error') {
+          throw new Error(result.error?.message ?? 'Could not update department.')
+        }
+      } else {
+        const result = (await createDepartment(value)) as {
+          id?: string
+          status?: string
+          error?: { message?: string }
+        }
+        if (result !== null && typeof result === 'object' && 'status' in result && result.status === 'error') {
+          throw new Error(result.error?.message ?? 'Could not create department.')
+        }
+        if (!result?.id) {
+          throw new Error(result?.error?.message ?? 'Could not create department.')
+        }
       }
       await revalidateQuery(actionKeys.listDepartments)
       onSuccess?.()
@@ -62,7 +81,7 @@ export function DepartmentForm({
   }
 
   return (
-    <FormWrapper formOptions={departmentOpts} onSubmit={handleSubmit}>
+    <FormWrapper key={initialValue?.id ?? 'new'} formOptions={departmentOpts} onSubmit={handleSubmit}>
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
         {!facultyId && (
@@ -75,7 +94,7 @@ export function DepartmentForm({
           />
         )}
         <FormField.TextInput name="name" label="Department name" placeholder="e.g. Computer Science" withAsterisk />
-        <Button type="submit" loading={pending}>Create department</Button>
+        <Button type="submit" loading={pending}>{isEditing ? 'Save changes' : 'Create department'}</Button>
       </Stack>
     </FormWrapper>
   )

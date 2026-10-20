@@ -33,19 +33,20 @@
     min-width: 0;
 }
 
-.titleIcon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
+.backAction {
     flex-shrink: 0;
-    border-radius: var(--mantine-radius-xs);
-    background: light-dark(
-        var(--mantine-color-brand-1),
-        var(--mantine-color-dark-7)
+    border-color: light-dark(
+        var(--mantine-color-gray-3),
+        var(--mantine-color-dark-6)
     );
-    color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-1));
+    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
+
+    &:hover {
+        background: light-dark(
+            var(--mantine-color-gray-0),
+            var(--mantine-color-dark-6)
+        );
+    }
 }
 
 .titleText {

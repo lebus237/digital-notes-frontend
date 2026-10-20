@@ -1,5 +1,5 @@
 import { Alert, Button, Group, Modal, Select } from "@mantine/core";
-import { IconBook, IconPlus } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { archiveCourse, listCourses } from "@/shared/api/endpoints/courses";
@@ -67,7 +67,6 @@ export function CoursesView() {
       breadcrumbs={breadcrumbs}
       title="Courses"
       description="Manage the course catalog"
-      icon={<IconBook size={20} />}
       actions={[
         {
           key: "new-course",

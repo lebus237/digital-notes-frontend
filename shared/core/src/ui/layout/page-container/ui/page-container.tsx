@@ -5,8 +5,10 @@ import {
   Tooltip,
   Tabs,
   type ButtonProps,
+  Group,
 } from "@mantine/core";
-import { IconX } from "@tabler/icons-react";
+import { IconArrowLeft, IconX } from "@tabler/icons-react";
+import { useCanGoBack, useRouter } from "@tanstack/react-router";
 import {
   Children,
   useCallback,
@@ -60,7 +62,6 @@ type PageContainerProps = {
   breadcrumbs: ShellCrumb[];
   title?: ReactNode;
   description?: ReactNode;
-  icon?: ReactNode;
   actions?: PageAction[];
   panel?: PagePanel;
   children?: ReactNode;
@@ -75,7 +76,6 @@ export function PageContainer({
   breadcrumbs,
   title,
   description,
-  icon,
   actions,
   panel,
   children,
@@ -86,6 +86,8 @@ export function PageContainer({
   keepMounted = true,
 }: Readonly<PageContainerProps>) {
   const { setBreadcrumbs } = useShell();
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
   const panelOpen = Boolean(panel?.opened);
   const hasTabs = Boolean(tabs && tabs.length > 0);
   const childArray = Children.toArray(children);
@@ -160,17 +162,29 @@ export function PageContainer({
         className={`${styles.content} ${panelOpen ? styles.contentShifted : ""}`}
       >
         <header className={styles.actionBar}>
-          {(title ?? description ?? icon) && (
-            <div className={styles.titleGroup}>
-              {icon && <span className={styles.titleIcon}>{icon}</span>}
-              <div className={styles.titleText}>
-                {title && <h1 className={styles.pageTitle}>{title}</h1>}
-                {description && (
-                  <p className={styles.pageDescription}>{description}</p>
-                )}
+          <Group gap="xs">
+            {canGoBack && (
+              <ActionIcon
+                className={styles.backAction}
+                variant="default"
+                size="lg"
+                onClick={() => router.history.back()}
+                aria-label="Go back"
+              >
+                <IconArrowLeft size={20} />
+              </ActionIcon>
+            )}
+            {(title ?? description) && (
+              <div className={styles.titleGroup}>
+                <div className={styles.titleText}>
+                  {title && <h1 className={styles.pageTitle}>{title}</h1>}
+                  {description && (
+                    <p className={styles.pageDescription}>{description}</p>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </Group>
           <div className={styles.actions}>
             {actions && actions.length > 0 && (
               <div className={styles.desktopActions}>

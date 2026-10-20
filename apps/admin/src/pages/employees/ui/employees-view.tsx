@@ -1,5 +1,5 @@
 import { Alert, Button, Modal, Select } from "@mantine/core";
-import { IconPlus, IconUsers } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { listEmployees } from "@/shared/api/endpoints/employees";
@@ -66,7 +66,6 @@ export function EmployeesView() {
       breadcrumbs={breadcrumbs}
       title="Employees"
       description="Manage employee accounts and access"
-      icon={<IconUsers size={20} />}
       actions={[
         {
           key: "new-employee",

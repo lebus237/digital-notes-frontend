@@ -1,5 +1,5 @@
 import { Modal } from "@mantine/core";
-import { IconBuilding, IconPlus } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageContainer } from "@digitalnotes/core";
@@ -49,7 +49,6 @@ export function LevelsView() {
       ]}
       title="Levels"
       description="Levels within the selected department."
-      icon={<IconBuilding size={20} />}
       actions={[
         {
           key: "new-level",

@@ -7,6 +7,7 @@ import {
   useCollectionService,
 } from "@digitalnotes/core";
 import styles from "../organisation-view.module.scss";
+import { EntityCardSkeleton } from "./entity-card-skeleton";
 
 export type OrganisationEntityItem = { id: string; name: string };
 export type OrganisationEntityKind =
@@ -52,7 +53,7 @@ export function OrganisationEntityGrid({
       cardSpan={{ base: 12, sm: 6, lg: 3 }}
       gutter="sm"
       skeletonCount={6}
-      skeletonProps={{ withImage: false, withBadges: false, withFooter: false }}
+      skeleton={<EntityCardSkeleton withEdit={Boolean(onEdit)} />}
       marginBottom="0"
       emptyMessage={emptyMessage}
       renderItem={(item: OrganisationEntityItem) => {

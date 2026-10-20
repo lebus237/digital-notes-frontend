@@ -15,6 +15,7 @@ function CollectionDisplayCard<T = any>({
   getKey,
   emptyMessage = 'text.no_results',
   skeletonCount = 8,
+  skeleton,
   skeletonProps,
   ...base
 }: CollectionDisplayBaseProps & {
@@ -27,6 +28,8 @@ function CollectionDisplayCard<T = any>({
   emptyMessage?: string
   skeletonCount?: number
   skeletonProps?: React.ComponentProps<typeof CardSkeleton>
+  /** Optional custom skeleton node, rendered per column instead of CardSkeleton */
+  skeleton?: React.ReactNode
 }) {
   const isLoading = base.controller?.isLoading ?? false
 
@@ -50,7 +53,7 @@ function CollectionDisplayCard<T = any>({
             <Grid gap={gutter}>
               {Array.from({ length: skeletonCount }).map((_, i) => (
                 <Grid.Col key={`sk-${i}`} span={cardSpan}>
-                  <CardSkeleton {...skeletonProps} />
+                  {skeleton ?? <CardSkeleton {...skeletonProps} />}
                 </Grid.Col>
               ))}
             </Grid>

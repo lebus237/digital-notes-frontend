@@ -45,6 +45,7 @@ export function UniversitiesView() {
       <OrganisationEntityGrid
         fetchApi={listUniversities}
         cacheKey={actionKeys.listUniversities}
+        kind="university"
         openLabel="faculties"
         emptyMessage="No universities yet. Create a university to begin."
         onItemClick={(item) =>

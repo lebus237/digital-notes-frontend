@@ -1,15 +1,6 @@
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Card,
-  Divider,
-  Group,
-  Stack,
-  Text,
-  UnstyledButton,
-} from "@mantine/core";
-import { IconChevronRight, IconPencil } from "@tabler/icons-react";
+import { Box, Button, Card, Divider, Group, Stack, Text } from "@mantine/core";
+import { clsx } from "clsx";
+import { IconPencil } from "@tabler/icons-react";
 import {
   CollectionDisplayCard,
   getInitials,
@@ -18,6 +9,15 @@ import {
 import styles from "../organisation-view.module.scss";
 
 export type OrganisationEntityItem = { id: string; name: string };
+export type OrganisationEntityKind =
+  "university" | "faculty" | "department" | "level";
+
+const kindInitialsClass: Record<OrganisationEntityKind, string> = {
+  university: styles.initialsUniversity,
+  faculty: styles.initialsFaculty,
+  department: styles.initialsDepartment,
+  level: styles.initialsLevel,
+};
 
 export function OrganisationEntityGrid({
   fetchApi,
@@ -27,6 +27,7 @@ export function OrganisationEntityGrid({
   emptyMessage,
   onItemClick,
   onEdit,
+  kind,
 }: Readonly<{
   fetchApi: (query: any) => Promise<any>;
   cacheKey: string;
@@ -35,6 +36,7 @@ export function OrganisationEntityGrid({
   emptyMessage: string;
   onItemClick?: (item: OrganisationEntityItem) => void;
   onEdit?: (item: OrganisationEntityItem) => void;
+  kind: OrganisationEntityKind;
 }>) {
   const controller = useCollectionService(
     fetchApi,
@@ -47,7 +49,7 @@ export function OrganisationEntityGrid({
     <CollectionDisplayCard
       records={controller.data}
       controller={controller}
-      cardSpan={{ base: 12, sm: 6, lg: 4 }}
+      cardSpan={{ base: 12, sm: 6, lg: 3 }}
       gutter="sm"
       skeletonCount={6}
       skeletonProps={{ withImage: false, withBadges: false, withFooter: false }}
@@ -64,12 +66,13 @@ export function OrganisationEntityGrid({
           <Card
             className={styles.entityCard}
             component="article"
-            padding="sm"
+            padding="xs"
             radius="sm"
             withBorder
           >
-            <Stack gap="xs" h="100%">
+            <Stack gap="sm" h="100%">
               <Group
+                className={styles.entityCardHeader}
                 justify="start"
                 align="start"
                 gap="sm"
@@ -77,15 +80,15 @@ export function OrganisationEntityGrid({
                 h="70%"
                 onClick={() => (onItemClick ? onItemClick(item) : null)}
               >
-                <Box className={styles.entinyInitials}>
+                <Box
+                  className={clsx(
+                    styles.entinyInitials,
+                    kindInitialsClass[kind],
+                  )}
+                >
                   <span>{getInitials(item.name)}</span>
                 </Box>
-                <Text
-                  className={styles.entityName}
-                  fw={600}
-                  // lineClamp={1}
-                  size="lg"
-                >
+                <Text className={styles.entityName} fw={600} size="lg">
                   {item.name}
                 </Text>
               </Group>
@@ -93,13 +96,12 @@ export function OrganisationEntityGrid({
                 <>
                   <Divider />
                   <Button
-                    variant="subtle"
                     size="xs"
-                    justify="start"
-                    leftSection={<IconPencil size={14} />}
+                    bg="var(--mantine-color-brand-6)"
+                    radius="xs"
                     onClick={() => onEdit(item)}
                   >
-                    Edit
+                    <Text size="sm">Edit</Text>
                   </Button>
                 </>
               )}

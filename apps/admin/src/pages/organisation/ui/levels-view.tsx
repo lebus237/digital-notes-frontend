@@ -62,6 +62,7 @@ export function LevelsView() {
       <OrganisationEntityGrid
         fetchApi={listLevels}
         cacheKey={actionKeys.listLevels}
+        kind="level"
         customQuery={{ departmentId }}
         emptyMessage="No levels yet. Add the first level to this department."
         onEdit={setEditingItem}

@@ -58,6 +58,7 @@ export function DepartmentsView() {
       <OrganisationEntityGrid
         fetchApi={listDepartments}
         cacheKey={actionKeys.listDepartments}
+        kind="department"
         customQuery={{ facultyId }}
         openLabel="levels"
         emptyMessage="No departments yet. Add the first department to this faculty."

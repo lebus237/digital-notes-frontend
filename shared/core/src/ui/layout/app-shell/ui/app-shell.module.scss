@@ -162,6 +162,14 @@
   gap: 0.625rem;
 }
 
+.groupButtonActive {
+  color: light-dark(var(--mantine-color-brand-8), var(--mantine-color-brand-2));
+
+  &:hover {
+    color: light-dark(var(--mantine-color-brand-8), var(--mantine-color-brand-2));
+  }
+}
+
 .chevron {
   color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-3));
   transition: transform 150ms ease-in-out;

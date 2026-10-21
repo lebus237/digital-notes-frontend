@@ -1,4 +1,4 @@
-export type { Department, Faculty, Level, ListQuery, Semester, University } from './model/models'
+export type { Department, DepartmentListItem, Faculty, Level, ListQuery, Semester, University } from './model/models'
 export {
   departmentSchema,
   facultySchema,

@@ -2,6 +2,7 @@ import { AppShell, Breadcrumbs, TextInput } from '@mantine/core'
 import { IconChevronDown, IconLayoutSidebar, IconSearch } from '@tabler/icons-react'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState, type ComponentType, type ReactNode } from 'react'
+import { isRouteActive, isRouteExact } from '../../../../lib/helpers/routes'
 import { ShellProvider, useShell, type ShellCrumb } from '../model/shell-context'
 import styles from './app-shell.module.scss'
 
@@ -51,6 +52,17 @@ function matchesQuery(item: SidebarConfigItem, query: string, parent?: SidebarCo
   return searchableText.some((text) => text.toLowerCase().includes(query))
 }
 
+function collectActiveGroupIds(items: SidebarConfigItem[], pathname: string) {
+  return items
+    .filter((item) => item.children?.length)
+    .filter(
+      (item) =>
+        isRouteActive(pathname, item.to) ||
+        (item.children ?? []).some((child) => isRouteActive(pathname, child.to)),
+    )
+    .map((item) => item.id)
+}
+
 function ShellCrumbs({ breadcrumbs }: Readonly<{ breadcrumbs: ShellCrumb[] }>) {
   if (breadcrumbs.length === 0) return null
 
@@ -69,7 +81,12 @@ function ShellCrumbs({ breadcrumbs }: Readonly<{ breadcrumbs: ShellCrumb[] }>) {
   )
 }
 
-function SidebarLink({ item, active, standalone = false }: Readonly<{ item: SidebarConfigItem; active: boolean; standalone?: boolean }>) {
+function SidebarLink({
+  item,
+  active,
+  exact = false,
+  standalone = false,
+}: Readonly<{ item: SidebarConfigItem; active: boolean; exact?: boolean; standalone?: boolean }>) {
   if (!item.to) return null
   const Icon = item.icon
   const className = standalone
@@ -80,7 +97,7 @@ function SidebarLink({ item, active, standalone = false }: Readonly<{ item: Side
     <Link
       to={item.to as never}
       className={className}
-      aria-current={active ? 'page' : undefined}
+      aria-current={active ? (exact ? 'page' : 'true') : undefined}
     >
       {Icon && <Icon size={16} aria-hidden={true} />}
       {item.label}
@@ -110,6 +127,26 @@ function AppShellFrame({
     setMobileOpened(false)
   }, [pathname])
 
+  // Keep the group that owns the current route expanded, even when it was collapsed before.
+  useEffect(() => {
+    const activeGroupIds = collectActiveGroupIds(sidebarConfig.items, pathname)
+    if (activeGroupIds.length === 0) return
+
+    setOpenGroups((groups) => {
+      const next = { ...groups }
+      let changed = false
+
+      for (const id of activeGroupIds) {
+        if (next[id] === false) {
+          next[id] = true
+          changed = true
+        }
+      }
+
+      return changed ? next : groups
+    })
+  }, [pathname, sidebarConfig])
+
   const normalizedQuery = query.trim().toLowerCase()
 
   function toggleSidebar() {
@@ -124,7 +161,12 @@ function AppShellFrame({
     if (!item.children) {
       return (
         <li key={item.id}>
-          <SidebarLink item={item} active={pathname === item.to} standalone />
+          <SidebarLink
+            item={item}
+            active={isRouteActive(pathname, item.to)}
+            exact={isRouteExact(pathname, item.to)}
+            standalone
+          />
         </li>
       )
     }
@@ -135,12 +177,15 @@ function AppShellFrame({
 
     const expanded = normalizedQuery !== '' || (openGroups[item.id] ?? true)
     const Icon = item.icon
+    const groupActive =
+      isRouteActive(pathname, item.to) ||
+      visibleChildren.some((child) => isRouteActive(pathname, child.to))
 
     return (
       <li key={item.id}>
         <button
           type="button"
-          className={styles.groupButton}
+          className={`${styles.groupButton} ${groupActive ? styles.groupButtonActive : ''}`}
           aria-expanded={expanded}
           onClick={() => setOpenGroups((groups) => ({ ...groups, [item.id]: !expanded }))}
         >
@@ -158,7 +203,11 @@ function AppShellFrame({
           <ul className={styles.subMenu}>
             {visibleChildren.map((child) => (
               <li key={child.id}>
-                <SidebarLink item={child} active={pathname === child.to} />
+                <SidebarLink
+                  item={child}
+                  active={isRouteActive(pathname, child.to)}
+                  exact={isRouteExact(pathname, child.to)}
+                />
               </li>
             ))}
           </ul>

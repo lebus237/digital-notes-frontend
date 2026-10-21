@@ -13,13 +13,15 @@ import { Route as AppRouteImport } from './app/routes/_app'
 import { Route as LoginRouteImport } from './app/routes/login'
 import { Route as LogoutRouteImport } from './app/routes/logout'
 import { Route as AppIndexRouteImport } from './app/routes/_app/index'
-import { Route as AppCoursesRouteImport } from './app/routes/_app/courses'
 import { Route as AppEmployeesRouteImport } from './app/routes/_app/employees'
 import { Route as AppOrganisationRouteRouteImport } from './app/routes/_app/organisation/route'
+import { Route as AppCoursesIndexRouteImport } from './app/routes/_app/courses/index'
 import { Route as AppOrganisationIndexRouteImport } from './app/routes/_app/organisation/index'
 import { Route as AppOrganisationDepartmentsRouteImport } from './app/routes/_app/organisation/departments'
 import { Route as AppOrganisationFacultiesRouteImport } from './app/routes/_app/organisation/faculties'
 import { Route as AppOrganisationLevelsRouteImport } from './app/routes/_app/organisation/levels'
+import { Route as AppCoursesDepartmentIdIndexRouteImport } from './app/routes/_app/courses/$departmentId/index'
+import { Route as AppCoursesDepartmentIdCourseIdIndexRouteImport } from './app/routes/_app/courses/$departmentId/$courseId/index'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -40,11 +42,6 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppCoursesRoute = AppCoursesRouteImport.update({
-  id: '/courses',
-  path: '/courses',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppEmployeesRoute = AppEmployeesRouteImport.update({
   id: '/employees',
   path: '/employees',
@@ -53,6 +50,11 @@ const AppEmployeesRoute = AppEmployeesRouteImport.update({
 const AppOrganisationRouteRoute = AppOrganisationRouteRouteImport.update({
   id: '/organisation',
   path: '/organisation',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCoursesIndexRoute = AppCoursesIndexRouteImport.update({
+  id: '/courses/',
+  path: '/courses/',
   getParentRoute: () => AppRoute,
 } as any)
 const AppOrganisationIndexRoute = AppOrganisationIndexRouteImport.update({
@@ -77,29 +79,45 @@ const AppOrganisationLevelsRoute = AppOrganisationLevelsRouteImport.update({
   path: '/levels',
   getParentRoute: () => AppOrganisationRouteRoute,
 } as any)
+const AppCoursesDepartmentIdIndexRoute =
+  AppCoursesDepartmentIdIndexRouteImport.update({
+    id: '/courses/$departmentId/',
+    path: '/courses/$departmentId/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppCoursesDepartmentIdCourseIdIndexRoute =
+  AppCoursesDepartmentIdCourseIdIndexRouteImport.update({
+    id: '/courses/$departmentId/$courseId/',
+    path: '/courses/$departmentId/$courseId/',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/organisation': typeof AppOrganisationRouteRouteWithChildren
-  '/courses': typeof AppCoursesRoute
   '/employees': typeof AppEmployeesRoute
   '/organisation/departments': typeof AppOrganisationDepartmentsRoute
   '/organisation/faculties': typeof AppOrganisationFacultiesRoute
   '/organisation/levels': typeof AppOrganisationLevelsRoute
+  '/courses/': typeof AppCoursesIndexRoute
   '/organisation/': typeof AppOrganisationIndexRoute
+  '/courses/$departmentId/': typeof AppCoursesDepartmentIdIndexRoute
+  '/courses/$departmentId/$courseId/': typeof AppCoursesDepartmentIdCourseIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
-  '/courses': typeof AppCoursesRoute
   '/employees': typeof AppEmployeesRoute
   '/': typeof AppIndexRoute
   '/organisation/departments': typeof AppOrganisationDepartmentsRoute
   '/organisation/faculties': typeof AppOrganisationFacultiesRoute
   '/organisation/levels': typeof AppOrganisationLevelsRoute
+  '/courses': typeof AppCoursesIndexRoute
   '/organisation': typeof AppOrganisationIndexRoute
+  '/courses/$departmentId': typeof AppCoursesDepartmentIdIndexRoute
+  '/courses/$departmentId/$courseId': typeof AppCoursesDepartmentIdCourseIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,13 +125,15 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/_app/organisation': typeof AppOrganisationRouteRouteWithChildren
-  '/_app/courses': typeof AppCoursesRoute
   '/_app/employees': typeof AppEmployeesRoute
   '/_app/': typeof AppIndexRoute
   '/_app/organisation/departments': typeof AppOrganisationDepartmentsRoute
   '/_app/organisation/faculties': typeof AppOrganisationFacultiesRoute
   '/_app/organisation/levels': typeof AppOrganisationLevelsRoute
+  '/_app/courses/': typeof AppCoursesIndexRoute
   '/_app/organisation/': typeof AppOrganisationIndexRoute
+  '/_app/courses/$departmentId/': typeof AppCoursesDepartmentIdIndexRoute
+  '/_app/courses/$departmentId/$courseId/': typeof AppCoursesDepartmentIdCourseIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -122,36 +142,42 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/organisation'
-    | '/courses'
     | '/employees'
     | '/organisation/departments'
     | '/organisation/faculties'
     | '/organisation/levels'
+    | '/courses/'
     | '/organisation/'
+    | '/courses/$departmentId/'
+    | '/courses/$departmentId/$courseId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/logout'
-    | '/courses'
     | '/employees'
     | '/'
     | '/organisation/departments'
     | '/organisation/faculties'
     | '/organisation/levels'
+    | '/courses'
     | '/organisation'
+    | '/courses/$departmentId'
+    | '/courses/$departmentId/$courseId'
   id:
     | '__root__'
     | '/_app'
     | '/login'
     | '/logout'
     | '/_app/organisation'
-    | '/_app/courses'
     | '/_app/employees'
     | '/_app/'
     | '/_app/organisation/departments'
     | '/_app/organisation/faculties'
     | '/_app/organisation/levels'
+    | '/_app/courses/'
     | '/_app/organisation/'
+    | '/_app/courses/$departmentId/'
+    | '/_app/courses/$departmentId/$courseId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -190,13 +216,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/courses': {
-      id: '/_app/courses'
-      path: '/courses'
-      fullPath: '/courses'
-      preLoaderRoute: typeof AppCoursesRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/employees': {
       id: '/_app/employees'
       path: '/employees'
@@ -209,6 +228,13 @@ declare module '@tanstack/react-router' {
       path: '/organisation'
       fullPath: '/organisation'
       preLoaderRoute: typeof AppOrganisationRouteRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/courses/': {
+      id: '/_app/courses/'
+      path: '/courses'
+      fullPath: '/courses/'
+      preLoaderRoute: typeof AppCoursesIndexRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/organisation/': {
@@ -239,6 +265,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOrganisationLevelsRouteImport
       parentRoute: typeof AppOrganisationRouteRoute
     }
+    '/_app/courses/$departmentId/': {
+      id: '/_app/courses/$departmentId/'
+      path: '/courses/$departmentId'
+      fullPath: '/courses/$departmentId/'
+      preLoaderRoute: typeof AppCoursesDepartmentIdIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/courses/$departmentId/$courseId/': {
+      id: '/_app/courses/$departmentId/$courseId/'
+      path: '/courses/$departmentId/$courseId'
+      fullPath: '/courses/$departmentId/$courseId/'
+      preLoaderRoute: typeof AppCoursesDepartmentIdCourseIdIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -261,16 +301,21 @@ const AppOrganisationRouteRouteWithChildren =
 
 interface AppRouteChildren {
   AppOrganisationRouteRoute: typeof AppOrganisationRouteRouteWithChildren
-  AppCoursesRoute: typeof AppCoursesRoute
   AppEmployeesRoute: typeof AppEmployeesRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppCoursesIndexRoute: typeof AppCoursesIndexRoute
+  AppCoursesDepartmentIdIndexRoute: typeof AppCoursesDepartmentIdIndexRoute
+  AppCoursesDepartmentIdCourseIdIndexRoute: typeof AppCoursesDepartmentIdCourseIdIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppOrganisationRouteRoute: AppOrganisationRouteRouteWithChildren,
-  AppCoursesRoute: AppCoursesRoute,
   AppEmployeesRoute: AppEmployeesRoute,
   AppIndexRoute: AppIndexRoute,
+  AppCoursesIndexRoute: AppCoursesIndexRoute,
+  AppCoursesDepartmentIdIndexRoute: AppCoursesDepartmentIdIndexRoute,
+  AppCoursesDepartmentIdCourseIdIndexRoute:
+    AppCoursesDepartmentIdCourseIdIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

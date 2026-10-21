@@ -94,7 +94,7 @@ export function OrganisationEntityGrid({
                 </Text>
               </Group>
               {onEdit && (
-                <>
+                <Stack gap="xs">
                   <Divider />
                   <Button
                     size="xs"
@@ -104,7 +104,7 @@ export function OrganisationEntityGrid({
                   >
                     <Text size="sm">Edit</Text>
                   </Button>
-                </>
+                </Stack>
               )}
             </Stack>
           </Card>

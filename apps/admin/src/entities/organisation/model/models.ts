@@ -18,6 +18,15 @@ export type Department = {
   slug: string
 }
 
+export type DepartmentListItem = {
+  id: string
+  facultyName: string
+  name: string
+  slug: string
+  createdAt: string
+  updatedAt: string
+}
+
 export type Level = {
   id: string
   departmentId: string

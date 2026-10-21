@@ -83,10 +83,10 @@ export const callActionWithId = <T>(
   },
 ): ((id: any, props?: T) => Promise<Resp | null>) => {
   return (id: any, props?: T) => {
-    return getMethod(method)(
-      options?.customUrlFunc?.(id, props) || path.replace(/{.+}/, id),
-      props,
-    )
+    const url =
+      options?.customUrlFunc?.(id, props) || path.replace(/{.+}/, id);
+
+    return getMethod(method)(getPath(url, method, props), props)
       .then((res: AxiosResponse<any>) => {
         if (isForm) {
           if (!getIsOk(res)) {

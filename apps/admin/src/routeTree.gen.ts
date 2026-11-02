@@ -19,7 +19,6 @@ import { Route as AppCoursesIndexRouteImport } from './app/routes/_app/courses/i
 import { Route as AppOrganisationIndexRouteImport } from './app/routes/_app/organisation/index'
 import { Route as AppOrganisationDepartmentsRouteImport } from './app/routes/_app/organisation/departments'
 import { Route as AppOrganisationFacultiesRouteImport } from './app/routes/_app/organisation/faculties'
-import { Route as AppOrganisationLevelsRouteImport } from './app/routes/_app/organisation/levels'
 import { Route as AppCoursesDepartmentIdIndexRouteImport } from './app/routes/_app/courses/$departmentId/index'
 import { Route as AppCoursesDepartmentIdCourseIdIndexRouteImport } from './app/routes/_app/courses/$departmentId/$courseId/index'
 
@@ -74,11 +73,6 @@ const AppOrganisationFacultiesRoute =
     path: '/faculties',
     getParentRoute: () => AppOrganisationRouteRoute,
   } as any)
-const AppOrganisationLevelsRoute = AppOrganisationLevelsRouteImport.update({
-  id: '/levels',
-  path: '/levels',
-  getParentRoute: () => AppOrganisationRouteRoute,
-} as any)
 const AppCoursesDepartmentIdIndexRoute =
   AppCoursesDepartmentIdIndexRouteImport.update({
     id: '/courses/$departmentId/',
@@ -100,7 +94,6 @@ export interface FileRoutesByFullPath {
   '/employees': typeof AppEmployeesRoute
   '/organisation/departments': typeof AppOrganisationDepartmentsRoute
   '/organisation/faculties': typeof AppOrganisationFacultiesRoute
-  '/organisation/levels': typeof AppOrganisationLevelsRoute
   '/courses/': typeof AppCoursesIndexRoute
   '/organisation/': typeof AppOrganisationIndexRoute
   '/courses/$departmentId/': typeof AppCoursesDepartmentIdIndexRoute
@@ -113,7 +106,6 @@ export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/organisation/departments': typeof AppOrganisationDepartmentsRoute
   '/organisation/faculties': typeof AppOrganisationFacultiesRoute
-  '/organisation/levels': typeof AppOrganisationLevelsRoute
   '/courses': typeof AppCoursesIndexRoute
   '/organisation': typeof AppOrganisationIndexRoute
   '/courses/$departmentId': typeof AppCoursesDepartmentIdIndexRoute
@@ -129,7 +121,6 @@ export interface FileRoutesById {
   '/_app/': typeof AppIndexRoute
   '/_app/organisation/departments': typeof AppOrganisationDepartmentsRoute
   '/_app/organisation/faculties': typeof AppOrganisationFacultiesRoute
-  '/_app/organisation/levels': typeof AppOrganisationLevelsRoute
   '/_app/courses/': typeof AppCoursesIndexRoute
   '/_app/organisation/': typeof AppOrganisationIndexRoute
   '/_app/courses/$departmentId/': typeof AppCoursesDepartmentIdIndexRoute
@@ -145,7 +136,6 @@ export interface FileRouteTypes {
     | '/employees'
     | '/organisation/departments'
     | '/organisation/faculties'
-    | '/organisation/levels'
     | '/courses/'
     | '/organisation/'
     | '/courses/$departmentId/'
@@ -158,7 +148,6 @@ export interface FileRouteTypes {
     | '/'
     | '/organisation/departments'
     | '/organisation/faculties'
-    | '/organisation/levels'
     | '/courses'
     | '/organisation'
     | '/courses/$departmentId'
@@ -173,7 +162,6 @@ export interface FileRouteTypes {
     | '/_app/'
     | '/_app/organisation/departments'
     | '/_app/organisation/faculties'
-    | '/_app/organisation/levels'
     | '/_app/courses/'
     | '/_app/organisation/'
     | '/_app/courses/$departmentId/'
@@ -258,13 +246,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOrganisationFacultiesRouteImport
       parentRoute: typeof AppOrganisationRouteRoute
     }
-    '/_app/organisation/levels': {
-      id: '/_app/organisation/levels'
-      path: '/levels'
-      fullPath: '/organisation/levels'
-      preLoaderRoute: typeof AppOrganisationLevelsRouteImport
-      parentRoute: typeof AppOrganisationRouteRoute
-    }
     '/_app/courses/$departmentId/': {
       id: '/_app/courses/$departmentId/'
       path: '/courses/$departmentId'
@@ -285,14 +266,12 @@ declare module '@tanstack/react-router' {
 interface AppOrganisationRouteRouteChildren {
   AppOrganisationDepartmentsRoute: typeof AppOrganisationDepartmentsRoute
   AppOrganisationFacultiesRoute: typeof AppOrganisationFacultiesRoute
-  AppOrganisationLevelsRoute: typeof AppOrganisationLevelsRoute
   AppOrganisationIndexRoute: typeof AppOrganisationIndexRoute
 }
 
 const AppOrganisationRouteRouteChildren: AppOrganisationRouteRouteChildren = {
   AppOrganisationDepartmentsRoute: AppOrganisationDepartmentsRoute,
   AppOrganisationFacultiesRoute: AppOrganisationFacultiesRoute,
-  AppOrganisationLevelsRoute: AppOrganisationLevelsRoute,
   AppOrganisationIndexRoute: AppOrganisationIndexRoute,
 }
 

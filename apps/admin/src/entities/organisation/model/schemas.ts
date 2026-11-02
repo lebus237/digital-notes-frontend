@@ -23,6 +23,7 @@ export const levelSchema = z.object({
 })
 
 export const semesterSchema = z.object({
+  departmentId: uuidRule,
   name: nameRule,
 })
 

@@ -18,7 +18,9 @@ export function FacultiesView() {
   const { universityId } = facultiesRoute.useSearch();
   const navigate = facultiesRoute.useNavigate();
   const [createOpen, setCreateOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<OrganisationEntityItem | null>(null);
+  const [editingItem, setEditingItem] = useState<OrganisationEntityItem | null>(
+    null,
+  );
 
   function handleSaved() {
     setCreateOpen(false);
@@ -60,6 +62,7 @@ export function FacultiesView() {
             search: {
               universityId,
               facultyId: item.id,
+              departmentId: undefined,
             },
           })
         }

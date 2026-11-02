@@ -28,7 +28,3 @@ export function departmentsUrl(
 ) {
   return withQuery("/organisation/departments", location);
 }
-
-export function levelsUrl(location: OrganisationIds = {}) {
-  return withQuery("/organisation/levels", location);
-}

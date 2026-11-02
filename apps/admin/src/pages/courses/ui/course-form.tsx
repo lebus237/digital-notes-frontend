@@ -33,8 +33,8 @@ export function CourseForm({
   });
 
   const { data: semesters = [] } = useQuery({
-    queryKey: [actionKeys.listSemesters, "options"],
-    queryFn: () => listSemesters({ page: 1, limit: 100 }),
+    queryKey: [actionKeys.listSemesters, "options", departmentId],
+    queryFn: () => listSemesters({ departmentId, page: 1, limit: 100 }),
     staleTime: 60_000,
     select: (payload) => normalizeCollectionResponse<NamedOption>(payload).data,
   });

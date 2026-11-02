@@ -6,7 +6,7 @@ import {
   getInitials,
   useCollectionService,
 } from "@digitalnotes/core";
-import styles from "../organisation-view.module.scss";
+import styles from "../styles/organisation-view.module.scss";
 import { EntityCardSkeleton } from "./entity-card-skeleton";
 
 export type OrganisationEntityItem = { id: string; name: string };

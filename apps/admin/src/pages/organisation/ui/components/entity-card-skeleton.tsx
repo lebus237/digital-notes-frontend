@@ -1,5 +1,5 @@
 import { Box, Card, Divider, Group, Skeleton, Stack } from "@mantine/core";
-import styles from "../organisation-view.module.scss";
+import styles from "../styles/organisation-view.module.scss";
 
 export function EntityCardSkeleton({
   withEdit = true,

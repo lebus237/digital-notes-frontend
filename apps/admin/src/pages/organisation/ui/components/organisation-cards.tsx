@@ -9,7 +9,11 @@ import {
 import styles from "../styles/organisation-view.module.scss";
 import { EntityCardSkeleton } from "./entity-card-skeleton";
 
-export type OrganisationEntityItem = { id: string; name: string };
+export type OrganisationEntityItem = {
+  id: string;
+  name: string;
+  year?: number;
+};
 export type OrganisationEntityKind =
   "university" | "faculty" | "department" | "level";
 
@@ -89,9 +93,16 @@ export function OrganisationEntityGrid({
                 >
                   <span>{getInitials(item.name)}</span>
                 </Box>
-                <Text className={styles.entityName} fw={600} size="lg">
-                  {item.name}
-                </Text>
+                <Stack gap={0}>
+                  <Text className={styles.entityName} fw={600} size="lg">
+                    {item.name}
+                  </Text>
+                  {kind === "level" && item.year != null && (
+                    <Text size="sm" c="dimmed">
+                      Year {item.year}
+                    </Text>
+                  )}
+                </Stack>
               </Group>
               {onEdit && (
                 <Stack gap="xs">

@@ -1,4 +1,4 @@
-import { Modal } from "@mantine/core";
+import { Alert, Modal } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
@@ -22,7 +22,9 @@ const levelsRoute = getRouteApi("/_app/organisation/levels");
 export function LevelsView() {
   const { universityId, facultyId, departmentId } = levelsRoute.useSearch();
   const [createOpen, setCreateOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<OrganisationEntityItem | null>(null);
+  const [editingItem, setEditingItem] = useState<OrganisationEntityItem | null>(
+    null,
+  );
 
   function handleSaved() {
     setCreateOpen(false);
@@ -58,14 +60,21 @@ export function LevelsView() {
         },
       ]}
     >
-      <OrganisationEntityGrid
-        fetchApi={listLevels}
-        cacheKey={actionKeys.listLevels}
-        kind="level"
-        customQuery={{ departmentId }}
-        emptyMessage="No levels yet. Add the first level to this department."
-        onEdit={setEditingItem}
-      />
+      {!departmentId ? (
+        <Alert color="yellow" title="No department selected">
+          Select a department to view its levels. Levels belong to a single
+          department, so they cannot be listed across departments.
+        </Alert>
+      ) : (
+        <OrganisationEntityGrid
+          fetchApi={listLevels}
+          cacheKey={actionKeys.listLevels}
+          kind="level"
+          customQuery={{ departmentId }}
+          emptyMessage="No levels yet. Add the first level to this department."
+          onEdit={setEditingItem}
+        />
+      )}
       <Modal
         opened={createOpen}
         onClose={() => setCreateOpen(false)}

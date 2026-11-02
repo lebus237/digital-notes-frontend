@@ -1,28 +1,36 @@
-import '@mantine/core/styles.css'
-import { ColorSchemeScript, MantineProvider } from '@mantine/core'
-import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
-import { theme } from '@digitalnotes/core'
+import "@mantine/core/styles.css";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRoute,
+} from "@tanstack/react-router";
+import type { ReactNode } from "react";
+import { theme } from "@digitalnotes/core";
+import { QueryProvider } from "@/app/providers";
 
 export const Route = createRootRoute({
   head: () => ({
     meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'DigitalNotes Contributor' },
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "DigitalNotes Contributor" },
     ],
   }),
   component: RootComponent,
-})
+});
 
 function RootComponent() {
   return (
     <RootDocument>
       <MantineProvider theme={theme} defaultColorScheme="auto">
-        <Outlet />
+        <QueryProvider>
+          <Outlet />
+        </QueryProvider>
       </MantineProvider>
     </RootDocument>
-  )
+  );
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
@@ -37,5 +45,5 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <Scripts />
       </body>
     </html>
-  )
+  );
 }

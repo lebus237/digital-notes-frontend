@@ -35,6 +35,7 @@ import {
   formatPrice,
   NOTE_STATUS_META,
   NOTE_TYPE_LABELS,
+  NOTE_TYPE_SHORT_LABELS,
   REVIEW_FILTERS,
   type AdminNoteListItem,
   type AdminNoteStatus,
@@ -50,7 +51,7 @@ const stats: Array<{
   icon: typeof IconClockHour4
   tone: 'amber' | 'green' | 'red' | 'gray'
 }> = [
-  { status: 'PENDING_REVIEW', label: 'Pending review', icon: IconClockHour4, tone: 'amber' },
+  { status: 'PENDING_REVIEW', label: 'Pending', icon: IconClockHour4, tone: 'amber' },
   { status: 'PUBLISHED', label: 'Published', icon: IconCheck, tone: 'green' },
   { status: 'REJECTED', label: 'Rejected', icon: IconX, tone: 'red' },
   { status: 'ARCHIVED', label: 'Archived', icon: IconArchive, tone: 'gray' },
@@ -111,6 +112,7 @@ export function NotesReviewView() {
     {
       accessor: 'title',
       title: 'Note',
+      width: 210,
       render: (note: AdminNoteListItem) => (
         <Stack gap={2}>
           <Text fw={600} size="sm" lineClamp={1}>
@@ -125,15 +127,17 @@ export function NotesReviewView() {
     {
       accessor: 'noteType',
       title: 'Type',
+      width: 75,
       render: (note: AdminNoteListItem) => (
         <Text size="sm" c="dimmed">
-          {NOTE_TYPE_LABELS[note.noteType]}
+          {NOTE_TYPE_SHORT_LABELS[note.noteType]}
         </Text>
       ),
     },
     {
       accessor: 'price',
       title: 'Price',
+      width: 70,
       render: (note: AdminNoteListItem) => (
         <Text size="sm">{formatPrice(note.price)}</Text>
       ),
@@ -141,6 +145,7 @@ export function NotesReviewView() {
     {
       accessor: 'status',
       title: 'Status',
+      width: 185,
       render: (note: AdminNoteListItem) => {
         const statusMeta = NOTE_STATUS_META[note.status]
         return (
@@ -162,6 +167,7 @@ export function NotesReviewView() {
     {
       accessor: 'pageCount',
       title: 'Pages',
+      width: 50,
       textAlign: 'center',
       render: (note: AdminNoteListItem) => (
         <Text size="sm" c="dimmed" ta="center">
@@ -172,6 +178,7 @@ export function NotesReviewView() {
     {
       accessor: 'updatedAt',
       title: 'Updated',
+      width: 110,
       render: (note: AdminNoteListItem) => (
         <Text size="sm" c="dimmed">
           {formatDate(note.updatedAt)}
@@ -180,8 +187,8 @@ export function NotesReviewView() {
     },
     {
       accessor: 'open',
-      title: '',
-      width: 36,
+      title: ' ',
+      width: 24,
       textAlign: 'right',
       render: () => <IconChevronRight size={16} color="var(--mantine-color-dimmed)" />,
     },

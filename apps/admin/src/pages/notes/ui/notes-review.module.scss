@@ -97,6 +97,11 @@
 
 .tableWrap {
   padding: 0 var(--mantine-spacing-md);
+
+  table {
+    table-layout: fixed;
+    width: 100%;
+  }
 }
 
 .footer {
@@ -150,9 +155,9 @@
 
 .drawerFooter {
   position: sticky;
-  bottom: calc(-1 * var(--mantine-spacing-lg));
+  bottom: 0;
   z-index: 2;
-  margin: var(--mantine-spacing-md) calc(-1 * var(--mantine-spacing-lg)) calc(-1 * var(--mantine-spacing-lg));
+  margin: var(--mantine-spacing-md) calc(-1 * var(--mantine-spacing-lg)) 0;
   padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
   border-top: 1px solid var(--mantine-color-default-border);
   background: light-dark(rgba(255, 253, 248, 0.94), rgba(27, 34, 29, 0.94));

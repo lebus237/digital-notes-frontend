@@ -67,6 +67,14 @@ export const NOTE_TYPE_LABELS: Record<AdminNoteType, string> = {
   EXERCISES: 'Exercises',
 }
 
+export const NOTE_TYPE_SHORT_LABELS: Record<AdminNoteType, string> = {
+  LECTURE_NOTES: 'Lecture',
+  SUMMARY: 'Summary',
+  REVISION: 'Revision',
+  PAST_EXAM: 'Past exam',
+  EXERCISES: 'Exercises',
+}
+
 export const REVIEW_FILTERS: Array<{ value: AdminNoteStatus | 'ALL'; label: string }> = [
   { value: 'ALL', label: 'All notes' },
   { value: 'PENDING_REVIEW', label: 'Pending' },

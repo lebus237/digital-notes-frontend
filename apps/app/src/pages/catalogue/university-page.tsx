@@ -47,7 +47,7 @@ export function UniversityPage() {
       description="Choose the faculty or school that hosts your programme."
       actions={<BackLink to="/" label="All universities" />}
     >
-      {facultiesQuery.isLoading ? (
+      {facultiesQuery.isPending ? (
         <GridSkeleton />
       ) : (
         <EntityGrid

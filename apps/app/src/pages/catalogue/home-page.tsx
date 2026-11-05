@@ -78,8 +78,8 @@ export function HomePage() {
             <Button
               size="md"
               radius="md"
-              color="white"
               variant="white"
+              color="brand"
               rightSection={<IconArrowRight size={18} />}
               onClick={scrollToCatalogue}
             >
@@ -130,7 +130,7 @@ export function HomePage() {
           }
         />
 
-        {universitiesQuery.isLoading ? (
+        {universitiesQuery.isPending ? (
           <GridSkeleton />
         ) : (
           <>

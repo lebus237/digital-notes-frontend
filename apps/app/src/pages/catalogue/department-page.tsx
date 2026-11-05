@@ -148,7 +148,7 @@ export function DepartmentPage() {
         </Text>
       </Group>
 
-      {coursesQuery.isLoading ? <GridSkeleton /> : <CourseGrid courses={courses} />}
+      {coursesQuery.isPending ? <GridSkeleton /> : <CourseGrid courses={courses} />}
 
       {coursesQuery.isError && (
         <Alert color="red" mt="lg">

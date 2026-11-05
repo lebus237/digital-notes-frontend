@@ -128,11 +128,21 @@ type EntityKind = 'university' | 'faculty' | 'department'
 
 const ENTITY_META: Record<
   EntityKind,
-  { label: string; icon: typeof IconBuildingBank; tone: string }
+  { label: string; plural: string; icon: typeof IconBuildingBank; tone: string }
 > = {
-  university: { label: 'University', icon: IconBuildingBank, tone: styles.toneBrand },
-  faculty: { label: 'Faculty', icon: IconSchool, tone: styles.toneViolet },
-  department: { label: 'Department', icon: IconFolder, tone: styles.toneAmber },
+  university: {
+    label: 'University',
+    plural: 'universities',
+    icon: IconBuildingBank,
+    tone: styles.toneBrand,
+  },
+  faculty: { label: 'Faculty', plural: 'faculties', icon: IconSchool, tone: styles.toneViolet },
+  department: {
+    label: 'Department',
+    plural: 'departments',
+    icon: IconFolder,
+    tone: styles.toneAmber,
+  },
 }
 
 export function EntityGrid({
@@ -151,7 +161,7 @@ export function EntityGrid({
     return (
       <EmptyState
         icon={<Icon size={26} stroke={1.6} />}
-        title={`No ${kind}s yet`}
+        title={`No ${meta.plural} yet`}
         description="The catalogue is still being populated. Check back soon."
       />
     )
@@ -301,7 +311,7 @@ export function NoteGrid({
               {note.title}
             </Title>
             <Group justify="space-between" mt="md">
-              <Text size="sm" fw={600} c="brand.7">
+              <Text size="sm" fw={600} className={styles.price}>
                 {formatPrice(note.price)}
               </Text>
               <Text size="xs" c="dimmed">

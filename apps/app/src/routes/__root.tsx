@@ -10,7 +10,12 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'DigitalNotes App' },
+      { title: 'DigitalNotes — Course notes library' },
+      {
+        name: 'description',
+        content:
+          'Browse universities, faculties, departments and courses to find approved course notes.',
+      },
     ],
   }),
   component: RootComponent,

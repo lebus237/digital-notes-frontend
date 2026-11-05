@@ -41,7 +41,7 @@ export function NotePage() {
 
   const note = noteQuery.data as NoteDetail | undefined
 
-  if (noteQuery.isError || (!noteQuery.isLoading && !note)) {
+  if (noteQuery.isError || (noteQuery.isSuccess && !note)) {
     return (
       <CataloguePage breadcrumbs={[BREADCRUMB_HOME]} title="Note unavailable">
         <Alert color="red">
@@ -79,7 +79,7 @@ export function NotePage() {
         ) : undefined
       }
     >
-      {noteQuery.isLoading && (
+      {noteQuery.isPending && (
         <Paper className={styles.noteLoading} withBorder radius="lg" p="xl">
           <Text c="dimmed">Loading note…</Text>
         </Paper>
@@ -197,7 +197,7 @@ export function NotePage() {
             <Paper className={styles.sidebarCard} withBorder radius="lg" p="lg">
               <Text className={styles.eyebrow}>Access</Text>
               <Group justify="space-between" align="center" mt="xs">
-                <Text size="xl" fw={700} c="brand.7">
+                <Text size="xl" fw={700} className={styles.price}>
                   {formatPrice(note.price)}
                 </Text>
                 <Badge color="green" variant="light">

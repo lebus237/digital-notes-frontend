@@ -117,7 +117,7 @@ export function CoursePage() {
         </Text>
       </Group>
 
-      {notesQuery.isLoading ? <GridSkeleton /> : <NoteGrid notes={notes} />}
+      {notesQuery.isPending ? <GridSkeleton /> : <NoteGrid notes={notes} />}
 
       {notesQuery.isError && (
         <Alert color="red" mt="lg">

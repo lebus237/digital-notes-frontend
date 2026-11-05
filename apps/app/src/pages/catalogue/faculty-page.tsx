@@ -78,7 +78,7 @@ export function FacultyPage() {
         ) : undefined
       }
     >
-      {departmentsQuery.isLoading ? (
+      {departmentsQuery.isPending ? (
         <GridSkeleton />
       ) : (
         <EntityGrid

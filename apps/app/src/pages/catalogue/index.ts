@@ -1,4 +1,5 @@
 export { HomePage } from './home-page'
+export { BrowsePage } from './browse-page'
 export { UniversityPage } from './university-page'
 export { FacultyPage } from './faculty-page'
 export { DepartmentPage } from './department-page'

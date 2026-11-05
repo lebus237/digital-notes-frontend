@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses.$courseId'
 import { Route as DepartmentsDepartmentIdRouteImport } from './routes/departments.$departmentId'
@@ -20,6 +21,11 @@ import { Route as UniversitiesUniversityIdRouteImport } from './routes/universit
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrowseRoute = BrowseRouteImport.update({
+  id: '/browse',
+  path: '/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LogoutRoute = LogoutRouteImport.update({
@@ -56,6 +62,7 @@ const UniversitiesUniversityIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/browse': typeof BrowseRoute
   '/logout': typeof LogoutRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/browse': typeof BrowseRoute
   '/logout': typeof LogoutRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
@@ -75,6 +83,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/browse': typeof BrowseRoute
   '/logout': typeof LogoutRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/browse'
     | '/logout'
     | '/courses/$courseId'
     | '/departments/$departmentId'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/browse'
     | '/logout'
     | '/courses/$courseId'
     | '/departments/$departmentId'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/browse'
     | '/logout'
     | '/courses/$courseId'
     | '/departments/$departmentId'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BrowseRoute: typeof BrowseRoute
   LogoutRoute: typeof LogoutRoute
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
   DepartmentsDepartmentIdRoute: typeof DepartmentsDepartmentIdRoute
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/browse': {
+      id: '/browse'
+      path: '/browse'
+      fullPath: '/browse'
+      preLoaderRoute: typeof BrowseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/logout': {
@@ -178,6 +198,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BrowseRoute: BrowseRoute,
   LogoutRoute: LogoutRoute,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
   DepartmentsDepartmentIdRoute: DepartmentsDepartmentIdRoute,

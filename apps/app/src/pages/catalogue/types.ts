@@ -63,6 +63,25 @@ export type CourseNote = {
   pageCount: number
   providedAt: string | null
   updatedAt: string
+  coverUrl?: string | null
+}
+
+export type PublicNote = CourseNote & {
+  description: string | null
+  status: string
+  uploadedBy: string
+  contributorName: string | null
+  publishedAt: string | null
+  courseId: string
+  courseCode: string
+  courseName: string
+  departmentId: string | null
+  departmentName: string | null
+  facultyId: string | null
+  facultyName: string | null
+  universityId: string | null
+  universityName: string | null
+  createdAt: string
 }
 
 export type NoteDetail = {
@@ -70,31 +89,76 @@ export type NoteDetail = {
   courseId: string
   courseCode: string
   courseName: string
+  courseDepartmentId: string | null
+  courseDepartmentName: string | null
+  courseLevelName: string | null
+  courseSemesterName: string | null
   title: string
   description: string | null
   noteType: string
   price: number
   status: string
+  uploadedBy: string
+  contributorName: string | null
   pages: NotePage[]
   providedAt: string | null
+  publishedAt: string | null
   updatedAt: string
 }
 
-export const NOTE_TYPE_LABELS: Record<string, string> = {
-  LECTURE_NOTES: 'Lecture notes',
-  SUMMARY: 'Summary',
-  REVISION: 'Revision',
-  PAST_EXAM: 'Past exam',
-  EXERCISES: 'Exercises',
+export type NoteTypeMeta = {
+  value: string
+  label: string
+  shortLabel: string
+  description: string
+  icon: string
 }
 
-export const NOTE_TYPE_SHORT_LABELS: Record<string, string> = {
-  LECTURE_NOTES: 'Lecture',
-  SUMMARY: 'Summary',
-  REVISION: 'Revision',
-  PAST_EXAM: 'Past exam',
-  EXERCISES: 'Exercises',
-}
+export const NOTE_TYPES: NoteTypeMeta[] = [
+  {
+    value: 'LECTURE_NOTES',
+    label: 'Lecture notes',
+    shortLabel: 'Lecture',
+    description: 'Complete course notes, written for the exam season.',
+    icon: 'notebook',
+  },
+  {
+    value: 'SUMMARY',
+    label: 'Summaries',
+    shortLabel: 'Summary',
+    description: 'The essentials of a course, condensed into a clear read.',
+    icon: 'sparkles',
+  },
+  {
+    value: 'REVISION',
+    label: 'Revision sheets',
+    shortLabel: 'Revision',
+    description: 'Structured sheets to revise faster and retain more.',
+    icon: 'book',
+  },
+  {
+    value: 'PAST_EXAM',
+    label: 'Past exams',
+    shortLabel: 'Past exam',
+    description: 'Practice with real subjects and worked corrections.',
+    icon: 'file',
+  },
+  {
+    value: 'EXERCISES',
+    label: 'Exercises',
+    shortLabel: 'Exercises',
+    description: 'Guided practice, from warm-up to exam level.',
+    icon: 'pencil',
+  },
+]
+
+export const NOTE_TYPE_LABELS: Record<string, string> = Object.fromEntries(
+  NOTE_TYPES.map((type) => [type.value, type.label])
+)
+
+export const NOTE_TYPE_SHORT_LABELS: Record<string, string> = Object.fromEntries(
+  NOTE_TYPES.map((type) => [type.value, type.shortLabel])
+)
 
 export function formatPrice(price: number): string {
   if (!price) return 'Free'

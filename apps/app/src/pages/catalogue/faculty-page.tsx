@@ -1,4 +1,5 @@
-import { Alert } from '@mantine/core'
+import { Alert, Group, Text } from '@mantine/core'
+import { IconFolder } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { normalizeCollectionResponse } from '@digitalnotes/core'
@@ -7,10 +8,13 @@ import {
   BackLink,
   BREADCRUMB_HOME,
   CataloguePage,
+  EmptyState,
   EntityGrid,
   GridSkeleton,
+  SectionHeading,
 } from './components'
 import type { Department, Faculty, University } from './types'
+import styles from './catalogue.module.scss'
 
 export function FacultyPage() {
   const { facultyId } = useParams({ from: '/faculties/$facultyId' })
@@ -34,11 +38,12 @@ export function FacultyPage() {
     queryKey: ['departments', facultyId],
     queryFn: () =>
       listDepartments({ facultyId, limit: 100 }).then((payload) =>
-        normalizeCollectionResponse<Department>(payload).data
+        normalizeCollectionResponse<Department>(payload)
       ),
   })
 
-  const departments = departmentsQuery.data ?? []
+  const departments = departmentsQuery.data?.data ?? []
+  const total = departmentsQuery.data?.meta.pagination.total ?? departments.length
 
   if (facultyQuery.isError) {
     return (
@@ -65,9 +70,10 @@ export function FacultyPage() {
 
   return (
     <CataloguePage
+      eyebrow="Faculty"
       breadcrumbs={breadcrumbs}
       title={faculty?.name ?? 'Faculty'}
-      description="Choose your department to see the courses available for your programme."
+      description="Your faculty brings together the departments and course programmes in your field."
       actions={
         university ? (
           <BackLink
@@ -78,16 +84,50 @@ export function FacultyPage() {
         ) : undefined
       }
     >
+      <div className={styles.indexSummary}>
+        <Group gap="xl" wrap="wrap">
+          <div>
+            <Text className={styles.summaryValue}>{total}</Text>
+            <Text size="xs" c="dimmed">
+              department{total === 1 ? '' : 's'}
+            </Text>
+          </div>
+          <div className={styles.summaryDivider} />
+          <div>
+            <Text className={styles.summaryLabel}>Part of</Text>
+            <Text size="sm" c="dimmed">
+              {university?.name ?? 'University catalogue'}
+            </Text>
+          </div>
+        </Group>
+      </div>
+
+      <SectionHeading
+        eyebrow="Departments"
+        title="Find your department"
+        description="Choose a department to see its levels, semesters and courses."
+      />
+
       {departmentsQuery.isPending ? (
-        <GridSkeleton />
-      ) : (
+        <GridSkeleton count={3} />
+      ) : departments.length > 0 ? (
         <EntityGrid
           kind="department"
-          items={departments.map((department) => ({ id: department.id, name: department.name }))}
+          items={departments.map((department) => ({
+            id: department.id,
+            name: department.name,
+            meta: faculty?.name,
+          }))}
           getLink={(item) => ({
             to: '/departments/$departmentId',
             params: { departmentId: item.id },
           })}
+        />
+      ) : (
+        <EmptyState
+          icon={<IconFolder size={26} />}
+          title="No departments yet"
+          description="The faculty is in the catalogue, but its departments have not been added yet."
         />
       )}
 

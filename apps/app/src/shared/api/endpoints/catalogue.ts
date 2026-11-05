@@ -16,4 +16,5 @@ export const listCourses = callAction('/api/v1/courses', 'GET')
 export const getCourse = callActionWithId('/api/v1/courses/{id}', 'GET')
 
 export const listCourseNotes = callActionWithId('/api/v1/courses/{courseId}/notes', 'GET')
+export const listPublicNotes = callAction('/api/v1/notes', 'GET')
 export const getNote = callActionWithId('/api/v1/notes/{id}', 'GET')

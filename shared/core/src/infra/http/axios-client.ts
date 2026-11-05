@@ -20,7 +20,7 @@ const processQueue = (error: any, token = null) => {
    failedQueue = []
 }
 
-const AUTH_API_PATHS = ['/api/login', '/api/register', '/api/refresh-token']
+const AUTH_API_PATHS = ['/api/login', '/api/register', '/api/refresh', '/api/logout']
 
 const AUTH_PAGE_PATHS = [
    '/login',
@@ -69,7 +69,7 @@ AxiosInstance.interceptors.response.use(
    function (error) {
       const originalRequest = error.config
 
-      if (originalRequest?.url?.includes('/api/refresh-token')) {
+      if (originalRequest?.url?.includes('/api/refresh')) {
          failedQueue = []
          processQueue(error, null)
          isRefreshing = false
@@ -98,9 +98,10 @@ AxiosInstance.interceptors.response.use(
                failedQueue.push({ resolve, reject })
             })
                .then(token => {
+                  originalRequest.headers = originalRequest.headers ?? {}
                   originalRequest.headers.Authorization = `Bearer ${token}`
 
-                  return axios(originalRequest) as any
+                  return AxiosInstance(originalRequest) as any
                })
                .catch(err => {
                   return Promise.reject(err)
@@ -111,18 +112,27 @@ AxiosInstance.interceptors.response.use(
          isRefreshing = true
 
          return new Promise(function (resolve, reject) {
-            axios
-               .post('/api/refresh-token', { refreshToken })
+            AxiosInstance
+               .post('/api/refresh', { refreshToken })
                .then(({ data }) => {
-                  authSuccess(data)
-                  processQueue(null, data.token)
-                  originalRequest.headers.Authorization = `Bearer ${data.token}`
+                  const payload = data?.data ?? data
+                  const accessToken = payload?.accessToken ?? payload?.token
+
+                  if (!accessToken) {
+                     throw new Error('Refresh response did not include an access token')
+                  }
+
+                  authSuccess(payload)
+                  processQueue(null, accessToken)
+                  originalRequest.headers = originalRequest.headers ?? {}
+                  originalRequest.headers.Authorization = `Bearer ${accessToken}`
                   isRefreshing = false
-                  resolve(axios(originalRequest))
+                  resolve(AxiosInstance(originalRequest))
                })
                .catch(err => {
                   processQueue(err, null)
                   isRefreshing = false
+                  redirectToLogout()
                   reject(err)
                })
          })

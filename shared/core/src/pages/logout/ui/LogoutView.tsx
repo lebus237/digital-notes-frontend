@@ -1,6 +1,6 @@
 import { Loader } from "@mantine/core";
 import { useEffect } from "react";
-import { clearSession } from "#/infra/http/helpers/session-helper";
+import { endSession } from "#/infra/http/helpers/session-helper";
 
 const DEFAULT_REDIRECT = "/login";
 
@@ -34,10 +34,10 @@ export function LogoutView({
   message?: string;
 }>) {
   useEffect(() => {
-    // clearSession is idempotent, so running twice under StrictMode is harmless.
-    // Always (re)arm the timer so the redirect fires even after a
-    // StrictMode mount-unmount-mount cycle clears the first one.
-    clearSession();
+    // endSession is idempotent: the first call captures the tokens and clears
+    // the local session, later calls are no-ops. Always (re)arm the timer so
+    // the redirect fires even after a StrictMode mount-unmount-mount cycle.
+    void endSession();
 
     const timer = window.setTimeout(() => {
       window.location.replace(redirectTo);

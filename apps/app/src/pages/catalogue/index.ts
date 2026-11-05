@@ -1,0 +1,6 @@
+export { HomePage } from './home-page'
+export { UniversityPage } from './university-page'
+export { FacultyPage } from './faculty-page'
+export { DepartmentPage } from './department-page'
+export { CoursePage } from './course-page'
+export { NotePage } from './note-page'

@@ -1,0 +1,384 @@
+.publicPage {
+  min-height: calc(100dvh - 68px);
+  background: light-dark(#fbfaf6, #141a16);
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(64px, 9vw, 112px) 0 56px;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(112, 168, 128, 0.32), transparent 34%),
+    radial-gradient(circle at 88% 10%, rgba(191, 216, 197, 0.2), transparent 30%),
+    linear-gradient(135deg, #17251d 0%, #1e3829 42%, #315e42 78%, #3f7652 100%);
+  color: #f8f6ef;
+}
+
+.heroOrbOne,
+.heroOrbTwo {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.heroOrbOne {
+  width: 420px;
+  height: 420px;
+  right: -140px;
+  top: -180px;
+  background: radial-gradient(circle, rgba(191, 216, 197, 0.18), transparent 68%);
+}
+
+.heroOrbTwo {
+  width: 340px;
+  height: 340px;
+  left: -120px;
+  bottom: -220px;
+  background: radial-gradient(circle, rgba(112, 168, 128, 0.2), transparent 68%);
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+}
+
+.heroBadge {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f4f3ed;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  letter-spacing: 0.02em;
+}
+
+.heroTitle {
+  margin-top: 22px;
+  max-width: 900px;
+  color: #fffdf8;
+  font-size: clamp(2.6rem, 6vw, 4.9rem);
+  line-height: 1.01;
+  letter-spacing: -0.055em;
+  font-weight: 700;
+}
+
+.heroText {
+  max-width: 640px;
+  margin-top: 22px;
+  color: rgba(248, 246, 239, 0.76);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.heroHint {
+  color: rgba(248, 246, 239, 0.58);
+  letter-spacing: 0.04em;
+}
+
+.heroSteps {
+  max-width: 1020px;
+}
+
+.heroStep {
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(12px);
+  color: #f8f6ef;
+}
+
+.heroStepNumber {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(248, 246, 239, 0.72);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.heroStepText {
+  color: rgba(248, 246, 239, 0.62);
+  line-height: 1.5;
+}
+
+.homeContent {
+  padding-top: clamp(44px, 6vw, 72px);
+  padding-bottom: clamp(48px, 7vw, 88px);
+}
+
+.closingBand {
+  border-top: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+  background:
+    radial-gradient(circle at 50% 120%, light-dark(rgba(112, 168, 128, 0.14), rgba(112, 168, 128, 0.08)), transparent 50%),
+    light-dark(var(--mantine-color-white), var(--mantine-color-dark-8));
+}
+
+.closingTitle {
+  letter-spacing: -0.035em;
+  max-width: 620px;
+}
+
+.page {
+  min-height: calc(100dvh - 68px);
+  background: light-dark(#fbfaf6, #141a16);
+}
+
+.breadcrumbs {
+  color: var(--mantine-color-dimmed);
+}
+
+.crumbLink {
+  color: var(--mantine-color-dimmed);
+  font-size: 0.82rem;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--mantine-color-brand-7);
+  }
+}
+
+.pageTitle {
+  font-size: clamp(2rem, 3.4vw, 2.85rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.eyebrow {
+  color: var(--mantine-color-brand-7);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  letter-spacing: -0.025em;
+}
+
+.entityLink {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.entityCard,
+.courseCard,
+.noteCard {
+  height: 100%;
+  border-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--mantine-color-brand-4);
+    box-shadow: 0 14px 34px light-dark(rgba(40, 75, 54, 0.11), rgba(0, 0, 0, 0.32));
+  }
+}
+
+.entityAvatar {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.toneBrand {
+  background: light-dark(var(--mantine-color-brand-0), var(--mantine-color-brand-9));
+  color: light-dark(var(--mantine-color-brand-8), var(--mantine-color-brand-2));
+}
+
+.toneViolet {
+  background: light-dark(var(--mantine-color-violet-0), var(--mantine-color-violet-9));
+  color: light-dark(var(--mantine-color-violet-8), var(--mantine-color-violet-2));
+}
+
+.toneAmber {
+  background: light-dark(var(--mantine-color-yellow-0), var(--mantine-color-yellow-9));
+  color: light-dark(var(--mantine-color-yellow-8), var(--mantine-color-yellow-3));
+}
+
+.entityArrow {
+  color: var(--mantine-color-dimmed);
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.entityLink:hover .entityArrow {
+  color: var(--mantine-color-brand-6);
+  transform: translate(2px, -2px);
+}
+
+.entityKind {
+  color: var(--mantine-color-dimmed);
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.entityName,
+.courseName {
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.courseName {
+  min-height: 2.5em;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  border-style: dashed;
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.searchWrap {
+  position: relative;
+  width: 280px;
+  max-width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: var(--mantine-color-dimmed);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px 0 36px;
+  border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-radius: var(--mantine-radius-md);
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+  color: var(--mantine-color-text);
+  font-size: 0.84rem;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+
+  &:focus {
+    border-color: var(--mantine-color-brand-5);
+    box-shadow: 0 0 0 2px light-dark(var(--mantine-color-brand-1), rgba(112, 168, 128, 0.18));
+  }
+
+  &::placeholder {
+    color: var(--mantine-color-dimmed);
+  }
+}
+
+.backLink {
+  white-space: nowrap;
+}
+
+.hint {
+  color: var(--mantine-color-dimmed);
+}
+
+.courseHero {
+  background:
+    radial-gradient(circle at 100% 0%, light-dark(rgba(112, 168, 128, 0.14), rgba(112, 168, 128, 0.08)), transparent 42%),
+    light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.courseHeroTitle {
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+}
+
+.courseStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 76px;
+  padding-left: 18px;
+  border-left: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+  color: var(--mantine-color-brand-7);
+}
+
+.noteLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 24px;
+  align-items: start;
+}
+
+.noteIntro {
+  background:
+    radial-gradient(circle at 100% 0%, light-dark(rgba(112, 168, 128, 0.12), rgba(112, 168, 128, 0.07)), transparent 40%),
+    light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.noteTitle {
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+}
+
+.noteLoading {
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+}
+
+.pageCard {
+  background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+
+  img {
+    object-fit: contain;
+  }
+}
+
+.noteSidebar {
+  position: sticky;
+  top: 88px;
+}
+
+.sidebarCard {
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+@media (max-width: 62em) {
+  .noteLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .noteSidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 48em) {
+  .hero {
+    padding-top: 52px;
+  }
+
+  .heroText {
+    font-size: 0.98rem;
+  }
+
+  .heroStep {
+    padding: 12px;
+  }
+
+  .searchWrap {
+    width: 100%;
+  }
+}

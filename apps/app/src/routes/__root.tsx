@@ -1,6 +1,7 @@
 import '@mantine/core/styles.css'
 import { ColorSchemeScript } from '@mantine/core'
 import { AppProvider } from '@/app/providers'
+import { SiteFooter, SiteHeader } from '@/widgets/site-chrome'
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
@@ -19,7 +20,9 @@ function RootComponent() {
   return (
     <RootDocument>
       <AppProvider>
+        <SiteHeader />
         <Outlet />
+        <SiteFooter />
       </AppProvider>
     </RootDocument>
   )

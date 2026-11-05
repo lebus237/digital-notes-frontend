@@ -1,4 +1,4 @@
-import { IconBook, IconBuilding, IconUsers } from '@tabler/icons-react'
+import { IconBook, IconBuilding, IconClipboardCheck, IconUsers } from '@tabler/icons-react'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { AppShellLayout, type SidebarConfig } from '@digitalnotes/core'
 import { ThemeSwitcher } from '@/features/switch-theme'
@@ -11,6 +11,13 @@ const sidebarConfig: SidebarConfig = {
       to: '/organisation',
       icon: IconBuilding,
       keywords: ['organisation', 'universities', 'faculties'],
+    },
+    {
+      id: 'notes',
+      label: 'Notes',
+      to: '/notes',
+      icon: IconClipboardCheck,
+      keywords: ['notes', 'review', 'moderation', 'queue'],
     },
     {
       id: 'courses',

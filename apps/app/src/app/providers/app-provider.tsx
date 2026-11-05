@@ -7,7 +7,7 @@ import { queryClient } from '@/shared/api/query-client'
 export function AppProvider({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider theme={theme} defaultColorScheme="auto">
+      <MantineProvider theme={theme} defaultColorScheme="light">
         {children}
       </MantineProvider>
     </QueryClientProvider>

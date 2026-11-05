@@ -10,11 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as LogoutRouteImport } from './routes/logout'
+import { Route as CoursesCourseIdRouteImport } from './routes/courses.$courseId'
+import { Route as DepartmentsDepartmentIdRouteImport } from './routes/departments.$departmentId'
+import { Route as FacultiesFacultyIdRouteImport } from './routes/faculties.$facultyId'
+import { Route as NotesNoteIdRouteImport } from './routes/notes.$noteId'
+import { Route as UniversitiesUniversityIdRouteImport } from './routes/universities.$universityId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrowseRoute = BrowseRouteImport.update({
+  id: '/browse',
+  path: '/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LogoutRoute = LogoutRouteImport.update({
@@ -22,31 +33,106 @@ const LogoutRoute = LogoutRouteImport.update({
   path: '/logout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoursesCourseIdRoute = CoursesCourseIdRouteImport.update({
+  id: '/courses/$courseId',
+  path: '/courses/$courseId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DepartmentsDepartmentIdRoute = DepartmentsDepartmentIdRouteImport.update({
+  id: '/departments/$departmentId',
+  path: '/departments/$departmentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacultiesFacultyIdRoute = FacultiesFacultyIdRouteImport.update({
+  id: '/faculties/$facultyId',
+  path: '/faculties/$facultyId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotesNoteIdRoute = NotesNoteIdRouteImport.update({
+  id: '/notes/$noteId',
+  path: '/notes/$noteId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UniversitiesUniversityIdRoute =
+  UniversitiesUniversityIdRouteImport.update({
+    id: '/universities/$universityId',
+    path: '/universities/$universityId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/browse': typeof BrowseRoute
   '/logout': typeof LogoutRoute
+  '/courses/$courseId': typeof CoursesCourseIdRoute
+  '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
+  '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
+  '/notes/$noteId': typeof NotesNoteIdRoute
+  '/universities/$universityId': typeof UniversitiesUniversityIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/browse': typeof BrowseRoute
   '/logout': typeof LogoutRoute
+  '/courses/$courseId': typeof CoursesCourseIdRoute
+  '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
+  '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
+  '/notes/$noteId': typeof NotesNoteIdRoute
+  '/universities/$universityId': typeof UniversitiesUniversityIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/browse': typeof BrowseRoute
   '/logout': typeof LogoutRoute
+  '/courses/$courseId': typeof CoursesCourseIdRoute
+  '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
+  '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
+  '/notes/$noteId': typeof NotesNoteIdRoute
+  '/universities/$universityId': typeof UniversitiesUniversityIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/logout'
+  fullPaths:
+    | '/'
+    | '/browse'
+    | '/logout'
+    | '/courses/$courseId'
+    | '/departments/$departmentId'
+    | '/faculties/$facultyId'
+    | '/notes/$noteId'
+    | '/universities/$universityId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/logout'
-  id: '__root__' | '/' | '/logout'
+  to:
+    | '/'
+    | '/browse'
+    | '/logout'
+    | '/courses/$courseId'
+    | '/departments/$departmentId'
+    | '/faculties/$facultyId'
+    | '/notes/$noteId'
+    | '/universities/$universityId'
+  id:
+    | '__root__'
+    | '/'
+    | '/browse'
+    | '/logout'
+    | '/courses/$courseId'
+    | '/departments/$departmentId'
+    | '/faculties/$facultyId'
+    | '/notes/$noteId'
+    | '/universities/$universityId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BrowseRoute: typeof BrowseRoute
   LogoutRoute: typeof LogoutRoute
+  CoursesCourseIdRoute: typeof CoursesCourseIdRoute
+  DepartmentsDepartmentIdRoute: typeof DepartmentsDepartmentIdRoute
+  FacultiesFacultyIdRoute: typeof FacultiesFacultyIdRoute
+  NotesNoteIdRoute: typeof NotesNoteIdRoute
+  UniversitiesUniversityIdRoute: typeof UniversitiesUniversityIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/browse': {
+      id: '/browse'
+      path: '/browse'
+      fullPath: '/browse'
+      preLoaderRoute: typeof BrowseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/logout': {
       id: '/logout'
       path: '/logout'
@@ -65,12 +158,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LogoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/courses/$courseId': {
+      id: '/courses/$courseId'
+      path: '/courses/$courseId'
+      fullPath: '/courses/$courseId'
+      preLoaderRoute: typeof CoursesCourseIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/departments/$departmentId': {
+      id: '/departments/$departmentId'
+      path: '/departments/$departmentId'
+      fullPath: '/departments/$departmentId'
+      preLoaderRoute: typeof DepartmentsDepartmentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faculties/$facultyId': {
+      id: '/faculties/$facultyId'
+      path: '/faculties/$facultyId'
+      fullPath: '/faculties/$facultyId'
+      preLoaderRoute: typeof FacultiesFacultyIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notes/$noteId': {
+      id: '/notes/$noteId'
+      path: '/notes/$noteId'
+      fullPath: '/notes/$noteId'
+      preLoaderRoute: typeof NotesNoteIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/universities/$universityId': {
+      id: '/universities/$universityId'
+      path: '/universities/$universityId'
+      fullPath: '/universities/$universityId'
+      preLoaderRoute: typeof UniversitiesUniversityIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BrowseRoute: BrowseRoute,
   LogoutRoute: LogoutRoute,
+  CoursesCourseIdRoute: CoursesCourseIdRoute,
+  DepartmentsDepartmentIdRoute: DepartmentsDepartmentIdRoute,
+  FacultiesFacultyIdRoute: FacultiesFacultyIdRoute,
+  NotesNoteIdRoute: NotesNoteIdRoute,
+  UniversitiesUniversityIdRoute: UniversitiesUniversityIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

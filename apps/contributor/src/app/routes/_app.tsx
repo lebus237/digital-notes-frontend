@@ -1,7 +1,6 @@
 import { IconNotes } from '@tabler/icons-react'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { AppShellLayout, type SidebarConfig } from '@digitalnotes/core'
-import { NotesProvider } from '@/entities/note'
 import { ThemeSwitcher } from '@/features/switch-theme'
 import { useEffect, useState } from 'react'
 
@@ -52,17 +51,15 @@ function ContributorLayout() {
   const profileMeta = user?.email && user.email !== profileName ? user.email : user ? 'Signed in' : 'Not signed in'
 
   return (
-    <NotesProvider>
-      <AppShellLayout
-        sidebarConfig={sidebarConfig}
-        brandName="DigitalNotes"
-        brandMeta="Contributor"
-        profileName={profileName}
-        profileMeta={profileMeta}
-        headerEnd={<ThemeSwitcher />}
-      >
-        <Outlet />
-      </AppShellLayout>
-    </NotesProvider>
+    <AppShellLayout
+      sidebarConfig={sidebarConfig}
+      brandName="DigitalNotes"
+      brandMeta="Contributor"
+      profileName={profileName}
+      profileMeta={profileMeta}
+      headerEnd={<ThemeSwitcher />}
+    >
+      <Outlet />
+    </AppShellLayout>
   )
 }

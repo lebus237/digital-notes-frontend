@@ -1,8 +1,10 @@
 import '@mantine/core/styles.css'
 import { ColorSchemeScript, MantineProvider } from '@mantine/core'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { theme } from '@digitalnotes/core'
+import { queryClient } from '@/shared/api/query-client'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -18,9 +20,11 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <MantineProvider theme={theme} defaultColorScheme="auto">
-        <Outlet />
-      </MantineProvider>
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider theme={theme} defaultColorScheme="auto">
+          <Outlet />
+        </MantineProvider>
+      </QueryClientProvider>
     </RootDocument>
   )
 }

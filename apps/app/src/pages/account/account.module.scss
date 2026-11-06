@@ -1,0 +1,293 @@
+.accountLayout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.accountSidebar {
+  position: sticky;
+  top: 112px;
+  padding: 18px;
+  border: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  border-radius: 12px;
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+}
+
+.identityCopy {
+  min-width: 0;
+}
+
+.identityName {
+  color: light-dark(#1b1c18, #f4f3ed);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.programme {
+  padding: 16px 0;
+  border-bottom: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+}
+
+.sidebarLabel {
+  color: var(--mantine-color-dimmed);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.accountNav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 0;
+}
+
+.navItem,
+.navActive {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 9px;
+  border-radius: 7px;
+  color: var(--mantine-color-dimmed);
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+
+  &:hover {
+    background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+    color: var(--mantine-color-text);
+  }
+}
+
+.navActive {
+  background: light-dark(var(--mantine-color-brand-0), var(--mantine-color-dark-6));
+  color: light-dark(var(--mantine-color-brand-8), var(--mantine-color-brand-2));
+  font-weight: 700;
+}
+
+.sidebarFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 14px;
+  border-top: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+}
+
+.accountMain {
+  min-width: 0;
+}
+
+.accountLoader {
+  display: grid;
+  min-height: 280px;
+  place-items: center;
+  border: 1px dashed light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  border-radius: 12px;
+}
+
+.signInPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  padding: 32px;
+  border: 1px dashed light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  border-radius: 12px;
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.promptIcon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border-radius: 999px;
+  background: light-dark(var(--mantine-color-brand-0), var(--mantine-color-brand-9));
+  color: light-dark(var(--mantine-color-brand-7), var(--mantine-color-brand-2));
+}
+
+.setupAlert {
+  margin-bottom: 16px;
+}
+
+.formCard,
+.infoCard {
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.infoCard {
+  margin-top: 16px;
+  padding: 22px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cardEyebrow {
+  color: light-dark(var(--mantine-color-brand-7), var(--mantine-color-brand-3));
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  margin-top: 7px;
+  color: light-dark(#1b1c18, #f4f3ed);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  letter-spacing: -0.035em;
+}
+
+.identityHint {
+  color: var(--mantine-color-dimmed);
+}
+
+/* Library */
+
+.libraryStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.statCard {
+  padding: 16px;
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.statIcon {
+  display: inline-flex;
+  color: light-dark(var(--mantine-color-brand-6), var(--mantine-color-brand-3));
+}
+
+.statValue {
+  margin-top: 11px;
+  color: light-dark(#1b1c18, #f4f3ed);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.statLabel {
+  margin-top: 5px;
+  color: var(--mantine-color-dimmed);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.programmeStat {
+  padding: 16px;
+  border: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  border-radius: 10px;
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.libraryTabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+}
+
+.tabItem,
+.tabActive {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--mantine-color-dimmed);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  span {
+    display: grid;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    place-items: center;
+    border-radius: 999px;
+    background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+    font-size: 0.62rem;
+  }
+
+  &:hover {
+    color: var(--mantine-color-text);
+  }
+}
+
+.tabActive {
+  background: light-dark(var(--mantine-color-brand-0), var(--mantine-color-dark-6));
+  color: light-dark(var(--mantine-color-brand-8), var(--mantine-color-brand-2));
+
+  span {
+    background: light-dark(var(--mantine-color-brand-2), var(--mantine-color-brand-8));
+    color: light-dark(var(--mantine-color-brand-9), var(--mantine-color-brand-1));
+  }
+}
+
+.libraryGridSkeleton {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+@media (max-width: 62em) {
+  .accountLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .accountSidebar {
+    position: static;
+  }
+
+  .libraryStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .programmeStat {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 48em) {
+  .libraryStats,
+  .libraryGridSkeleton {
+    grid-template-columns: 1fr;
+  }
+
+  .libraryTabs {
+    overflow-x: auto;
+  }
+}

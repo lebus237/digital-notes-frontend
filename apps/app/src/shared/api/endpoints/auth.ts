@@ -1,0 +1,91 @@
+import {
+  authSuccess,
+  callAction,
+  endSession,
+  LocalStorage,
+} from '@digitalnotes/core'
+
+export const AUTH_CHANGED_EVENT = 'digitalnotes:auth-changed'
+
+export type SessionUser = {
+  id?: string
+  fullName?: string | null
+  email?: string
+  phoneNumber?: string
+  role?: string
+  createdAt?: string
+}
+
+export type LoginPayload = {
+  email: string
+  password: string
+}
+
+export type RegisterPayload = {
+  fullName: string
+  email: string
+  phoneNumber: string
+  password: string
+}
+
+type AuthResponse = {
+  data?: {
+    user?: SessionUser
+    accessToken?: string
+    refreshToken?: string
+    context?: unknown
+  }
+  error?: { message?: string; code?: string }
+  message?: string
+  errors?: Array<{ message?: string } | string>
+}
+
+export function notifyAuthChanged() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event(AUTH_CHANGED_EVENT))
+  }
+}
+
+export function getSessionUser(): SessionUser | null {
+  return LocalStorage.getUser<SessionUser>()
+}
+
+export function hasSession(): boolean {
+  return Boolean(LocalStorage.getAuthToken())
+}
+
+function errorMessage(response: AuthResponse | null): string {
+  if (!response) return 'Cannot reach the server. Check your connection and try again.'
+  if (response.error?.message) return response.error.message
+  if (response.message) return response.message
+  const first = response.errors?.[0]
+  if (typeof first === 'string') return first
+  if (first?.message) return first.message
+  return 'The request could not be completed. Please try again.'
+}
+
+function persistAuthResponse(response: AuthResponse | null) {
+  const data = response?.data
+  if (!data?.accessToken) {
+    throw new Error(errorMessage(response))
+  }
+
+  authSuccess(data)
+  notifyAuthChanged()
+  return data
+}
+
+export async function loginStudent(payload: LoginPayload) {
+  const response = (await callAction('/api/login', 'POST')(payload)) as AuthResponse | null
+  return persistAuthResponse(response)
+}
+
+export async function registerStudent(payload: RegisterPayload) {
+  const response = (await callAction('/api/register', 'POST')(payload)) as AuthResponse | null
+  return persistAuthResponse(response)
+}
+
+export async function logoutStudent() {
+  await endSession()
+  notifyAuthChanged()
+}

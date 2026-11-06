@@ -18,6 +18,7 @@ import {
   IconArrowRight,
   IconBook2,
   IconBookmark,
+  IconAlertCircle,
   IconCheck,
   IconChevronDown,
   IconFileDescription,
@@ -34,7 +35,7 @@ import {
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useState, type FormEvent } from 'react'
 import { NOTE_TYPES } from '@/pages/catalogue/types'
-import { logoutStudent } from '@/shared/api/endpoints/auth'
+import { logoutStudent, resendVerification } from '@/shared/api/endpoints/auth'
 import { useSession } from '@/shared/auth/use-session'
 import styles from './site-chrome.module.scss'
 
@@ -56,6 +57,9 @@ export function SiteHeader() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [opened, setOpened] = useState(false)
+  const [verificationState, setVerificationState] = useState<
+    'idle' | 'sending' | 'sent' | 'error'
+  >('idle')
   const session = useSession()
   const displayName = session.user?.fullName || session.user?.email || 'My account'
   const initial = displayName.trim().charAt(0).toUpperCase() || 'S'
@@ -64,6 +68,16 @@ export function SiteHeader() {
     await logoutStudent()
     setOpened(false)
     void navigate({ to: '/' })
+  }
+
+  const resendEmail = async () => {
+    setVerificationState('sending')
+    try {
+      await resendVerification()
+      setVerificationState('sent')
+    } catch {
+      setVerificationState('error')
+    }
   }
 
   const submitSearch = (event: FormEvent) => {
@@ -257,6 +271,43 @@ export function SiteHeader() {
           </Group>
         </Container>
       </header>
+
+      {session.authenticated && session.user?.emailVerified === false && (
+        <div className={styles.verifyBar}>
+          <Container size="xl">
+            <Group justify="space-between" gap="md" wrap="wrap" py={9}>
+              <Group gap={8} wrap="nowrap" align="flex-start">
+                <IconAlertCircle size={16} className={styles.verifyIcon} />
+                <Text size="xs" className={styles.verifyText}>
+                  <strong>Verify your email.</strong> Confirm your address to secure your
+                  account and enable account recovery.
+                </Text>
+              </Group>
+              <Group gap="sm" wrap="nowrap">
+                {verificationState === 'sent' && (
+                  <Text size="xs" className={styles.verifySuccess}>
+                    Verification link sent
+                  </Text>
+                )}
+                {verificationState === 'error' && (
+                  <Text size="xs" className={styles.verifyError}>
+                    Could not send the link
+                  </Text>
+                )}
+                <Button
+                  variant="subtle"
+                  color="brand"
+                  size="compact-sm"
+                  loading={verificationState === 'sending'}
+                  onClick={resendEmail}
+                >
+                  Resend link
+                </Button>
+              </Group>
+            </Group>
+          </Container>
+        </div>
+      )}
 
       <Drawer
         opened={opened}

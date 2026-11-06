@@ -18,6 +18,7 @@ import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses.$courseId'
 import { Route as DepartmentsDepartmentIdRouteImport } from './routes/departments.$departmentId'
 import { Route as FacultiesFacultyIdRouteImport } from './routes/faculties.$facultyId'
@@ -69,6 +70,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesCourseIdRoute = CoursesCourseIdRouteImport.update({
   id: '/courses/$courseId',
   path: '/courses/$courseId',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
   '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
   '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
   '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/reset-password'
+    | '/verify-email'
     | '/courses/$courseId'
     | '/departments/$departmentId'
     | '/faculties/$facultyId'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/reset-password'
+    | '/verify-email'
     | '/courses/$courseId'
     | '/departments/$departmentId'
     | '/faculties/$facultyId'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/reset-password'
+    | '/verify-email'
     | '/courses/$courseId'
     | '/departments/$departmentId'
     | '/faculties/$facultyId'
@@ -206,6 +218,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
   DepartmentsDepartmentIdRoute: typeof DepartmentsDepartmentIdRoute
   FacultiesFacultyIdRoute: typeof FacultiesFacultyIdRoute
@@ -278,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses/$courseId': {
       id: '/courses/$courseId'
       path: '/courses/$courseId'
@@ -326,6 +346,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
   DepartmentsDepartmentIdRoute: DepartmentsDepartmentIdRoute,
   FacultiesFacultyIdRoute: FacultiesFacultyIdRoute,

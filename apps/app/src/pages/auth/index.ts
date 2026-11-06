@@ -3,4 +3,5 @@ export {
   LoginPage,
   RegisterPage,
   ResetPasswordPage,
+  VerifyEmailPage,
 } from './ui/auth-page'

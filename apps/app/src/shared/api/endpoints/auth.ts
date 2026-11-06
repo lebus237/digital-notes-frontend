@@ -2,6 +2,7 @@ import {
   authSuccess,
   callAction,
   endSession,
+  getApiEndpoint,
   LocalStorage,
 } from '@digitalnotes/core'
 
@@ -13,6 +14,7 @@ export type SessionUser = {
   email?: string
   phoneNumber?: string
   role?: string
+  emailVerified?: boolean
   createdAt?: string
 }
 
@@ -121,6 +123,44 @@ export async function changePassword(payload: ChangePasswordPayload) {
     throw new Error(errorMessage(response as AuthResponse))
   }
   return response
+}
+
+export async function verifyEmail(token: string) {
+  const response = await callAction('/api/email/verify', 'POST')({ token })
+  if (response?.error || (response?.message && !response?.data)) {
+    throw new Error(errorMessage(response as AuthResponse))
+  }
+  return response
+}
+
+export async function resendVerification() {
+  const response = await callAction('/api/email/resend', 'POST')()
+  if (response?.error || (response?.message && !response?.data)) {
+    throw new Error(errorMessage(response as AuthResponse))
+  }
+  return response
+}
+
+export async function refreshCurrentUser(): Promise<SessionUser | null> {
+  const token = LocalStorage.getAuthToken()
+  if (!token) return null
+
+  try {
+    const response = await fetch(`${getApiEndpoint()}/api/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (!response.ok) return null
+
+    const payload = await response.json()
+    const user = payload?.data?.user as SessionUser | undefined
+    if (!user) return null
+
+    LocalStorage.setUser(user)
+    notifyAuthChanged()
+    return user
+  } catch {
+    return null
+  }
 }
 
 export async function logoutStudent() {

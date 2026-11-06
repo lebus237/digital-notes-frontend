@@ -259,6 +259,16 @@
   color: light-dark(var(--mantine-color-brand-7), var(--mantine-color-brand-2));
 }
 
+.errorIcon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border-radius: 999px;
+  background: light-dark(#fff2f2, #3a2020);
+  color: light-dark(#9d2f2f, #f0b5b5);
+}
+
 .successTitle {
   margin-top: 16px;
   color: light-dark(#1b1c18, #f4f3ed);

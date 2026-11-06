@@ -22,8 +22,10 @@ import { useEffect, useState } from 'react'
 import {
   forgotPassword,
   loginStudent,
+  refreshCurrentUser,
   registerStudent,
   resetPassword,
+  verifyEmail,
 } from '@/shared/api/endpoints/auth'
 import { useSession } from '@/shared/auth/use-session'
 import styles from './auth.module.scss'
@@ -33,6 +35,21 @@ const BENEFITS = [
   'Pick up exactly where you stopped reading.',
   'Personalise the catalogue with your programme.',
 ]
+
+/*
+ * Email verification links are single-use. Cache the request by token so a
+ * StrictMode double-effect (or a remount) cannot consume the same link twice.
+ */
+const verifyRequests = new Map<string, Promise<unknown>>()
+
+function verifyEmailOnce(token: string): Promise<unknown> {
+  let request = verifyRequests.get(token)
+  if (!request) {
+    request = verifyEmail(token)
+    verifyRequests.set(token, request)
+  }
+  return request
+}
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -451,6 +468,99 @@ export function ResetPasswordPage() {
             Update password
           </Button>
         </form>
+      )}
+    </AuthShell>
+  )
+}
+
+export function VerifyEmailPage() {
+  const search = useSearch({ from: '/verify-email' })
+  const token = typeof search.token === 'string' ? search.token : ''
+  const { authenticated } = useSession()
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (!token) {
+      setStatus('error')
+      setError('This verification link is incomplete. Request a new link from your account.')
+      return
+    }
+
+    verifyEmailOnce(token)
+      .then(async () => {
+        await refreshCurrentUser().catch(() => undefined)
+        setStatus('success')
+      })
+      .catch((verifyError) => {
+        setStatus('error')
+        setError(
+          verifyError instanceof Error
+            ? verifyError.message
+            : 'This verification link is invalid or has expired.'
+        )
+      })
+  }, [token])
+
+  return (
+    <AuthShell
+      title={status === 'success' ? 'Email verified' : 'Verify your email'}
+      subtitle={
+        status === 'success'
+          ? 'Your email is confirmed. Your DigitalNotes account is now fully secured.'
+          : 'We are confirming the email address linked to your student account.'
+      }
+      footer={
+        <Text size="sm" c="dimmed" ta="center">
+          <Link to="/login" className={styles.inlineLink}>
+            Back to sign in
+          </Link>
+        </Text>
+      }
+    >
+      {status === 'loading' && (
+        <div className={styles.successPanel}>
+          <div className={styles.successIcon}>
+            <IconMail size={24} />
+          </div>
+          <Text size="sm" c="dimmed" mt="md" ta="center">
+            Checking your verification link…
+          </Text>
+        </div>
+      )}
+
+      {status === 'success' && (
+        <div className={styles.successPanel}>
+          <div className={styles.successIcon}>
+            <IconCheck size={24} />
+          </div>
+          <Text size="sm" c="dimmed" mt="md" ta="center" lh={1.7}>
+            You can now return to your library. A verified email also lets you recover your
+            account more safely.
+          </Text>
+          <Button
+            component={Link}
+            to={authenticated ? '/library' : '/login'}
+            color="brand"
+            mt="lg"
+          >
+            {authenticated ? 'Open my library' : 'Sign in'}
+          </Button>
+        </div>
+      )}
+
+      {status === 'error' && (
+        <div className={styles.successPanel}>
+          <div className={styles.errorIcon}>
+            <IconMail size={24} />
+          </div>
+          <Text size="sm" c="dimmed" mt="md" ta="center" lh={1.7}>
+            {error}
+          </Text>
+          <Button component={Link} to="/profile" variant="light" color="brand" mt="lg">
+            Resend verification link
+          </Button>
+        </div>
       )}
     </AuthShell>
   )

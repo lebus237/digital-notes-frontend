@@ -33,6 +33,7 @@ const AUTH_API_PATHS = [
   "/api/refresh",
   "/api/forgot-password",
   "/api/reset-password",
+  "/api/logout",
 ];
 
 const AUTH_PAGE_PATHS = [

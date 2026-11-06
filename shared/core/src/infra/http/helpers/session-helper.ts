@@ -42,10 +42,37 @@ export const clearSession = () => {
   LocalStorage.clearAll();
 };
 
-export const logout = (redirectTo = "/login") => {
-  clearSession();
+/**
+ * Revokes the current session server-side, then clears local credentials.
+ *
+ * Tokens are read before `clearSession` because the request must carry the
+ * access token and the refresh token even though the local session disappears
+ * immediately. Network failures are ignored: the user is logged out locally
+ * either way.
+ */
+export const endSession = async () => {
+   const accessToken = LocalStorage.getAuthToken()
+   const refreshToken = LocalStorage.getRefreshToken()
 
-  if (typeof window !== "undefined") {
-    window.location.replace(redirectTo);
-  }
-};
+   clearSession()
+
+   if (!accessToken) return
+
+   try {
+      await axios.post(
+         '/api/logout',
+         refreshToken ? { refreshToken } : undefined,
+         { headers: { Authorization: `Bearer ${accessToken}` } },
+      )
+   } catch {
+      // Local session is already gone; server-side revocation is best effort.
+   }
+}
+
+export const logout = async (redirectTo = '/login') => {
+   await endSession()
+
+   if (typeof window !== 'undefined') {
+      window.location.replace(redirectTo)
+   }
+}

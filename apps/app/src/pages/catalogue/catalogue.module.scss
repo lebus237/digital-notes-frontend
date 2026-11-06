@@ -934,6 +934,63 @@
   text-transform: uppercase;
 }
 
+/* Home personalisation */
+
+.personalSection {
+  padding: clamp(44px, 6vw, 72px) 0;
+  border-bottom: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  background:
+    radial-gradient(
+      circle at 90% 20%,
+      light-dark(rgba(200, 169, 107, 0.13), rgba(200, 169, 107, 0.07)),
+      transparent 28%
+    ),
+    light-dark(#f3efe6, #171e19);
+}
+
+.personalHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.personalTitle {
+  margin-top: 6px;
+  color: light-dark(#1b1c18, #f4f3ed);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.7rem, 2.8vw, 2.35rem);
+  letter-spacing: -0.035em;
+}
+
+.personalPrompt {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 24px;
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.personalEmpty {
+  padding: 24px;
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+@media (max-width: 48em) {
+  .personalPrompt {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .personalHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
 /* ── Home sections ────────────────────────────────────────────────────────── */
 
 .homeSection {

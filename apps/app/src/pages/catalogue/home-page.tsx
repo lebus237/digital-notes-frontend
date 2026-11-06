@@ -26,14 +26,11 @@ import { useQuery } from '@tanstack/react-query'
 import { useState, type FormEvent } from 'react'
 import { normalizeCollectionResponse } from '@digitalnotes/core'
 import {
-  getStudentProfile,
   listCourses,
   listDepartments,
   listPublicNotes,
   listUniversities,
 } from '@/shared/api/endpoints'
-import { useSession } from '@/shared/auth/use-session'
-import type { StudentProfile } from '@/pages/account/types'
 import {
   DocumentGrid,
   EntityGrid,
@@ -64,7 +61,6 @@ const STEPS = [
 
 export function HomePage() {
   const navigate = useNavigate()
-  const session = useSession()
   const [search, setSearch] = useState('')
 
   const notesQuery = useQuery({
@@ -90,33 +86,6 @@ export function HomePage() {
     queryFn: () => listCourses({ limit: 1 }),
     select: (payload) => normalizeCollectionResponse(payload).meta.pagination.total,
   })
-
-  const profileQuery = useQuery({
-    queryKey: ['student-profile'],
-    queryFn: () => getStudentProfile(),
-    select: (payload) => payload?.data as StudentProfile,
-    enabled: session.authenticated,
-  })
-  const profile = profileQuery.data
-
-  const personalizedQuery = useQuery({
-    queryKey: [
-      'home-personalized',
-      profile?.departmentId,
-      profile?.levelId,
-      profile?.semesterId,
-    ],
-    queryFn: () =>
-      listPublicNotes({
-        limit: 8,
-        ...(profile?.departmentId ? { departmentId: profile.departmentId } : {}),
-        ...(profile?.levelId ? { levelId: profile.levelId } : {}),
-        ...(profile?.semesterId ? { semesterId: profile.semesterId } : {}),
-      }),
-    select: (payload) => normalizeCollectionResponse<PublicNote>(payload).data,
-    enabled: Boolean(profile?.departmentId),
-  })
-  const personalizedNotes = personalizedQuery.data ?? []
 
   const documents = notesQuery.data?.data ?? []
   const universities = universitiesQuery.data?.data ?? []
@@ -146,11 +115,7 @@ export function HomePage() {
             <div className={styles.heroCopy}>
               <Group gap={8} className={styles.heroKicker}>
                 <span className={styles.heroKickerDot} />
-                <Text>
-                  {session.authenticated
-                    ? `WELCOME BACK${session.user?.fullName ? `, ${session.user.fullName.split(' ')[0].toUpperCase()}` : ''}`
-                    : 'THE ACADEMIC LIBRARY FOR YOUR SEMESTER'}
-                </Text>
+                <Text>THE ACADEMIC LIBRARY FOR YOUR SEMESTER</Text>
               </Group>
 
               <Title className={styles.heroDisplay}>
@@ -274,93 +239,6 @@ export function HomePage() {
           </div>
         </Container>
       </section>
-
-      {session.authenticated && profileQuery.isSuccess && (
-        <section className={styles.personalSection} id="for-you">
-          <Container size="xl">
-            {profile?.departmentId ? (
-              <>
-                <div className={styles.personalHeader}>
-                  <div>
-                    <Text className={styles.eyebrow}>For your programme</Text>
-                    <Title order={2} className={styles.personalTitle}>
-                      Documents for {profile.departmentName ?? 'your courses'}
-                    </Title>
-                    <Text size="sm" c="dimmed" mt={6}>
-                      {[profile.universityName, profile.levelName, profile.semesterName]
-                        .filter(Boolean)
-                        .join(' · ')}
-                    </Text>
-                  </div>
-                  <Group gap="sm">
-                    <Button
-                      component={Link}
-                      to="/profile"
-                      variant="subtle"
-                      color="gray"
-                      size="sm"
-                    >
-                      Edit programme
-                    </Button>
-                    <Button
-                      component={Link}
-                      to="/browse"
-                      variant="light"
-                      color="brand"
-                      size="sm"
-                      rightSection={<IconArrowRight size={15} />}
-                    >
-                      Browse all
-                    </Button>
-                  </Group>
-                </div>
-
-                {personalizedQuery.isPending ? (
-                  <GridSkeleton count={4} />
-                ) : personalizedNotes.length > 0 ? (
-                  <DocumentGrid notes={personalizedNotes.slice(0, 4)} />
-                ) : (
-                  <Paper className={styles.personalEmpty} withBorder radius="lg">
-                    <Text fw={700}>Your programme is set up.</Text>
-                    <Text size="sm" c="dimmed" mt={4}>
-                      Documents for this programme will appear here as soon as they are
-                      published.
-                    </Text>
-                  </Paper>
-                )}
-              </>
-            ) : (
-              <Paper className={styles.personalPrompt} withBorder radius="lg">
-                <Group gap="lg" wrap="nowrap" align="flex-start">
-                  <ThemeIcon size={48} radius="xl" variant="light" color="brand">
-                    <IconSparkles size={23} />
-                  </ThemeIcon>
-                  <div>
-                    <Text className={styles.eyebrow}>For your programme</Text>
-                    <Title order={2} className={styles.personalTitle}>
-                      Make this library yours
-                    </Title>
-                    <Text size="sm" c="dimmed" mt={6} maw={560} lh={1.65}>
-                      Add your university, department and semester to see the documents that
-                      match your courses first.
-                    </Text>
-                  </div>
-                </Group>
-                <Button
-                  component={Link}
-                  to="/profile"
-                  color="brand"
-                  size="sm"
-                  mt="lg"
-                  rightSection={<IconArrowRight size={15} />}
-                >
-                  Set up my programme
-                </Button>
-              </Paper>
-            )}
-          </Container>
-        </section>
-      )}
 
       <section className={styles.homeSection} id="trending">
         <Container size="xl">

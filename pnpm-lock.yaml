@@ -139,6 +139,22 @@ importers:
         specifier: '*'
         version: 19.3.0(react@19.3.0)
 
+  apps/student:
+    dependencies:
+      '@digitalnotes/core':
+        specifier: workspace:*
+        version: link:../../shared/core
+      '@digitalnotes/i18n':
+        specifier: workspace:*
+        version: link:../../shared/i18n
+    devDependencies:
+      react:
+        specifier: '*'
+        version: 19.3.0
+      react-dom:
+        specifier: '*'
+        version: 19.3.0(react@19.3.0)
+
   shared/core:
     dependencies:
       '@digitalnotes/i18n':

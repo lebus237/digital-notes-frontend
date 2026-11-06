@@ -1,0 +1,173 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.backLink {
+  align-self: flex-start;
+  color: #315e42;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #e6e2d8;
+  border-radius: 18px;
+  background: #1e3829;
+  aspect-ratio: 4 / 3;
+}
+
+.cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.coverFallback {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  color: rgba(248, 245, 236, 0.72);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.12em;
+}
+
+.typeBadge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.heading {
+  padding: 0 2px;
+}
+
+.courseCode {
+  color: #315e42;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-top: 5px;
+  color: #1b1c18;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.5rem, 6.5vw, 1.95rem);
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+}
+
+.meta {
+  margin-top: 8px;
+  color: #706b62;
+  font-size: 0.72rem;
+}
+
+.actions {
+  padding: 0 2px;
+}
+
+.description {
+  padding: 16px;
+  border: 1px solid #e6e2d8;
+  background: #fffdf8;
+}
+
+.sectionLabel {
+  color: #706b62;
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.details {
+  overflow: hidden;
+  border: 1px solid #e6e2d8;
+  border-radius: 14px;
+  background: #fffdf8;
+}
+
+.detailRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 14px;
+  border-bottom: 1px solid #f0ece2;
+  font-size: 0.76rem;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  span {
+    color: #706b62;
+  }
+
+  strong {
+    max-width: 62%;
+    color: #1b1c18;
+    font-weight: 700;
+    text-align: right;
+  }
+}
+
+.reader {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.pages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pageFigure {
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid #e6e2d8;
+  border-radius: 12px;
+  background: #fffdf8;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    padding: 8px 12px;
+    border-top: 1px solid #f0ece2;
+    color: #706b62;
+    font-size: 0.62rem;
+    font-weight: 600;
+  }
+}
+
+.pageMissing {
+  display: grid;
+  aspect-ratio: 4 / 5;
+  place-items: center;
+  color: #938d82;
+  font-size: 0.78rem;
+}

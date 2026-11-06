@@ -2,7 +2,6 @@ import {
   authSuccess,
   callAction,
   endSession,
-  getApiEndpoint,
   LocalStorage,
 } from '@digitalnotes/core'
 
@@ -18,32 +17,16 @@ export type SessionUser = {
   createdAt?: string
 }
 
-export type LoginPayload = {
-  email: string
-  password: string
-}
-
+export type LoginPayload = { email: string; password: string }
 export type RegisterPayload = {
   fullName: string
   email: string
   phoneNumber: string
   password: string
 }
-
-export type ForgotPasswordPayload = {
-  email?: string
-  phoneNumber?: string
-}
-
-export type ResetPasswordPayload = {
-  token: string
-  password: string
-}
-
-export type ChangePasswordPayload = {
-  currentPassword: string
-  newPassword: string
-}
+export type ForgotPasswordPayload = { email?: string; phoneNumber?: string }
+export type ResetPasswordPayload = { token: string; password: string }
+export type ChangePasswordPayload = { currentPassword: string; newPassword: string }
 
 type AuthResponse = {
   data?: {
@@ -86,7 +69,6 @@ function persistAuthResponse(response: AuthResponse | null) {
   if (!data?.accessToken) {
     throw new Error(errorMessage(response))
   }
-
   authSuccess(data)
   notifyAuthChanged()
   return data
@@ -108,12 +90,8 @@ export async function forgotPassword(payload: ForgotPasswordPayload) {
 
 export async function resetPassword(payload: ResetPasswordPayload) {
   const response = await callAction('/api/reset-password', 'POST')(payload)
-  if (response?.error) {
-    throw new Error(errorMessage(response as AuthResponse))
-  }
-  if (response?.message && !response?.data) {
-    throw new Error(response.message)
-  }
+  if (response?.error) throw new Error(errorMessage(response as AuthResponse))
+  if (response?.message && !response?.data) throw new Error(response.message)
   return response
 }
 
@@ -142,25 +120,12 @@ export async function resendVerification() {
 }
 
 export async function refreshCurrentUser(): Promise<SessionUser | null> {
-  const token = LocalStorage.getAuthToken()
-  if (!token) return null
-
-  try {
-    const response = await fetch(`${getApiEndpoint()}/api/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    if (!response.ok) return null
-
-    const payload = await response.json()
-    const user = payload?.data?.user as SessionUser | undefined
-    if (!user) return null
-
-    LocalStorage.setUser(user)
-    notifyAuthChanged()
-    return user
-  } catch {
-    return null
-  }
+  const response = await callAction('/api/me', 'GET')()
+  const user = response?.data?.user as SessionUser | undefined
+  if (!user) return null
+  LocalStorage.setUser(user)
+  notifyAuthChanged()
+  return user
 }
 
 export async function logoutStudent() {

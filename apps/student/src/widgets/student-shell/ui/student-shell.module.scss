@@ -1,0 +1,148 @@
+.app {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  background: #f5f1e8;
+}
+
+.topBar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding-top: env(safe-area-inset-top, 0);
+  border-bottom: 1px solid #e9e5da;
+  background: rgba(255, 253, 248, 0.92);
+  backdrop-filter: blur(18px);
+}
+
+.topInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 62px;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.brandMark {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 8px;
+  background: #1e3829;
+  color: #f8f5ec;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.brandName {
+  color: #1b1c18;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.brandMeta {
+  color: #706b62;
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.verifyBar {
+  border-bottom: 1px solid #e8d9b5;
+  background: #fbf2dd;
+}
+
+.verifyText,
+.verifyIcon {
+  color: #6b4e1d;
+}
+
+.verifyText {
+  line-height: 1.35;
+
+  strong {
+    font-weight: 800;
+  }
+}
+
+.verifyIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.main {
+  flex: 1;
+  padding: 20px 16px calc(112px + env(safe-area-inset-bottom, 0px));
+}
+
+.bottomBar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 60;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  border-top: 1px solid #e9e5da;
+  background: rgba(255, 253, 248, 0.94);
+  backdrop-filter: blur(18px);
+}
+
+.bottomInner {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  padding: 6px 4px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.navItem,
+.navActive {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 2px 4px;
+  border: 0;
+  background: transparent;
+  color: #938d82;
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #315e42;
+  }
+
+  svg {
+    color: #938d82;
+  }
+}
+
+.navActive,
+.navActive svg {
+  color: #315e42;
+}
+
+.navActive {
+  background: #edf5ef;
+  border-radius: 10px;
+}

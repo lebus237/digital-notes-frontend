@@ -28,12 +28,21 @@ import {
   IconPhoto,
   IconUser,
   IconZoomIn,
+  IconBookmark,
 } from '@tabler/icons-react'
 import { Link, useParams } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { normalizeCollectionResponse } from '@digitalnotes/core'
-import { getNote, listCourseNotes } from '@/shared/api/endpoints'
+import {
+  addFavorite,
+  getNote,
+  listCourseNotes,
+  listFavoriteIds,
+  recordNoteView,
+  removeFavorite,
+} from '@/shared/api/endpoints'
+import { useSession } from '@/shared/auth/use-session'
 import {
   BackLink,
   BREADCRUMB_HOME,
@@ -56,6 +65,8 @@ export function NotePage() {
   const { noteId } = useParams({ from: '/notes/$noteId' })
   const [viewerIndex, setViewerIndex] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
+  const session = useSession()
+  const queryClient = useQueryClient()
 
   const noteQuery = useQuery({
     queryKey: ['note', noteId],
@@ -63,6 +74,31 @@ export function NotePage() {
   })
 
   const note = noteQuery.data as NoteDetail | undefined
+
+  const favoriteIdsQuery = useQuery({
+    queryKey: ['favorite-ids', session.user?.id],
+    queryFn: () => listFavoriteIds(),
+    select: (payload) => (payload?.data?.ids ?? []) as string[],
+    enabled: session.authenticated,
+  })
+
+  const favoriteIds = favoriteIdsQuery.data ?? []
+  const isFavorite = favoriteIds.includes(noteId)
+
+  const toggleFavorite = useMutation({
+    mutationFn: () => (isFavorite ? removeFavorite(noteId) : addFavorite(noteId)),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['favorite-ids', session.user?.id] })
+      void queryClient.invalidateQueries({ queryKey: ['student-favorites'] })
+    },
+  })
+
+  useEffect(() => {
+    if (session.authenticated && note?.id) {
+      void recordNoteView(note.id)
+      void queryClient.invalidateQueries({ queryKey: ['student-history'] })
+    }
+  }, [note?.id, queryClient, session.authenticated])
 
   const relatedQuery = useQuery({
     queryKey: ['related-notes', note?.courseId],
@@ -217,6 +253,28 @@ export function NotePage() {
                     >
                       Read document
                     </Button>
+                    {session.authenticated ? (
+                      <Button
+                        variant={isFavorite ? 'light' : 'outline'}
+                        color={isFavorite ? 'brand' : 'gray'}
+                        leftSection={<IconBookmark size={16} fill={isFavorite ? 'currentColor' : 'none'} />}
+                        loading={toggleFavorite.isPending}
+                        onClick={() => toggleFavorite.mutate()}
+                      >
+                        {isFavorite ? 'Saved to library' : 'Save to library'}
+                      </Button>
+                    ) : (
+                      <Button
+                        component={Link}
+                        to="/login"
+                        search={{ redirect: `/notes/${noteId}` } as never}
+                        variant="outline"
+                        color="gray"
+                        leftSection={<IconBookmark size={16} />}
+                      >
+                        Save to library
+                      </Button>
+                    )}
                     <Tooltip label={copied ? 'Link copied' : 'Copy link'} withArrow>
                       <ActionIcon
                         variant="outline"

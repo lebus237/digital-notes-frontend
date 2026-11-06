@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './app/routes/login'
 import { Route as LogoutRouteImport } from './app/routes/logout'
 import { Route as AppIndexRouteImport } from './app/routes/_app/index'
 import { Route as AppEmployeesRouteImport } from './app/routes/_app/employees'
+import { Route as AppNotesRouteImport } from './app/routes/_app/notes'
 import { Route as AppOrganisationRouteRouteImport } from './app/routes/_app/organisation/route'
 import { Route as AppCoursesIndexRouteImport } from './app/routes/_app/courses/index'
 import { Route as AppOrganisationIndexRouteImport } from './app/routes/_app/organisation/index'
@@ -44,6 +45,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppEmployeesRoute = AppEmployeesRouteImport.update({
   id: '/employees',
   path: '/employees',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotesRoute = AppNotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
   getParentRoute: () => AppRoute,
 } as any)
 const AppOrganisationRouteRoute = AppOrganisationRouteRouteImport.update({
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/organisation': typeof AppOrganisationRouteRouteWithChildren
   '/employees': typeof AppEmployeesRoute
+  '/notes': typeof AppNotesRoute
   '/organisation/departments': typeof AppOrganisationDepartmentsRoute
   '/organisation/faculties': typeof AppOrganisationFacultiesRoute
   '/courses/': typeof AppCoursesIndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/employees': typeof AppEmployeesRoute
+  '/notes': typeof AppNotesRoute
   '/': typeof AppIndexRoute
   '/organisation/departments': typeof AppOrganisationDepartmentsRoute
   '/organisation/faculties': typeof AppOrganisationFacultiesRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/logout': typeof LogoutRoute
   '/_app/organisation': typeof AppOrganisationRouteRouteWithChildren
   '/_app/employees': typeof AppEmployeesRoute
+  '/_app/notes': typeof AppNotesRoute
   '/_app/': typeof AppIndexRoute
   '/_app/organisation/departments': typeof AppOrganisationDepartmentsRoute
   '/_app/organisation/faculties': typeof AppOrganisationFacultiesRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/organisation'
     | '/employees'
+    | '/notes'
     | '/organisation/departments'
     | '/organisation/faculties'
     | '/courses/'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/employees'
+    | '/notes'
     | '/'
     | '/organisation/departments'
     | '/organisation/faculties'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/_app/organisation'
     | '/_app/employees'
+    | '/_app/notes'
     | '/_app/'
     | '/_app/organisation/departments'
     | '/_app/organisation/faculties'
@@ -209,6 +221,13 @@ declare module '@tanstack/react-router' {
       path: '/employees'
       fullPath: '/employees'
       preLoaderRoute: typeof AppEmployeesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/notes': {
+      id: '/_app/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof AppNotesRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/organisation': {
@@ -281,6 +300,7 @@ const AppOrganisationRouteRouteWithChildren =
 interface AppRouteChildren {
   AppOrganisationRouteRoute: typeof AppOrganisationRouteRouteWithChildren
   AppEmployeesRoute: typeof AppEmployeesRoute
+  AppNotesRoute: typeof AppNotesRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCoursesIndexRoute: typeof AppCoursesIndexRoute
   AppCoursesDepartmentIdIndexRoute: typeof AppCoursesDepartmentIdIndexRoute
@@ -290,6 +310,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppOrganisationRouteRoute: AppOrganisationRouteRouteWithChildren,
   AppEmployeesRoute: AppEmployeesRoute,
+  AppNotesRoute: AppNotesRoute,
   AppIndexRoute: AppIndexRoute,
   AppCoursesIndexRoute: AppCoursesIndexRoute,
   AppCoursesDepartmentIdIndexRoute: AppCoursesDepartmentIdIndexRoute,

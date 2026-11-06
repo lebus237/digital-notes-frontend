@@ -1,4 +1,9 @@
-import { IconBook, IconBuilding, IconUsers } from "@tabler/icons-react";
+import {
+  IconBook,
+  IconBuilding,
+  IconClipboardCheck,
+  IconUsers,
+} from "@tabler/icons-react";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import {
   ADMIN_ROLE,
@@ -20,6 +25,13 @@ const sidebarConfig: SidebarConfig = {
       to: "/organisation",
       icon: IconBuilding,
       keywords: ["organisation", "universities", "faculties"],
+    },
+    {
+      id: "notes",
+      label: "Notes",
+      to: "/notes",
+      icon: IconClipboardCheck,
+      keywords: ["notes", "review", "moderation", "queue"],
     },
     {
       id: "courses",

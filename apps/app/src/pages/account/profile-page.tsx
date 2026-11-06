@@ -3,6 +3,7 @@ import {
   Button,
   Group,
   Paper,
+  PasswordInput,
   Select,
   Skeleton,
   SimpleGrid,
@@ -10,7 +11,7 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import { IconCheck, IconDeviceFloppy, IconSchool } from '@tabler/icons-react'
+import { IconCheck, IconDeviceFloppy, IconLock, IconSchool } from '@tabler/icons-react'
 import { useNavigate } from '@tanstack/react-router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
@@ -24,6 +25,7 @@ import {
   listUniversities,
   updateStudentProfile,
 } from '@/shared/api/endpoints'
+import { changePassword, logoutStudent } from '@/shared/api/endpoints/auth'
 import { useSession } from '@/shared/auth/use-session'
 import {
   BackLink,
@@ -50,6 +52,13 @@ export function ProfilePage() {
   const [form, setForm] = useState<AcademicForm>(EMPTY_FORM)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
+  const [passwords, setPasswords] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmation: '',
+  })
+  const [passwordError, setPasswordError] = useState('')
+  const [changingPassword, setChangingPassword] = useState(false)
 
   useEffect(() => {
     if (session.ready && !session.authenticated) {
@@ -155,6 +164,45 @@ export function ProfilePage() {
       }
       return next
     })
+  }
+
+  const changePasswordSubmit = async () => {
+    setPasswordError('')
+    if (!passwords.currentPassword) {
+      setPasswordError('Enter your current password.')
+      return
+    }
+    if (passwords.newPassword !== passwords.confirmation) {
+      setPasswordError('The two new passwords do not match.')
+      return
+    }
+    if (
+      passwords.newPassword.length < 6 ||
+      !/[a-z]/.test(passwords.newPassword) ||
+      !/[A-Z]/.test(passwords.newPassword) ||
+      !/\d/.test(passwords.newPassword)
+    ) {
+      setPasswordError(
+        'Use at least 6 characters with one uppercase letter, one lowercase letter and one number.'
+      )
+      return
+    }
+
+    setChangingPassword(true)
+    try {
+      await changePassword({
+        currentPassword: passwords.currentPassword,
+        newPassword: passwords.newPassword,
+      })
+      await logoutStudent()
+      void navigate({ to: '/login', search: { notice: 'password-changed' } as never })
+    } catch (submitError) {
+      setPasswordError(
+        submitError instanceof Error ? submitError.message : 'Password change failed.'
+      )
+    } finally {
+      setChangingPassword(false)
+    }
   }
 
   if (!session.ready) {
@@ -333,6 +381,76 @@ export function ProfilePage() {
                     }
                   />
                 </Stack>
+              </Paper>
+
+              <Paper className={styles.infoCard} withBorder radius="lg">
+                <Group justify="space-between" align="flex-start" gap="md">
+                  <div>
+                    <Text className={styles.cardEyebrow}>Security</Text>
+                    <Title order={3} className={styles.securityTitle}>
+                      Change your password
+                    </Title>
+                  </div>
+                  <IconLock size={20} className={styles.securityIcon} />
+                </Group>
+                <Text size="xs" c="dimmed" mt={6} maw={460}>
+                  For your security, changing your password signs you out everywhere. You will
+                  be asked to sign in again.
+                </Text>
+
+                <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md" mt="lg">
+                  <PasswordInput
+                    label="Current password"
+                    value={passwords.currentPassword}
+                    onChange={(event) =>
+                      setPasswords((current) => ({
+                        ...current,
+                        currentPassword: event.currentTarget.value,
+                      }))
+                    }
+                    autoComplete="current-password"
+                  />
+                  <PasswordInput
+                    label="New password"
+                    value={passwords.newPassword}
+                    onChange={(event) =>
+                      setPasswords((current) => ({
+                        ...current,
+                        newPassword: event.currentTarget.value,
+                      }))
+                    }
+                    autoComplete="new-password"
+                  />
+                  <PasswordInput
+                    label="Confirm new password"
+                    value={passwords.confirmation}
+                    onChange={(event) =>
+                      setPasswords((current) => ({
+                        ...current,
+                        confirmation: event.currentTarget.value,
+                      }))
+                    }
+                    autoComplete="new-password"
+                  />
+                </SimpleGrid>
+
+                {passwordError && (
+                  <Alert color="red" mt="md">
+                    {passwordError}
+                  </Alert>
+                )}
+
+                <Group justify="flex-end" mt="lg">
+                  <Button
+                    variant="light"
+                    color="brand"
+                    leftSection={<IconLock size={16} />}
+                    loading={changingPassword}
+                    onClick={changePasswordSubmit}
+                  >
+                    Update password
+                  </Button>
+                </Group>
               </Paper>
             </>
           )}

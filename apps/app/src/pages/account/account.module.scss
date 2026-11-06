@@ -160,6 +160,18 @@
   letter-spacing: -0.035em;
 }
 
+.securityTitle {
+  margin-top: 6px;
+  color: light-dark(#1b1c18, #f4f3ed);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.4rem;
+  letter-spacing: -0.03em;
+}
+
+.securityIcon {
+  color: light-dark(var(--mantine-color-brand-6), var(--mantine-color-brand-3));
+}
+
 .identityHint {
   color: var(--mantine-color-dimmed);
 }

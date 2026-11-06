@@ -28,6 +28,21 @@ export type RegisterPayload = {
   password: string
 }
 
+export type ForgotPasswordPayload = {
+  email?: string
+  phoneNumber?: string
+}
+
+export type ResetPasswordPayload = {
+  token: string
+  password: string
+}
+
+export type ChangePasswordPayload = {
+  currentPassword: string
+  newPassword: string
+}
+
 type AuthResponse = {
   data?: {
     user?: SessionUser
@@ -83,6 +98,29 @@ export async function loginStudent(payload: LoginPayload) {
 export async function registerStudent(payload: RegisterPayload) {
   const response = (await callAction('/api/register', 'POST')(payload)) as AuthResponse | null
   return persistAuthResponse(response)
+}
+
+export async function forgotPassword(payload: ForgotPasswordPayload) {
+  return callAction('/api/forgot-password', 'POST')(payload)
+}
+
+export async function resetPassword(payload: ResetPasswordPayload) {
+  const response = await callAction('/api/reset-password', 'POST')(payload)
+  if (response?.error) {
+    throw new Error(errorMessage(response as AuthResponse))
+  }
+  if (response?.message && !response?.data) {
+    throw new Error(response.message)
+  }
+  return response
+}
+
+export async function changePassword(payload: ChangePasswordPayload) {
+  const response = await callAction('/api/change-password', 'POST')(payload)
+  if (response?.error || response?.message) {
+    throw new Error(errorMessage(response as AuthResponse))
+  }
+  return response
 }
 
 export async function logoutStudent() {

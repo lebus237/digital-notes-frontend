@@ -242,6 +242,31 @@
   line-height: 1.5;
 }
 
+.successPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 22px 0 6px;
+}
+
+.successIcon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border-radius: 999px;
+  background: light-dark(var(--mantine-color-brand-0), var(--mantine-color-brand-9));
+  color: light-dark(var(--mantine-color-brand-7), var(--mantine-color-brand-2));
+}
+
+.successTitle {
+  margin-top: 16px;
+  color: light-dark(#1b1c18, #f4f3ed);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.8rem;
+  letter-spacing: -0.035em;
+}
+
 @media (max-width: 62em) {
   .grid {
     grid-template-columns: 1fr;

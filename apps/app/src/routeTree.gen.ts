@@ -11,11 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BrowseRouteImport } from './routes/browse'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses.$courseId'
 import { Route as DepartmentsDepartmentIdRouteImport } from './routes/departments.$departmentId'
 import { Route as FacultiesFacultyIdRouteImport } from './routes/faculties.$facultyId'
@@ -30,6 +32,11 @@ const IndexRoute = IndexRouteImport.update({
 const BrowseRoute = BrowseRouteImport.update({
   id: '/browse',
   path: '/browse',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -55,6 +62,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesCourseIdRoute = CoursesCourseIdRouteImport.update({
@@ -87,11 +99,13 @@ const UniversitiesUniversityIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
   '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
@@ -101,11 +115,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
   '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
@@ -116,11 +132,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
   '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
@@ -132,11 +150,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/browse'
+    | '/forgot-password'
     | '/library'
     | '/login'
     | '/logout'
     | '/profile'
     | '/register'
+    | '/reset-password'
     | '/courses/$courseId'
     | '/departments/$departmentId'
     | '/faculties/$facultyId'
@@ -146,11 +166,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/browse'
+    | '/forgot-password'
     | '/library'
     | '/login'
     | '/logout'
     | '/profile'
     | '/register'
+    | '/reset-password'
     | '/courses/$courseId'
     | '/departments/$departmentId'
     | '/faculties/$facultyId'
@@ -160,11 +182,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/browse'
+    | '/forgot-password'
     | '/library'
     | '/login'
     | '/logout'
     | '/profile'
     | '/register'
+    | '/reset-password'
     | '/courses/$courseId'
     | '/departments/$departmentId'
     | '/faculties/$facultyId'
@@ -175,11 +199,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BrowseRoute: typeof BrowseRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
   DepartmentsDepartmentIdRoute: typeof DepartmentsDepartmentIdRoute
   FacultiesFacultyIdRoute: typeof FacultiesFacultyIdRoute
@@ -201,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/browse'
       fullPath: '/browse'
       preLoaderRoute: typeof BrowseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -236,6 +269,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/courses/$courseId': {
@@ -279,11 +319,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BrowseRoute: BrowseRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
   DepartmentsDepartmentIdRoute: DepartmentsDepartmentIdRoute,
   FacultiesFacultyIdRoute: FacultiesFacultyIdRoute,

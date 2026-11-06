@@ -1,1 +1,6 @@
-export { LoginPage, RegisterPage } from './ui/auth-page'
+export {
+  ForgotPasswordPage,
+  LoginPage,
+  RegisterPage,
+  ResetPasswordPage,
+} from './ui/auth-page'

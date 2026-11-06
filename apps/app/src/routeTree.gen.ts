@@ -11,7 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BrowseRouteImport } from './routes/browse'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as LibraryRouteImport } from './routes/library'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LogoutRouteImport } from './routes/logout'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses.$courseId'
 import { Route as DepartmentsDepartmentIdRouteImport } from './routes/departments.$departmentId'
 import { Route as FacultiesFacultyIdRouteImport } from './routes/faculties.$facultyId'
@@ -28,9 +35,44 @@ const BrowseRoute = BrowseRouteImport.update({
   path: '/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
   path: '/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesCourseIdRoute = CoursesCourseIdRouteImport.update({
@@ -63,7 +105,14 @@ const UniversitiesUniversityIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
   '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
@@ -73,7 +122,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
   '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
@@ -84,7 +140,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/departments/$departmentId': typeof DepartmentsDepartmentIdRoute
   '/faculties/$facultyId': typeof FacultiesFacultyIdRoute
@@ -96,7 +159,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/browse'
+    | '/forgot-password'
+    | '/library'
+    | '/login'
     | '/logout'
+    | '/profile'
+    | '/register'
+    | '/reset-password'
+    | '/verify-email'
     | '/courses/$courseId'
     | '/departments/$departmentId'
     | '/faculties/$facultyId'
@@ -106,7 +176,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/browse'
+    | '/forgot-password'
+    | '/library'
+    | '/login'
     | '/logout'
+    | '/profile'
+    | '/register'
+    | '/reset-password'
+    | '/verify-email'
     | '/courses/$courseId'
     | '/departments/$departmentId'
     | '/faculties/$facultyId'
@@ -116,7 +193,14 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/browse'
+    | '/forgot-password'
+    | '/library'
+    | '/login'
     | '/logout'
+    | '/profile'
+    | '/register'
+    | '/reset-password'
+    | '/verify-email'
     | '/courses/$courseId'
     | '/departments/$departmentId'
     | '/faculties/$facultyId'
@@ -127,7 +211,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BrowseRoute: typeof BrowseRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LibraryRoute: typeof LibraryRoute
+  LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
+  ProfileRoute: typeof ProfileRoute
+  RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
   DepartmentsDepartmentIdRoute: typeof DepartmentsDepartmentIdRoute
   FacultiesFacultyIdRoute: typeof FacultiesFacultyIdRoute
@@ -151,11 +242,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrowseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/logout': {
       id: '/logout'
       path: '/logout'
       fullPath: '/logout'
       preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/courses/$courseId': {
@@ -199,7 +339,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BrowseRoute: BrowseRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  LibraryRoute: LibraryRoute,
+  LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
+  ProfileRoute: ProfileRoute,
+  RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
   DepartmentsDepartmentIdRoute: DepartmentsDepartmentIdRoute,
   FacultiesFacultyIdRoute: FacultiesFacultyIdRoute,

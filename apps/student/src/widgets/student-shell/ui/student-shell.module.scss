@@ -64,29 +64,6 @@
   text-transform: uppercase;
 }
 
-.verifyBar {
-  border-bottom: 1px solid #e8d9b5;
-  background: #fbf2dd;
-}
-
-.verifyText,
-.verifyIcon {
-  color: #6b4e1d;
-}
-
-.verifyText {
-  line-height: 1.35;
-
-  strong {
-    font-weight: 800;
-  }
-}
-
-.verifyIcon {
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
 .main {
   flex: 1;
   padding: 20px 16px calc(112px + env(safe-area-inset-bottom, 0px));

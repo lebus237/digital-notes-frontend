@@ -1,21 +1,16 @@
 import {
   Avatar,
   Box,
-  Button,
   Container,
-  Group,
-  Text,
 } from '@mantine/core'
 import {
-  IconAlertCircle,
   IconBook2,
   IconCompass,
   IconLogout,
   IconUserCircle,
 } from '@tabler/icons-react'
 import { Link, useLocation, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import { logoutStudent, resendVerification } from '@/shared/api/endpoints/auth'
+import { logoutStudent } from '@/shared/api/endpoints/auth'
 import { useSession } from '@/shared/auth/use-session'
 import styles from './student-shell.module.scss'
 
@@ -26,9 +21,6 @@ export function StudentShell({ children }: Readonly<{ children: React.ReactNode 
   const location = useLocation()
   const navigate = useNavigate()
   const session = useSession()
-  const [verificationState, setVerificationState] = useState<
-    'idle' | 'sending' | 'sent' | 'error'
-  >('idle')
   const active = location.pathname.includes('/profile') ? 'profile' : 'library'
   const displayName = session.user?.fullName || session.user?.email || 'Student'
   const initial = displayName.trim().charAt(0).toUpperCase() || 'S'
@@ -36,16 +28,6 @@ export function StudentShell({ children }: Readonly<{ children: React.ReactNode 
   const signOut = async () => {
     await logoutStudent()
     void navigate({ to: '/login' })
-  }
-
-  const resendEmail = async () => {
-    setVerificationState('sending')
-    try {
-      await resendVerification()
-      setVerificationState('sent')
-    } catch {
-      setVerificationState('error')
-    }
   }
 
   return (
@@ -64,32 +46,6 @@ export function StudentShell({ children }: Readonly<{ children: React.ReactNode 
           </Avatar>
         </Container>
       </header>
-
-      {session.authenticated && session.user?.emailVerified === false && (
-        <div className={styles.verifyBar}>
-          <Container size="sm">
-            <Group justify="space-between" gap="sm" wrap="nowrap" py={8}>
-              <Group gap={8} wrap="nowrap" align="flex-start">
-                <IconAlertCircle size={16} className={styles.verifyIcon} />
-                <Text size="xs" className={styles.verifyText}>
-                  <strong>Verify your email</strong>
-                  <br />
-                  Secure your account and enable recovery.
-                </Text>
-              </Group>
-              <Button
-                size="compact-sm"
-                variant="light"
-                color="brand"
-                loading={verificationState === 'sending'}
-                onClick={resendEmail}
-              >
-                {verificationState === 'sent' ? 'Sent' : 'Resend'}
-              </Button>
-            </Group>
-          </Container>
-        </div>
-      )}
 
       <main className={styles.main}>{children}</main>
 

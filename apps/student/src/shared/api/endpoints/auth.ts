@@ -13,7 +13,6 @@ export type SessionUser = {
   email?: string
   phoneNumber?: string
   role?: string
-  emailVerified?: boolean
   createdAt?: string
 }
 
@@ -101,31 +100,6 @@ export async function changePassword(payload: ChangePasswordPayload) {
     throw new Error(errorMessage(response as AuthResponse))
   }
   return response
-}
-
-export async function verifyEmail(token: string) {
-  const response = await callAction('/api/email/verify', 'POST')({ token })
-  if (response?.error || (response?.message && !response?.data)) {
-    throw new Error(errorMessage(response as AuthResponse))
-  }
-  return response
-}
-
-export async function resendVerification() {
-  const response = await callAction('/api/email/resend', 'POST')()
-  if (response?.error || (response?.message && !response?.data)) {
-    throw new Error(errorMessage(response as AuthResponse))
-  }
-  return response
-}
-
-export async function refreshCurrentUser(): Promise<SessionUser | null> {
-  const response = await callAction('/api/me', 'GET')()
-  const user = response?.data?.user as SessionUser | undefined
-  if (!user) return null
-  LocalStorage.setUser(user)
-  notifyAuthChanged()
-  return user
 }
 
 export async function logoutStudent() {

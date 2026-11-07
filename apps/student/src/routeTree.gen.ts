@@ -15,7 +15,6 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app/notes.$noteId'
@@ -49,11 +48,6 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VerifyEmailRoute = VerifyEmailRouteImport.update({
-  id: '/verify-email',
-  path: '/verify-email',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -77,7 +71,6 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/verify-email': typeof VerifyEmailRoute
   '/profile': typeof AppProfileRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
 }
@@ -87,7 +80,6 @@ export interface FileRoutesByTo {
   '/logout': typeof LogoutRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/verify-email': typeof VerifyEmailRoute
   '/profile': typeof AppProfileRoute
   '/': typeof AppIndexRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
@@ -100,7 +92,6 @@ export interface FileRoutesById {
   '/logout': typeof LogoutRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/verify-email': typeof VerifyEmailRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/': typeof AppIndexRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
@@ -114,7 +105,6 @@ export interface FileRouteTypes {
     | '/logout'
     | '/register'
     | '/reset-password'
-    | '/verify-email'
     | '/profile'
     | '/notes/$noteId'
   fileRoutesByTo: FileRoutesByTo
@@ -124,7 +114,6 @@ export interface FileRouteTypes {
     | '/logout'
     | '/register'
     | '/reset-password'
-    | '/verify-email'
     | '/profile'
     | '/'
     | '/notes/$noteId'
@@ -136,7 +125,6 @@ export interface FileRouteTypes {
     | '/logout'
     | '/register'
     | '/reset-password'
-    | '/verify-email'
     | '/_app/profile'
     | '/_app/'
     | '/_app/notes/$noteId'
@@ -149,7 +137,6 @@ export interface RootRouteChildren {
   LogoutRoute: typeof LogoutRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
-  VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -194,13 +181,6 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verify-email': {
-      id: '/verify-email'
-      path: '/verify-email'
-      fullPath: '/verify-email'
-      preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/': {
@@ -248,7 +228,6 @@ const rootRouteChildren: RootRouteChildren = {
   LogoutRoute: LogoutRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
-  VerifyEmailRoute: VerifyEmailRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

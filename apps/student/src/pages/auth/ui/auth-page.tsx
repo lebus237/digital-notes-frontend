@@ -12,10 +12,8 @@ import { useEffect, useState } from 'react'
 import {
   forgotPassword,
   loginStudent,
-  refreshCurrentUser,
   registerStudent,
   resetPassword,
-  verifyEmail,
 } from '@/shared/api/endpoints/auth'
 import { useSession } from '@/shared/auth/use-session'
 import styles from './auth.module.scss'
@@ -377,84 +375,6 @@ export function ResetPasswordPage() {
             Update password
           </Button>
         </form>
-      )}
-    </MobileAuthShell>
-  )
-}
-
-export function VerifyEmailPage() {
-  const search = useSearch({ from: '/verify-email' })
-  const token = typeof search.token === 'string' ? search.token : ''
-  const { authenticated } = useSession()
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    if (!token) {
-      setStatus('error')
-      setError('This verification link is incomplete.')
-      return
-    }
-    verifyEmail(token)
-      .then(async () => {
-        await refreshCurrentUser().catch(() => undefined)
-        setStatus('success')
-      })
-      .catch((verifyError) => {
-        setStatus('error')
-        setError(verifyError instanceof Error ? verifyError.message : 'Link invalid or expired.')
-      })
-  }, [token])
-
-  return (
-    <MobileAuthShell
-      title={status === 'success' ? 'Email verified' : 'Verify your email'}
-      subtitle="Confirming the email linked to your account."
-      footer={
-        <Text size="sm" c="dimmed" ta="center">
-          <Link to="/login" className={styles.inlineLink}>
-            Back to sign in
-          </Link>
-        </Text>
-      }
-    >
-      {status === 'loading' && (
-        <div className={styles.success}>
-          <div className={styles.successIcon}>
-            <IconMail size={24} />
-          </div>
-          <Text size="sm" c="dimmed" mt="sm" ta="center">
-            Checking your link…
-          </Text>
-        </div>
-      )}
-      {status === 'success' && (
-        <div className={styles.success}>
-          <div className={styles.successIcon}>
-            <IconCheck size={24} />
-          </div>
-          <Button
-            component={Link}
-            to={authenticated ? '/' : '/login'}
-            color="brand"
-            mt="lg"
-          >
-            {authenticated ? 'Open my library' : 'Sign in'}
-          </Button>
-        </div>
-      )}
-      {status === 'error' && (
-        <div className={styles.success}>
-          <div className={styles.errorIcon}>
-            <IconMail size={24} />
-          </div>
-          <Text size="sm" c="dimmed" mt="sm" ta="center" lh={1.7}>
-            {error}
-          </Text>
-          <Button component={Link} to="/login" variant="light" color="brand" mt="lg">
-            Back to sign in
-          </Button>
-        </div>
       )}
     </MobileAuthShell>
   )

@@ -1,9 +1,11 @@
-import { Card, Stack, Group, Box, Text } from "@mantine/core";
-import styles from "./entity-card.module.scss";
+import { ActionIcon, Box, Card, Group, Menu, Stack, Text } from "@mantine/core";
+import { IconDotsVertical } from "@tabler/icons-react";
 import { getInitials } from "@digitalnotes/core";
+import styles from "./entity-card.module.scss";
 
 export function EntityCard(props: {
   data: { id: string; designation: string };
+  meta?: React.ReactNode;
   onClick?: (id: string) => void;
   optionConfig?: Array<{
     label: string;
@@ -19,6 +21,31 @@ export function EntityCard(props: {
       radius="sm"
       withBorder
     >
+      {props.optionConfig && props.optionConfig.length > 0 && (
+        <Menu position="bottom-end" withinPortal>
+          <Menu.Target>
+            <ActionIcon
+              className={styles.actions}
+              variant="subtle"
+              color="gray"
+              aria-label="More actions"
+            >
+              <IconDotsVertical size={18} />
+            </ActionIcon>
+          </Menu.Target>
+          <Menu.Dropdown>
+            {props.optionConfig.map((option, index) => (
+              <Menu.Item
+                key={`${option.label}-${index}`}
+                leftSection={option.icon}
+                onClick={option.onSelect}
+              >
+                {option.label}
+              </Menu.Item>
+            ))}
+          </Menu.Dropdown>
+        </Menu>
+      )}
       <Stack gap="sm" h="100%">
         <Group
           className={styles.header}
@@ -36,6 +63,11 @@ export function EntityCard(props: {
             <Text className={styles.designation} fw={600} size="lg">
               {props.data.designation}
             </Text>
+            {props.meta != null && (
+              <Text className={styles.meta} size="sm" c="dimmed">
+                {props.meta}
+              </Text>
+            )}
           </Box>
         </Group>
       </Stack>

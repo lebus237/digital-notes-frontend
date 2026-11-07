@@ -1,13 +1,9 @@
-import { Box, Button, Card, Divider, Group, Stack, Text } from "@mantine/core";
-import { clsx } from "clsx";
 import { IconPencil } from "@tabler/icons-react";
 import {
   CollectionDisplayCard,
-  getInitials,
   useCollectionService,
 } from "@digitalnotes/core";
-import styles from "../styles/organisation-view.module.scss";
-import { EntityCardSkeleton } from "./entity-card-skeleton";
+import { EntityCard, EntityCardSkeleton } from "@/shared/ui";
 
 export type OrganisationEntityItem = {
   id: string;
@@ -17,18 +13,10 @@ export type OrganisationEntityItem = {
 export type OrganisationEntityKind =
   "university" | "faculty" | "department" | "level";
 
-const kindInitialsClass: Record<OrganisationEntityKind, string> = {
-  university: styles.initialsUniversity,
-  faculty: styles.initialsFaculty,
-  department: styles.initialsDepartment,
-  level: styles.initialsLevel,
-};
-
 export function OrganisationEntityGrid({
   fetchApi,
   cacheKey,
   customQuery,
-  openLabel,
   emptyMessage,
   onItemClick,
   onEdit,
@@ -51,76 +39,37 @@ export function OrganisationEntityGrid({
   );
 
   return (
-    <CollectionDisplayCard
+    <CollectionDisplayCard<OrganisationEntityItem>
       records={controller.data}
       controller={controller}
       cardSpan={{ base: 12, sm: 6, lg: 3 }}
       gutter="sm"
       skeletonCount={6}
-      skeleton={<EntityCardSkeleton withEdit={Boolean(onEdit)} />}
+      skeleton={<EntityCardSkeleton withActions={Boolean(onEdit)} />}
       marginBottom="0"
       emptyMessage={emptyMessage}
-      renderItem={(item: OrganisationEntityItem) => {
-        const name = (
-          <Text className={styles.entityName} fw={600} lineClamp={1}>
-            {item.name}
-          </Text>
-        );
-
-        return (
-          <Card
-            className={styles.entityCard}
-            component="article"
-            padding="xs"
-            radius="sm"
-            withBorder
-          >
-            <Stack gap="sm" h="100%">
-              <Group
-                className={styles.entityCardHeader}
-                justify="start"
-                align="start"
-                gap="sm"
-                wrap="nowrap"
-                h="70%"
-                onClick={() => (onItemClick ? onItemClick(item) : null)}
-              >
-                <Box
-                  className={clsx(
-                    styles.entinyInitials,
-                    kindInitialsClass[kind],
-                  )}
-                >
-                  <span>{getInitials(item.name)}</span>
-                </Box>
-                <Stack gap={0}>
-                  <Text className={styles.entityName} fw={600} size="lg">
-                    {item.name}
-                  </Text>
-                  {kind === "level" && item.year != null && (
-                    <Text size="sm" c="dimmed">
-                      Year {item.year}
-                    </Text>
-                  )}
-                </Stack>
-              </Group>
-              {onEdit && (
-                <Stack gap="xs">
-                  <Divider />
-                  <Button
-                    size="xs"
-                    bg="var(--mantine-color-brand-6)"
-                    radius="xs"
-                    onClick={() => onEdit(item)}
-                  >
-                    <Text size="sm">Edit</Text>
-                  </Button>
-                </Stack>
-              )}
-            </Stack>
-          </Card>
-        );
-      }}
+      renderItem={(item) => (
+        <EntityCard
+          data={{ id: item.id, designation: item.name }}
+          meta={
+            kind === "level" && item.year != null
+              ? `Year ${item.year}`
+              : undefined
+          }
+          onClick={onItemClick ? () => onItemClick(item) : undefined}
+          optionConfig={
+            onEdit
+              ? [
+                  {
+                    label: "Edit",
+                    icon: <IconPencil size={16} />,
+                    onSelect: () => onEdit(item),
+                  },
+                ]
+              : undefined
+          }
+        />
+      )}
       hidePlugins={{ filters: true, order: true, range: true, export: true }}
     />
   );

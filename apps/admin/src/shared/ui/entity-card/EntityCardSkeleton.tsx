@@ -1,7 +1,9 @@
 import { Box, Card, Group, Skeleton, Stack } from "@mantine/core";
 import styles from "./entity-card.module.scss";
 
-export function EntityCardSkeleton() {
+export function EntityCardSkeleton({
+  withActions = false,
+}: Readonly<{ withActions?: boolean }>) {
   return (
     <Card
       className={styles.container}
@@ -10,6 +12,9 @@ export function EntityCardSkeleton() {
       radius="sm"
       withBorder
     >
+      {withActions && (
+        <Skeleton className={styles.actions} circle height={28} width={28} />
+      )}
       <Stack gap="sm" h="100%">
         <Group
           className={styles.header}

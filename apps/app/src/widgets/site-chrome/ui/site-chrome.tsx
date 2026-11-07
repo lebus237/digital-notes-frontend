@@ -1,6 +1,5 @@
 import {
   ActionIcon,
-  Avatar,
   Box,
   Burger,
   Button,
@@ -17,30 +16,27 @@ import {
 import {
   IconArrowRight,
   IconBook2,
-  IconBookmark,
   IconCheck,
   IconChevronDown,
   IconFileDescription,
-  IconLibrary,
-  IconLogout,
   IconMoon,
   IconPencil,
   IconSearch,
   IconSparkles,
   IconSun,
   IconUpload,
-  IconUserCircle,
 } from '@tabler/icons-react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useState, type FormEvent } from 'react'
 import { NOTE_TYPES } from '@/pages/catalogue/types'
-import { logoutStudent } from '@/shared/api/endpoints/auth'
-import { useSession } from '@/shared/auth/use-session'
 import styles from './site-chrome.module.scss'
 
 const CONTRIBUTOR_URL =
   (import.meta as { env?: Record<string, string> }).env?.VITE_CONTRIBUTOR_URL ??
   'http://localhost:3002'
+
+const STUDENT_APP_URL =
+  (import.meta as { env?: Record<string, string> }).env?.VITE_STUDENT_URL ?? 'http://localhost:3003'
 
 const NOTE_TYPE_ICON: Record<string, typeof IconBook2> = {
   LECTURE_NOTES: IconBook2,
@@ -56,15 +52,6 @@ export function SiteHeader() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [opened, setOpened] = useState(false)
-  const session = useSession()
-  const displayName = session.user?.fullName || session.user?.email || 'My account'
-  const initial = displayName.trim().charAt(0).toUpperCase() || 'S'
-
-  const signOut = async () => {
-    await logoutStudent()
-    setOpened(false)
-    void navigate({ to: '/' })
-  }
 
   const submitSearch = (event: FormEvent) => {
     event.preventDefault()
@@ -187,64 +174,18 @@ export function SiteHeader() {
                 <IconUpload size={15} />
                 Contribute
               </a>
-              {session.ready && !session.authenticated && (
-                <>
-                  <Link to="/login" className={styles.signInLink}>
-                    Sign in
-                  </Link>
-                  <Button component={Link} to="/register" size="sm" radius="md" color="brand">
-                    Join free
-                  </Button>
-                </>
-              )}
-
-              {session.authenticated && (
-                <Menu shadow="md" width={220} position="bottom-end" radius="md">
-                  <Menu.Target>
-                    <Button
-                      variant="light"
-                      color="brand"
-                      size="sm"
-                      radius="md"
-                      leftSection={
-                        <Avatar size={24} radius="xl" color="brand">
-                          {initial}
-                        </Avatar>
-                      }
-                      rightSection={<IconChevronDown size={13} />}
-                      className={styles.accountButton}
-                    >
-                      <Text size="xs" fw={700} lineClamp={1} className={styles.accountName}>
-                        {displayName}
-                      </Text>
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Label>{session.user?.email ?? 'Student account'}</Menu.Label>
-                    <Menu.Item
-                      leftSection={<IconLibrary size={16} />}
-                      onClick={() => navigate({ to: '/library' })}
-                    >
-                      My library
-                    </Menu.Item>
-                    <Menu.Item
-                      leftSection={<IconUserCircle size={16} />}
-                      onClick={() => navigate({ to: '/profile' })}
-                    >
-                      Profile
-                    </Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item
-                      color="red"
-                      leftSection={<IconLogout size={16} />}
-                      onClick={signOut}
-                    >
-                      Sign out
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              )}
-
+              <a href={STUDENT_APP_URL} className={styles.signInLink}>
+                Sign in
+              </a>
+              <Button
+                component="a"
+                href={`${STUDENT_APP_URL}/register`}
+                size="sm"
+                radius="md"
+                color="brand"
+              >
+                Join free
+              </Button>
             </Group>
 
             <Burger
@@ -278,52 +219,14 @@ export function SiteHeader() {
             />
           </form>
 
-          {session.ready && !session.authenticated && (
-            <Group grow>
-              <Button
-                component={Link}
-                to="/login"
-                variant="light"
-                color="brand"
-                onClick={() => setOpened(false)}
-              >
-                Sign in
-              </Button>
-              <Button
-                component={Link}
-                to="/register"
-                color="brand"
-                onClick={() => setOpened(false)}
-              >
-                Join free
-              </Button>
-            </Group>
-          )}
-
-          {session.authenticated && (
-            <Stack gap={2}>
-              <Text size="xs" c="dimmed">
-                Signed in as {session.user?.fullName ?? session.user?.email ?? 'Student'}
-              </Text>
-              <Link
-                to="/library"
-                className={styles.drawerLink}
-                onClick={() => setOpened(false)}
-              >
-                My library
-              </Link>
-              <Link
-                to="/profile"
-                className={styles.drawerLink}
-                onClick={() => setOpened(false)}
-              >
-                My profile
-              </Link>
-              <Button variant="subtle" color="gray" justify="flex-start" onClick={signOut}>
-                Sign out
-              </Button>
-            </Stack>
-          )}
+          <Group grow>
+            <Button component="a" href={STUDENT_APP_URL} variant="light" color="brand">
+              Sign in
+            </Button>
+            <Button component="a" href={`${STUDENT_APP_URL}/register`} color="brand">
+              Join free
+            </Button>
+          </Group>
 
           <Stack gap={4}>
             <Link

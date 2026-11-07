@@ -1,0 +1,18 @@
+{
+  "name": "DigitalNotes Student",
+  "short_name": "DigitalNotes",
+  "description": "Your personal course library, saved documents and reading history.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f1e8",
+  "theme_color": "#1e3829",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

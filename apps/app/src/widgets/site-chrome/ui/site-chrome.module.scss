@@ -225,6 +225,37 @@
   white-space: nowrap;
 }
 
+.verifyBar {
+  border-bottom: 1px solid light-dark(#e8d9b5, #4a3d24);
+  background: light-dark(#fbf2dd, #2b2418);
+  color: light-dark(#6b4e1d, #e5d2a7);
+}
+
+.verifyText {
+  color: inherit;
+  line-height: 1.45;
+
+  strong {
+    font-weight: 800;
+  }
+}
+
+.verifyIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: light-dark(#9b742d, #d7b86f);
+}
+
+.verifySuccess {
+  color: light-dark(#3b6a46, #a8d1ae);
+  font-weight: 600;
+}
+
+.verifyError {
+  color: light-dark(#9d2f2f, #f0b5b5);
+  font-weight: 600;
+}
+
 .drawerBody {
   padding-top: 8px;
 }

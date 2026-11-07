@@ -1,0 +1,37 @@
+.card {
+  margin-bottom: 14px;
+  padding: 20px;
+  border: 1px solid #e6e2d8;
+  background: #fffdf8;
+}
+
+.identity {
+  min-width: 0;
+}
+
+.programmeLabel {
+  color: #315e42;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  color: #1b1c18;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.2rem;
+  letter-spacing: -0.025em;
+}
+
+.exploreLink {
+  display: inline-flex;
+  margin-top: 14px;
+  padding: 11px 18px;
+  border-radius: 10px;
+  background: #1e3829;
+  color: #f8f5ec;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+}

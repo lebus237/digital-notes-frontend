@@ -64,7 +64,7 @@ export function DepartmentCoursesView() {
             archiveMutation.mutate(row.id);
           }}
         >
-          Archive
+          Remove
         </Button>
       ),
     },
@@ -88,7 +88,6 @@ export function DepartmentCoursesView() {
         },
       ]}
     >
-      {feedback && <Alert color="blue">{feedback}</Alert>}
       <CollectionTable
         columns={columns}
         fetchApi={listCourses}
@@ -112,7 +111,6 @@ export function DepartmentCoursesView() {
           departmentId={departmentId}
           onSuccess={() => {
             setCreateOpen(false);
-            setFeedback("Course created.");
             void revalidateQuery(actionKeys.listCourses);
           }}
         />

@@ -11,10 +11,7 @@ export function DepartmentsView() {
 
   return (
     <PageContainer
-      breadcrumbs={[
-        { label: "Home", to: "/" },
-        { label: "Courses" },
-      ]}
+      breadcrumbs={[{ label: "Home", to: "/" }, { label: "Courses" }]}
       title="Courses"
       description="Browse the course catalog by department."
     >
@@ -22,10 +19,10 @@ export function DepartmentsView() {
         fetchApi={listDepartments}
         cacheKey={actionKeys.listDepartments}
         emptyMessage="No departments yet. Add a department to start the catalog."
-        onItemClick={(item) =>
+        onItemClick={(id) =>
           void navigate({
             to: "/courses/$departmentId",
-            params: { departmentId: item.id },
+            params: { departmentId: id },
           })
         }
       />

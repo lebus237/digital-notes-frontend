@@ -1,11 +1,8 @@
-import { Box, Card, Group, Stack, Text } from "@mantine/core";
 import {
   CollectionDisplayCard,
-  getInitials,
   useCollectionService,
 } from "@digitalnotes/core";
-import styles from "../courses-view.module.scss";
-import { DepartmentCardSkeleton } from "./department-card-skeleton";
+import { EntityCard, EntityCardSkeleton } from "@/shared/ui";
 
 export type DepartmentCardItem = {
   id: string;
@@ -28,7 +25,7 @@ export function DepartmentCardGrid({
   cacheKey: string;
   customQuery?: any;
   emptyMessage: string;
-  onItemClick?: (item: DepartmentCardItem) => void;
+  onItemClick?: (id: string) => void;
 }>) {
   const controller = useCollectionService(
     fetchApi,
@@ -44,43 +41,14 @@ export function DepartmentCardGrid({
       cardSpan={{ base: 12, sm: 6, lg: 3 }}
       gutter="sm"
       skeletonCount={6}
-      skeleton={<DepartmentCardSkeleton />}
+      skeleton={<EntityCardSkeleton />}
       marginBottom="0"
       emptyMessage={emptyMessage}
       renderItem={(item: DepartmentCardItem) => (
-        <Card
-          className={styles.departmentCard}
-          component="article"
-          padding="xs"
-          radius="sm"
-          withBorder
-        >
-          <Stack gap="sm" h="100%">
-            <Group
-              className={styles.departmentCardHeader}
-              justify="start"
-              align="start"
-              gap="sm"
-              wrap="nowrap"
-              h="100%"
-              onClick={() => (onItemClick ? onItemClick(item) : null)}
-            >
-              <Box className={styles.departmentCardInitials}>
-                <span>{getInitials(item.name)}</span>
-              </Box>
-              <Box className={styles.departmentCardBody}>
-                <Text className={styles.departmentCardName} fw={600} size="lg">
-                  {item.name}
-                </Text>
-                {item.facultyName && (
-                  <Text className={styles.departmentCardMeta} size="xs">
-                    {item.facultyName}
-                  </Text>
-                )}
-              </Box>
-            </Group>
-          </Stack>
-        </Card>
+        <EntityCard
+          data={{ designation: item.name ?? item.name, id: item.id }}
+          onClick={onItemClick}
+        />
       )}
       hidePlugins={{ filters: true, order: true, range: true, export: true }}
     />

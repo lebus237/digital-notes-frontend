@@ -13,7 +13,7 @@ import { actionKeys } from "@/shared/api/action-keys";
 import { archiveCourse, listCourses } from "@/shared/api/endpoints/courses";
 import { revalidateQuery } from "@/shared/api/revalidate-query";
 import { useDepartmentLookup } from "../model/use-department-lookup";
-import { CourseForm } from "./course-form";
+import { CourseForm } from "./forms/course-form";
 
 const departmentCoursesRoute = getRouteApi("/_app/courses/$departmentId/");
 

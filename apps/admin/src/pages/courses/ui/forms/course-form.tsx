@@ -1,19 +1,15 @@
 import { Alert, Button, Stack } from "@mantine/core";
 import { formOptions } from "@tanstack/react-form";
-import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import {
   FormField,
   FormWrapper,
   getServerMessage,
-  normalizeCollectionResponse,
 } from "@digitalnotes/core";
 import { courseSchema, type CourseValues } from "@/entities/course";
 import { actionKeys } from "@/shared/api/action-keys";
 import { createCourse } from "@/shared/api/endpoints/courses";
 import { listLevels, listSemesters } from "@/shared/api/endpoints/organisation";
-
-type NamedOption = { id: string; name: string };
 
 export function CourseForm({
   departmentId,
@@ -24,20 +20,6 @@ export function CourseForm({
 }>) {
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
-
-  const { data: levels = [] } = useQuery({
-    queryKey: [actionKeys.listLevels, "options", departmentId],
-    queryFn: () => listLevels({ departmentId, page: 1, limit: 100 }),
-    staleTime: 60_000,
-    select: (payload) => normalizeCollectionResponse<NamedOption>(payload).data,
-  });
-
-  const { data: semesters = [] } = useQuery({
-    queryKey: [actionKeys.listSemesters, "options", departmentId],
-    queryFn: () => listSemesters({ departmentId, page: 1, limit: 100 }),
-    staleTime: 60_000,
-    select: (payload) => normalizeCollectionResponse<NamedOption>(payload).data,
-  });
 
   const courseOpts = useMemo(
     () =>
@@ -88,18 +70,22 @@ export function CourseForm({
     >
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
-        <FormField.Select
+        <FormField.AsyncAutocomplete
           name="levelId"
           label="Level"
           placeholder="Select level"
-          data={levels.map((item) => ({ value: item.id, label: item.name }))}
+          fetchApi={listLevels}
+          cacheKey={`${actionKeys.listLevels}-course-options`}
+          customQuery={{ departmentId }}
           withAsterisk
         />
-        <FormField.Select
+        <FormField.AsyncAutocomplete
           name="semesterId"
           label="Semester"
           placeholder="Select semester"
-          data={semesters.map((item) => ({ value: item.id, label: item.name }))}
+          fetchApi={listSemesters}
+          cacheKey={`${actionKeys.listSemesters}-course-options`}
+          customQuery={{ departmentId }}
           withAsterisk
         />
         <FormField.TextInput

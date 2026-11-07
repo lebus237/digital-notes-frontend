@@ -31,12 +31,7 @@ export function OrganisationEntityGrid({
   onEdit?: (item: OrganisationEntityItem) => void;
   kind: OrganisationEntityKind;
 }>) {
-  const controller = useCollectionService(
-    fetchApi,
-    { pagination: { page: 1, limit: 20 } },
-    cacheKey,
-    customQuery,
-  );
+  const controller = useCollectionService(fetchApi);
 
   return (
     <CollectionDisplayCard<OrganisationEntityItem>

@@ -1,7 +1,7 @@
 import { Alert, Button, Modal } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   CollectionTable,
@@ -14,15 +14,21 @@ import { archiveCourse, listCourses } from "@/shared/api/endpoints/courses";
 import { revalidateQuery } from "@/shared/api/revalidate-query";
 import { useDepartmentLookup } from "../model/use-department-lookup";
 import { CourseForm } from "./forms/course-form";
+import { FetchableDevEnvironment } from "vite";
+import { getDepartment } from "@/shared/api/endpoints";
 
 const departmentCoursesRoute = getRouteApi("/_app/courses/$departmentId/");
 
 export function DepartmentCoursesView() {
   const { departmentId } = departmentCoursesRoute.useParams();
   const navigate = departmentCoursesRoute.useNavigate();
-  const { department } = useDepartmentLookup(departmentId);
   const [createOpen, setCreateOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
+
+  const { data: department } = useQuery({
+    queryKey: [departmentId],
+    queryFn: () => getDepartment(departmentId),
+  });
 
   const archiveMutation = useMutation({
     mutationFn: (id: string) => archiveCourse(id, {}),
@@ -88,7 +94,6 @@ export function DepartmentCoursesView() {
         fetchApi={listCourses}
         cacheKey={actionKeys.listCourses}
         customQuery={{ departmentId }}
-        limit={20}
         onRowClick={(row: CourseListItem) =>
           void navigate({
             to: "/courses/$departmentId/$courseId",

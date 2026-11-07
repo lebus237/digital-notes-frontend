@@ -1,24 +1,45 @@
-import { callAction, callActionWithId } from '@digitalnotes/core'
+import { callAction, callActionWithId } from "@digitalnotes/core";
 
 // Public read endpoints (backend start/routes.ts — /api/v1, publicReadThrottle)
-export const listUniversities = callAction('/api/v1/universities', 'GET')
-export const listFaculties = callAction('/api/v1/faculties', 'GET')
-export const listDepartments = callAction('/api/v1/departments', 'GET')
-export const listLevels = callAction('/api/v1/levels', 'GET')
-export const listSemesters = callAction('/api/v1/semesters', 'GET')
+export const listUniversities = callAction("/api/v1/universities", "GET");
+export const listFaculties = callAction("/api/v1/faculties", "GET");
+export const listDepartments = callAction("/api/v1/departments", "GET");
+export const listLevels = callAction("/api/v1/levels", "GET");
+export const listSemesters = callAction("/api/v1/semesters", "GET");
 
 // Admin write endpoints (backend — /api/v1/admin, administrator role)
-export const createUniversity = callAction('/api/v1/admin/universities', 'POST')
-export const createFaculty = callAction('/api/v1/admin/faculties', 'POST')
-export const createDepartment = callAction('/api/v1/admin/departments', 'POST')
-export const createLevel = callAction('/api/v1/admin/levels', 'POST')
-export const createSemester = callAction('/api/v1/admin/semesters', 'POST')
+export const createUniversity = callAction(
+  "/api/v1/admin/universities",
+  "POST",
+);
+export const createFaculty = callAction("/api/v1/admin/faculties", "POST");
+export const createDepartment = callAction("/api/v1/admin/departments", "POST");
+export const createLevel = callAction("/api/v1/admin/levels", "POST");
+export const createSemester = callAction("/api/v1/admin/semesters", "POST");
 
-export const updateUniversity = callActionWithId('/api/v1/admin/universities/{id}', 'PATCH')
-export const updateFaculty = callActionWithId('/api/v1/admin/faculties/{id}', 'PATCH')
-export const updateDepartment = callActionWithId('/api/v1/admin/departments/{id}', 'PATCH')
-export const updateLevel = callActionWithId('/api/v1/admin/levels/{id}', 'PATCH')
-export const updateSemester = callActionWithId('/api/v1/admin/semesters/{id}', 'PATCH')
+export const updateUniversity = callActionWithId(
+  "/api/v1/admin/universities/{id}",
+  "PATCH",
+);
+export const updateFaculty = callActionWithId(
+  "/api/v1/admin/faculties/{id}",
+  "PATCH",
+);
+export const updateDepartment = callActionWithId(
+  "/api/v1/admin/departments/{id}",
+  "PATCH",
+);
+export const updateLevel = callActionWithId(
+  "/api/v1/admin/levels/{id}",
+  "PATCH",
+);
+export const updateSemester = callActionWithId(
+  "/api/v1/admin/semesters/{id}",
+  "PATCH",
+);
 
-export const getFaculty = callActionWithId('/api/v1/faculties/{id}', 'GET')
-export const getDepartment = callActionWithId('/api/v1/departments/{id}', 'GET')
+export const getFaculty = callActionWithId("/api/v1/faculties/{id}", "GET");
+export const getDepartment = callActionWithId(
+  "/api/v1/departments/{id}",
+  "GET",
+);

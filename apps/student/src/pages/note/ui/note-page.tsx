@@ -1,14 +1,7 @@
 import { Alert, Badge, Button, Group, Paper, Skeleton, Text, Title } from '@mantine/core'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from '@tanstack/react-router'
-import { useEffect } from 'react'
-import {
-  addFavorite,
-  getNote,
-  listFavoriteIds,
-  recordNoteView,
-  removeFavorite,
-} from '@/shared/api/endpoints'
+import { getNote } from '@/shared/api/endpoints'
 import {
   formatDate,
   formatPrice,
@@ -22,7 +15,6 @@ const PUBLIC_URL =
 
 export function NotePage() {
   const { noteId } = useParams({ from: '/_app/notes/$noteId' })
-  const queryClient = useQueryClient()
 
   const noteQuery = useQuery({
     queryKey: ['note', noteId],
@@ -30,27 +22,29 @@ export function NotePage() {
   })
   const note = noteQuery.data as NoteDetail | undefined
 
-  const favoriteIdsQuery = useQuery({
-    queryKey: ['favorite-ids'],
-    queryFn: () => listFavoriteIds(),
-    select: (payload) => (payload?.data?.ids ?? []) as string[],
-  })
-  const isFavorite = (favoriteIdsQuery.data ?? []).includes(noteId)
+  // Missing backend routes: /student/favorites* and /student/history* do not exist yet.
+  // const favoriteIdsQuery = useQuery({
+  //   queryKey: ['favorite-ids'],
+  //   queryFn: () => listFavoriteIds(),
+  //   select: (payload) => (payload?.data?.ids ?? []) as string[],
+  // })
+  // const isFavorite = (favoriteIdsQuery.data ?? []).includes(noteId)
 
-  const toggleFavorite = useMutation({
-    mutationFn: () => (isFavorite ? removeFavorite(noteId) : addFavorite(noteId)),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['favorite-ids'] })
-      void queryClient.invalidateQueries({ queryKey: ['student-favorites'] })
-    },
-  })
+  // const toggleFavorite = useMutation({
+  //   mutationFn: () => (isFavorite ? removeFavorite(noteId) : addFavorite(noteId)),
+  //   onSuccess: () => {
+  //     void queryClient.invalidateQueries({ queryKey: ['favorite-ids'] })
+  //     void queryClient.invalidateQueries({ queryKey: ['student-favorites'] })
+  //   },
+  // })
+  const isFavorite = false
 
-  useEffect(() => {
-    if (!note?.id) return
-    void recordNoteView(note.id).then(() =>
-      queryClient.invalidateQueries({ queryKey: ['student-history'] })
-    )
-  }, [note?.id, queryClient])
+  // useEffect(() => {
+  //   if (!note?.id) return
+  //   void recordNoteView(note.id).then(() =>
+  //     queryClient.invalidateQueries({ queryKey: ['student-history'] })
+  //   )
+  // }, [note?.id, queryClient])
 
   if (noteQuery.isPending) {
     return (
@@ -103,12 +97,8 @@ export function NotePage() {
       </div>
 
       <Group grow gap="sm" className={styles.actions}>
-        <Button
-          color="brand"
-          radius="md"
-          loading={toggleFavorite.isPending}
-          onClick={() => toggleFavorite.mutate()}
-        >
+        {/* Save-to-library disabled: /student/favorites* backend routes do not exist yet. */}
+        <Button color="brand" radius="md" disabled>
           {isFavorite ? 'Saved to library' : 'Save to library'}
         </Button>
         <Button

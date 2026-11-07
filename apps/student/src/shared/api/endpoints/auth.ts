@@ -1,31 +1,35 @@
-import {
-  authSuccess,
-  callAction,
-  endSession,
-  LocalStorage,
-} from '@digitalnotes/core'
+import { authSuccess, callAction, endSession, LocalStorage } from '@digitalnotes/core'
 
 export const AUTH_CHANGED_EVENT = 'digitalnotes:auth-changed'
 
 export type SessionUser = {
   id?: string
   fullName?: string | null
-  email?: string
+  email?: string | null
   phoneNumber?: string
+  uniqueIdentifier?: string | null
+  username?: string | null
   role?: string
   createdAt?: string
 }
 
-export type LoginPayload = { email: string; password: string }
+export type LoginPayload = { identifier: string; password: string }
 export type RegisterPayload = {
-  fullName: string
-  email: string
+  uniqueIdentifier: string
   phoneNumber: string
   password: string
+  universityId: string
+  facultyId: string
+  fullName?: string
+  email?: string
+  username?: string
 }
 export type ForgotPasswordPayload = { email?: string; phoneNumber?: string }
 export type ResetPasswordPayload = { token: string; password: string }
-export type ChangePasswordPayload = { currentPassword: string; newPassword: string }
+export type ChangePasswordPayload = {
+  currentPassword: string
+  newPassword: string
+}
 
 type AuthResponse = {
   data?: {
@@ -74,7 +78,13 @@ function persistAuthResponse(response: AuthResponse | null) {
 }
 
 export async function loginStudent(payload: LoginPayload) {
-  const response = (await callAction('/api/login', 'POST')(payload)) as AuthResponse | null
+  const response = (await callAction(
+    '/api/login',
+    'POST'
+  )({
+    uniqueIdentifier: payload.identifier,
+    password: payload.password,
+  })) as AuthResponse | null
   return persistAuthResponse(response)
 }
 

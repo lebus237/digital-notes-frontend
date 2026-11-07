@@ -1,20 +1,17 @@
-import {
-  Alert,
-  Button,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core'
+import { Alert, Button, PasswordInput, Select, Text, TextInput, Title } from '@mantine/core'
 import { IconCheck, IconLock, IconMail, IconPhone, IconUser } from '@tabler/icons-react'
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
+import { normalizeCollectionResponse } from '@digitalnotes/core'
 import {
   forgotPassword,
   loginStudent,
   registerStudent,
   resetPassword,
+  type RegisterPayload,
 } from '@/shared/api/endpoints/auth'
+import { listFaculties, listUniversities } from '@/shared/api/endpoints/catalogue'
 import { useSession } from '@/shared/auth/use-session'
 import styles from './auth.module.scss'
 
@@ -23,7 +20,7 @@ export function LoginPage() {
   const search = useSearch({ from: '/login' })
   const { authenticated, ready } = useSession()
   const redirect = typeof search.redirect === 'string' ? search.redirect : '/'
-  const [email, setEmail] = useState('')
+  const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -37,13 +34,13 @@ export function LoginPage() {
   const submit = async (event: React.FormEvent) => {
     event.preventDefault()
     setError('')
-    if (!email.trim() || !password) {
-      setError('Enter your email and password.')
+    if (!identifier.trim() || !password) {
+      setError('Enter your identifier and password.')
       return
     }
     setSubmitting(true)
     try {
-      await loginStudent({ email: email.trim(), password })
+      await loginStudent({ identifier: identifier.trim(), password })
       void navigate({ to: redirect as never })
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Sign in failed.')
@@ -73,14 +70,14 @@ export function LoginPage() {
         )}
         {error && <div className={styles.error}>{error}</div>}
         <TextInput
-          label="Email"
-          placeholder="you@example.com"
-          leftSection={<IconMail size={16} />}
-          value={email}
-          onChange={(event) => setEmail(event.currentTarget.value)}
+          label="Identifier"
+          placeholder="Enter your unique identifier"
+          leftSection={<IconUser size={16} />}
+          value={identifier}
+          onChange={(event) => setIdentifier(event.currentTarget.value)}
           size="lg"
           radius="md"
-          autoComplete="email"
+          autoComplete="username"
         />
         <PasswordInput
           label="Password"
@@ -108,9 +105,34 @@ export function LoginPage() {
 export function RegisterPage() {
   const navigate = useNavigate()
   const { authenticated, ready } = useSession()
-  const [values, setValues] = useState({ fullName: '', email: '', phoneNumber: '', password: '' })
+  const [values, setValues] = useState({
+    uniqueIdentifier: '',
+    phoneNumber: '',
+    password: '',
+    universityId: null as string | null,
+    facultyId: null as string | null,
+    fullName: '',
+    email: '',
+    username: '',
+  })
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+
+  const universitiesQuery = useQuery({
+    queryKey: ['student-registration-universities'],
+    queryFn: () => listUniversities({ limit: 100 }),
+    select: (payload) => normalizeCollectionResponse<{ id: string; name: string }>(payload).data,
+  })
+  const facultiesQuery = useQuery({
+    queryKey: ['student-registration-faculties', values.universityId],
+    queryFn: () =>
+      listFaculties({
+        universityId: values.universityId as string,
+        limit: 100,
+      }),
+    select: (payload) => normalizeCollectionResponse<{ id: string; name: string }>(payload).data,
+    enabled: Boolean(values.universityId),
+  })
 
   useEffect(() => {
     if (ready && authenticated) {
@@ -118,15 +140,24 @@ export function RegisterPage() {
     }
   }, [authenticated, navigate, ready])
 
-  const update = (key: keyof typeof values, value: string) =>
-    setValues((current) => ({ ...current, [key]: value }))
+  const update = (
+    key: 'uniqueIdentifier' | 'phoneNumber' | 'password' | 'fullName' | 'email' | 'username',
+    value: string
+  ) => setValues((current) => ({ ...current, [key]: value }))
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault()
     setError('')
-    if (values.fullName.trim().length < 2) return setError('Enter your full name.')
-    if (!values.email.includes('@')) return setError('Enter a valid email address.')
+    if (!values.uniqueIdentifier.trim()) return setError('Enter your unique identifier.')
     if (values.phoneNumber.trim().length < 8) return setError('Enter a valid phone number.')
+    if (!values.universityId) return setError('Choose your university.')
+    if (!values.facultyId) return setError('Choose your faculty.')
+    if (values.email.trim() && !values.email.includes('@')) {
+      return setError('Enter a valid email address.')
+    }
+    if (values.username.trim() && values.username.trim().length < 3) {
+      return setError('Your username must be at least 3 characters.')
+    }
     if (
       values.password.length < 6 ||
       !/[a-z]/.test(values.password) ||
@@ -137,12 +168,17 @@ export function RegisterPage() {
     }
     setSubmitting(true)
     try {
-      await registerStudent({
-        fullName: values.fullName.trim(),
-        email: values.email.trim(),
+      const payload: RegisterPayload = {
+        uniqueIdentifier: values.uniqueIdentifier.trim(),
         phoneNumber: values.phoneNumber.trim(),
         password: values.password,
-      })
+        universityId: values.universityId,
+        facultyId: values.facultyId,
+      }
+      if (values.fullName.trim()) payload.fullName = values.fullName.trim()
+      if (values.email.trim()) payload.email = values.email.trim()
+      if (values.username.trim()) payload.username = values.username.trim()
+      await registerStudent(payload)
       void navigate({ to: '/' })
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Account creation failed.')
@@ -167,7 +203,71 @@ export function RegisterPage() {
       <form className={styles.form} onSubmit={submit}>
         {error && <div className={styles.error}>{error}</div>}
         <TextInput
-          label="Full name"
+          label="Unique identifier"
+          placeholder="Your student identifier"
+          leftSection={<IconUser size={16} />}
+          value={values.uniqueIdentifier}
+          onChange={(event) => update('uniqueIdentifier', event.currentTarget.value)}
+          maxLength={100}
+          required
+          size="lg"
+          radius="md"
+          autoComplete="username"
+        />
+        <TextInput
+          label="Phone number"
+          placeholder="6XX XXX XXX"
+          leftSection={<IconPhone size={16} />}
+          value={values.phoneNumber}
+          onChange={(event) => update('phoneNumber', event.currentTarget.value)}
+          maxLength={12}
+          required
+          size="lg"
+          radius="md"
+          autoComplete="tel"
+        />
+        <Select
+          label="University"
+          placeholder="Choose your university"
+          data={(universitiesQuery.data ?? []).map((item) => ({
+            value: item.id,
+            label: item.name,
+          }))}
+          value={values.universityId}
+          onChange={(universityId) =>
+            setValues((current) => ({
+              ...current,
+              universityId,
+              facultyId: null,
+            }))
+          }
+          searchable
+          required
+          clearable
+          nothingFoundMessage="No universities found"
+          size="lg"
+          radius="md"
+          disabled={universitiesQuery.isError}
+        />
+        <Select
+          label="Faculty"
+          placeholder={values.universityId ? 'Choose your faculty' : 'Choose a university first'}
+          data={(facultiesQuery.data ?? []).map((item) => ({
+            value: item.id,
+            label: item.name,
+          }))}
+          value={values.facultyId}
+          onChange={(facultyId) => setValues((current) => ({ ...current, facultyId }))}
+          searchable
+          required
+          clearable
+          nothingFoundMessage="No faculties found"
+          size="lg"
+          radius="md"
+          disabled={!values.universityId || facultiesQuery.isError}
+        />
+        <TextInput
+          label="Full name (optional)"
           placeholder="Your name"
           leftSection={<IconUser size={16} />}
           value={values.fullName}
@@ -177,7 +277,7 @@ export function RegisterPage() {
           autoComplete="name"
         />
         <TextInput
-          label="Email"
+          label="Email (optional)"
           placeholder="you@example.com"
           leftSection={<IconMail size={16} />}
           value={values.email}
@@ -187,14 +287,14 @@ export function RegisterPage() {
           autoComplete="email"
         />
         <TextInput
-          label="Phone number"
-          placeholder="6XX XXX XXX"
-          leftSection={<IconPhone size={16} />}
-          value={values.phoneNumber}
-          onChange={(event) => update('phoneNumber', event.currentTarget.value)}
+          label="Username (optional)"
+          placeholder="Choose a username"
+          leftSection={<IconUser size={16} />}
+          value={values.username}
+          onChange={(event) => update('username', event.currentTarget.value)}
           size="lg"
           radius="md"
-          autoComplete="tel"
+          autoComplete="username"
         />
         <PasswordInput
           label="Password"
@@ -202,6 +302,7 @@ export function RegisterPage() {
           leftSection={<IconLock size={16} />}
           value={values.password}
           onChange={(event) => update('password', event.currentTarget.value)}
+          required
           size="lg"
           radius="md"
           autoComplete="new-password"
@@ -230,9 +331,7 @@ export function ForgotPasswordPage() {
       if (response?.error || (response?.message && !response?.data)) {
         throw new Error(response?.error?.message ?? response?.message)
       }
-      setMessage(
-        response?.data?.message ?? 'If an account exists, a reset link has been sent.'
-      )
+      setMessage(response?.data?.message ?? 'If an account exists, a reset link has been sent.')
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Request failed.')
     } finally {

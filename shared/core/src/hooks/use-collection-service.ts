@@ -10,6 +10,7 @@ import {
 export type CollectionServiceReturnType = {
   data: any[];
   isLoading: boolean;
+  isFetching: boolean;
   query: CollectionQueryType;
   meta: CollectionQueryType & {
     pagination: { page: number; limit: number; total: number };
@@ -57,6 +58,7 @@ export const useCollectionService = (
   const {
     data: rawResp,
     isLoading,
+    isFetching,
     refetch,
   } = useQuery({
     queryKey: [
@@ -160,6 +162,7 @@ export const useCollectionService = (
       query: collectionQuery,
       meta,
       isLoading,
+      isFetching,
       analytics: resp?.analytics,
       onPaginate,
       onChangeOrder,
@@ -176,6 +179,7 @@ export const useCollectionService = (
       collectionQuery,
       meta,
       isLoading,
+      isFetching,
       resp?.analytics,
       resp?.data,
       onPaginate,

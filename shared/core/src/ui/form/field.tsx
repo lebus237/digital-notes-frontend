@@ -1,4 +1,5 @@
 import { useFormContext } from './context'
+import type { AsyncAutocompleteProps } from './inputs/async-autocomplete'
 import type { EmailProps } from './inputs/email'
 import type { NumberInputProps } from './inputs/number-input'
 import type { PasswordProps } from './inputs/password'
@@ -33,6 +34,11 @@ export function TextArea(props: TextAreaProps & FormFieldProps) {
 export function Select(props: SelectInputProps & FormFieldProps) {
    const form = useFormContext()
    return <form.AppField name={props.name}>{(field: any) => <field.Select {...props} />}</form.AppField>
+}
+
+export function AsyncAutocomplete(props: AsyncAutocompleteProps & FormFieldProps) {
+   const form = useFormContext()
+   return <form.AppField name={props.name}>{(field: any) => <field.AsyncAutocomplete {...props} />}</form.AppField>
 }
 
 export function NumberInput(props: NumberInputProps & FormFieldProps) {

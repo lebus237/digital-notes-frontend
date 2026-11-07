@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { Alert, Button, Stack } from '@mantine/core'
 import { formOptions } from '@tanstack/react-form'
@@ -6,7 +5,6 @@ import {
   FormField,
   FormWrapper,
   getServerMessage,
-  normalizeCollectionResponse,
 } from '@digitalnotes/core'
 import { departmentSchema, type DepartmentValues } from '@/entities/organisation'
 import { actionKeys } from '@/shared/api/action-keys'
@@ -25,14 +23,6 @@ export function DepartmentForm({
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
   const isEditing = Boolean(initialValue?.id)
-
-  const { data: faculties = [] } = useQuery({
-    queryKey: ['admin-faculties', 'options'],
-    enabled: !facultyId,
-    staleTime: 60_000,
-    queryFn: () => listFaculties({ pagination: { page: 1, limit: 100 } }),
-    select: (payload) => normalizeCollectionResponse<{ id: string; name: string }>(payload).data,
-  })
 
   const departmentOpts = useMemo(
     () =>
@@ -85,11 +75,12 @@ export function DepartmentForm({
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
         {!facultyId && (
-          <FormField.Select
+          <FormField.AsyncAutocomplete
             name="facultyId"
             label="Faculty"
             placeholder="Select faculty"
-            data={faculties.map((item) => ({ value: item.id, label: item.name }))}
+            fetchApi={listFaculties}
+            cacheKey="admin-faculties-options"
             withAsterisk
           />
         )}

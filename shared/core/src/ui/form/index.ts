@@ -1,4 +1,5 @@
 export { Email, type EmailProps } from './inputs/email'
+export { AsyncAutocomplete, type AsyncAutocompleteOption, type AsyncAutocompleteProps } from './inputs/async-autocomplete'
 export { Password, type PasswordProps } from './inputs/password'
 export { TextArea, type TextAreaProps } from './inputs/text-area'
 export { TextInput, type TextInputProps } from './inputs/text-input'

@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { Alert, Button, Stack } from '@mantine/core'
 import { formOptions } from '@tanstack/react-form'
@@ -6,7 +5,6 @@ import {
   FormField,
   FormWrapper,
   getServerMessage,
-  normalizeCollectionResponse,
 } from '@digitalnotes/core'
 import { facultySchema, type FacultyValues } from '@/entities/organisation'
 import { actionKeys } from '@/shared/api/action-keys'
@@ -25,14 +23,6 @@ export function FacultyForm({
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
   const isEditing = Boolean(initialValue?.id)
-
-  const { data: universities = [] } = useQuery({
-    queryKey: ['admin-universities', 'options'],
-    enabled: !universityId,
-    staleTime: 60_000,
-    queryFn: () => listUniversities({ pagination: { page: 1, limit: 100 } }),
-    select: (payload) => normalizeCollectionResponse<{ id: string; name: string }>(payload).data,
-  })
 
   const facultyOpts = useMemo(
     () =>
@@ -85,11 +75,12 @@ export function FacultyForm({
       <Stack gap="sm">
         {error && <Alert color="red">{error}</Alert>}
         {!universityId && (
-          <FormField.Select
+          <FormField.AsyncAutocomplete
             name="universityId"
             label="University"
             placeholder="Select university"
-            data={universities.map((item) => ({ value: item.id, label: item.name }))}
+            fetchApi={listUniversities}
+            cacheKey="admin-universities-options"
             withAsterisk
           />
         )}

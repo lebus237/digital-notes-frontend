@@ -1,6 +1,7 @@
 import { createFormHook } from '@tanstack/react-form'
 import { fieldContext, formContext } from './context'
 import { Email, type EmailProps } from './inputs/email'
+import { AsyncAutocomplete, type AsyncAutocompleteProps } from './inputs/async-autocomplete'
 import { NumberFieldInput, type NumberInputProps } from './inputs/number-input'
 import { Password, type PasswordProps } from './inputs/password'
 import { SelectInput, type SelectInputProps } from './inputs/select'
@@ -12,6 +13,7 @@ export const { useAppForm } = createFormHook({
    fieldContext,
    formContext,
    fieldComponents: {
+      AsyncAutocomplete: withFieldContext<AsyncAutocompleteProps>(AsyncAutocomplete),
       TextInput: withFieldContext<TextInputProps>(TextInput),
       Email: withFieldContext<EmailProps>(Email),
       Password: withFieldContext<PasswordProps>(Password),
